@@ -60,7 +60,7 @@ export default {
         '900': '#7e3210',
         '950': '#441606',
     },
-    'ecstasy': {
+    'accent': {
         '50': '#fff9ec',
         '100': '#fff2d3',
         '200': '#ffe2a5',
