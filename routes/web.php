@@ -6,6 +6,6 @@ Route::get('/', function () {
     return view('home.index');
 });
 
-Route::get('/home/index', function () {
-    return view('home.index');
+Route::get('/pengajuan/detail', function () {
+    return view('submissions.show');
 });
