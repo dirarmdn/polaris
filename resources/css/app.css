@@ -5,12 +5,26 @@
 @layer base {
     @font-face {
         font-family: 'Manrope';
-        src: url('/fonts/Manrope-VariableFont_wght.ttf') format('truetype');
+        src: url('/public/fonts/Manrope-VariableFont_wght.ttf') format('truetype');
         font-weight: 100 900;
         font-style: normal;
     }
 }
 
+@layer utilities {
+    .bg-custom-gradient {
+      background: linear-gradient(180deg, rgba(23, 63, 132, 0) 0%, #173F84 100%), url('/public/images/Landing-2.svg');
+      background-position: 50%;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-color: lightgray;
+    }
+}
+
 body {
-    font-family: 'Manrope', sans-serif;
+    font-family: 'Manrope';
+}
+
+.avatars:hover .avatars_item {
+    margin-right: 12px;
 }

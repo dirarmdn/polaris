@@ -7,6 +7,12 @@ export default {
   ],
   theme: {
     extend: {
+      backgroundImage: {
+        'landing-bg-1': "url('/images/Landing-1.svg')",
+      },
+      fontFamily: {
+        manrope: ['Manrope', 'sans-serif'],
+      },
       colors: {
         'primary': {
         '50': '#eef8ff',
