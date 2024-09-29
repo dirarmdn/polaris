@@ -99,12 +99,18 @@
 
     <script type="module">
         $(document).ready(function() {
-            let initialHtml = $('#search-results').html();
-            let initialCount = $('#pengajuan-count').text();
+            let $searchResults = $('#search-results');
+            let $pengajuanCount = $('#pengajuan-count');
+            let $searchInput = $('#search');
+            let $searchButton = $('#search-button');
+            let $toggleViewButton = $('#toggle-view');
+            let $viewIcon = $('#view-icon');
+            let initialHtml = $searchResults.html();
+            let initialCount = $pengajuanCount.text();
 
             function performSearch() {
-                let query = $('#search').val();
-                let view = $('#toggle-view').hasClass('grid-view') ? 'grid' : 'list';
+                let query = $searchInput.val();
+                let view = $toggleViewButton.hasClass('grid-view') ? 'grid' : 'list';
                 console.log(view);
 
                 if (query.trim() === '') {
@@ -117,59 +123,55 @@
                     type: "GET",
                     data: {'search': query, 'view': view},
                     success: function(data) {
-                        $('#search-results').html(data.html);
-                        $('#pengajuan-count').text(data.count);
+                        $searchResults.html(data.html);
+                        $pengajuanCount.text(data.count);
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         console.log("AJAX error: ", textStatus, errorThrown);
                     }
                 });
-
             }
 
             function resetSearch() {
-                $('#search-results').html(initialHtml);
-                $('#pengajuan-count').text(initialCount);
+                $searchResults.html(initialHtml);
+                $pengajuanCount.text(initialCount);
             }
 
-            $('#search-button').on('click', function() {
-                performSearch();
-            });
+            $searchButton.on('click', performSearch);
 
-            $('#search').on('keypress', function(e) {
+            $searchInput.on('keypress', function(e) {
                 if(e.which == 13) {
                     e.preventDefault();
                     performSearch();
                 }
             });
 
-            $('#search').on('input', function() {
+            $searchInput.on('input', function() {
                 if ($(this).val().trim() === '') {
                     resetSearch();
                 }
             });
 
             // Toggle between grid and list view
-            $('#toggle-view').on('click', function() {
+            $toggleViewButton.on('click', function() {
                 $(this).toggleClass('grid-view');
                 let view = $(this).hasClass('grid-view') ? 'grid' : 'list';
-                let query = $('#search').val();
+                let query = $searchInput.val();
 
                 $.ajax({
                     url: "{{ route('pengajuan.search') }}",
                     type: "GET",
                     data: {'search': query, 'view': view},
                     success: function(data) {
-                        $('#search-results').html(data.html);
-                        $('#pengajuan-count').text(data.count);
+                        $searchResults.html(data.html);
+                        $pengajuanCount.text(data.count);
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         console.log("AJAX error: ", textStatus, errorThrown);
                     }
                 });
 
-                let icon = $('#view-icon');
-                icon.text(view === 'grid' ? 'view_list' : 'grid_view');
+                $viewIcon.text(view === 'grid' ? 'view_list' : 'grid_view');
             });
 
             $('#sort-by-title').on('click', function() {
@@ -181,16 +183,16 @@
             });
 
             function performSort(sortBy) {
-                let query = $('#search').val(); // Ambil nilai pencarian saat ini
-                let view = $('#toggle-view').hasClass('grid-view') ? 'grid' : 'list';
+                let query = $searchInput.val();
+                let view = $toggleViewButton.hasClass('grid-view') ? 'grid' : 'list';
 
                 $.ajax({
                     url: "{{ route('pengajuan.search') }}",
                     type: "GET",
                     data: {'search': query, 'view': view, 'sort_by': sortBy},
                     success: function (data) {
-                        $('#search-results').html(data.html);
-                        $('#pengajuan-count').text(data.count);
+                        $searchResults.html(data.html);
+                        $pengajuanCount.text(data.count);
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         console.log("AJAX error: ", textStatus, errorThrown);
