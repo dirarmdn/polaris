@@ -10,10 +10,12 @@ class Pengajuan extends Model
     use HasFactory;
 
     protected $table = 'pengajuans'; // Nama tabel
+    protected $primaryKey = 'kode_pengajuan';
 
     protected $fillable = [
-        'kode_pengajuan', 
+        'kode_pengajuan',
         'id_pengaju',
+        'isVerified',
         'judul_pengajuan',
         'deskripsi_masalah',
         'tujuan_aplikasi',
@@ -27,6 +29,6 @@ class Pengajuan extends Model
     // Relasi dengan model Pengaju (Many to One)
     public function pengaju()
     {
-        return $this->belongsTo(Pengaju::class, 'id_pengaju');
+        return $this->belongsTo('App\Models\Pengaju', 'id_pengaju');
     }
 }

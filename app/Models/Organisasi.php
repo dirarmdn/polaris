@@ -9,7 +9,10 @@ class Organisasi extends Model
 {
     use HasFactory;
 
-    protected $table = 'organisasis'; // Nama tabel
+    protected $table = 'organisasis';
+    public $incrementing = false;
+    protected $primaryKey = 'kode_organisasi';
+    protected $keyType = 'string';
 
     protected $fillable = [
         'kode_organisasi',
@@ -19,12 +22,12 @@ class Organisasi extends Model
     // Relasi dengan model Pengaju (One to Many)
     public function pengajus()
     {
-        return $this->hasMany(Pengaju::class, 'kode_organisasi');
+        return $this->hasMany('App\Models\Pengaju', 'kode_organisasi');
     }
 
     // Relasi dengan model Admin (One to Many)
     public function admins()
     {
-        return $this->hasMany(Admin::class, 'kode_organisasi');
+        return $this->hasMany('App\Models\Admin', 'kode_organisasi');
     }
 }

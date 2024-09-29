@@ -10,6 +10,7 @@ class Admin extends Model
     use HasFactory;
 
     protected $table = 'admins';
+    protected $primaryKey = 'nip';
 
     protected $fillable = [
         'nip',

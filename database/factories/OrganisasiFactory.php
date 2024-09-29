@@ -14,10 +14,12 @@ class OrganisasiFactory extends Factory
      *
      * @return array<string, mixed>
      */
+    protected $model = \App\Models\Organisasi::class;
     public function definition(): array
     {
         return [
-            //
+            'kode_organisasi' => $this->faker->unique()->regexify('[A-Z]{3}[0-9]{3}'), // e.g. ABC123
+            'nama' => $this->faker->company
         ];
     }
 }

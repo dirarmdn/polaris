@@ -10,3 +10,4 @@ Route::get('/about', [HomeController::class,'about'])->name('home.about');
 Route::get('/pengajuan', [PengajuanController::class, 'index'])->name('pengajuan');
 Route::get('/pengajuan/detail', [PengajuanController::class,'show'])->name('pengajuan.detail');
 Route::get('/pengajuan/create', [PengajuanController::class, 'create'])->name('pengajuan.create');
+Route::get('/search', [PengajuanController::class, 'search'])->name('pengajuan.search');
