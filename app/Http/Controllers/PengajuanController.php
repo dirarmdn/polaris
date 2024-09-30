@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\Pengajuan;
 use App\Http\Requests\StorePengajuanRequest;
 use App\Http\Requests\UpdatePengajuanRequest;
-use Illuminate\Http\Request;
 
 class PengajuanController extends Controller
 {
@@ -91,5 +91,22 @@ class PengajuanController extends Controller
     public function destroy(Pengajuan $pengajuan)
     {
         //
+    }
+    public function verification()
+    {
+        return view('submissions.verification'); // Pastikan ini mengarah ke view yang benar
+    }
+
+    public function sendVerificationCode(Request $request)
+    {
+        // Validasi input email
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+
+        // Logika untuk mengirim kode verifikasi ke email
+        // Contoh: Kirim kode verifikasi
+
+        return redirect()->back()->with('success', 'Verification code has been sent!');
     }
 }
