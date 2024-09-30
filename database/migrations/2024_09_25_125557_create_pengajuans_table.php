@@ -15,11 +15,12 @@ return new class extends Migration
             $table->string('kode_pengajuan')->primary();
             $table->bigInteger('id_pengaju');
             $table->foreign('id_pengaju')->references('id_pengaju')->on('pengajus');
+            $table->boolean('isVerified');
             $table->string('judul_pengajuan');
-            $table->string('deskripsi_masalah');
-            $table->string('tujuan_aplikasi');
-            $table->string('proses_bisnis');
-            $table->string('aturan_bisnis');
+            $table->text('deskripsi_masalah');
+            $table->text('tujuan_aplikasi');
+            $table->text('proses_bisnis');
+            $table->text('aturan_bisnis');
             $table->string('platform');
             $table->enum('jenis_proyek', ['Proyek yang sudah ada','Proyek Baru']);
             $table->string('stakeholder');

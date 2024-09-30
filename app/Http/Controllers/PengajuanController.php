@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Pengajuan;
 use App\Http\Requests\StorePengajuanRequest;
 use App\Http\Requests\UpdatePengajuanRequest;
+use Illuminate\Http\Request;
 
 class PengajuanController extends Controller
 {
@@ -14,7 +15,34 @@ class PengajuanController extends Controller
      */
     public function index()
     {
-        return view("submissions.index");
+        $pengajuan = Pengajuan::paginate(5);
+        return view("submissions.index", ['pengajuan' => $pengajuan]);
+    }
+
+    public function search(Request $request)
+    {
+        if ($request->ajax()) {
+            $search = $request->get('search');
+            $sortBy = $request->get('sort_by', 'date'); // Default sorting by date
+
+            $query = Pengajuan::where('judul_pengajuan', 'like', '%'.$search.'%')
+                ->orWhere('deskripsi_masalah', 'like', '%'.$search.'%');
+
+            // Sorting logic
+            if ($sortBy === 'title') {
+                $pengajuan = $query->orderBy('judul_pengajuan')->get();
+            } else {
+                $pengajuan = $query->orderBy('created_at', 'desc')->get(); // Default sort by date
+            }
+
+            $view = $request->get('view', 'list');
+            $html = view($view === 'grid' ? 'components.grid_view' : 'components.list_view', compact('pengajuan'))->render();
+
+            return response()->json([
+                'html' => $html,
+                'count' => $pengajuan->count()
+            ]);
+        }
     }
 
     /**

@@ -10,6 +10,8 @@ class Pengaju extends Model
     use HasFactory;    use HasFactory;
 
     protected $table = 'pengajus'; // Nama tabel
+    protected $primaryKey = 'id_pengaju';
+    public $incrementing = true;
 
     protected $fillable = [
         'kode_organisasi',
@@ -22,12 +24,12 @@ class Pengaju extends Model
     // Relasi dengan model Organisasi (Many to One)
     public function organisasi()
     {
-        return $this->belongsTo(Organisasi::class, 'kode_organisasi');
+        return $this->belongsTo('App\Models\Organisasi', 'kode_organisasi');
     }
 
     // Relasi dengan model Pengajuan (One to Many)
     public function pengajuans()
     {
-        return $this->hasMany(Pengajuan::class, 'id_pengaju');
+        return $this->hasMany('App\Models\Pengajuan', 'id_pengaju');
     }
 }
