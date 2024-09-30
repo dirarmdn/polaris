@@ -1,6 +1,6 @@
 <div class="list-view">
     @foreach($pengajuan as $p)
-        <div class="max-w-2xl flex items-center gap-5 mb-3 p-6 bg-primary-50 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+        <div data-aos="fade-up" class="max-w-2xl flex items-center gap-5 mb-3 p-6 bg-primary-50 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
             <div>
                 <h5 class="mb-2 text-lg font-semibold tracking-tight text-gray-900 dark:text-white">{{ $p->judul_pengajuan }}</h5>
                 <p class="mb-5 text-sm font-normal text-gray-500 dark:text-gray-400">{{ $p->deskripsi_masalah }}</p>

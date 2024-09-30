@@ -12,36 +12,37 @@ class PengajuanController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $pengajuan = Pengajuan::paginate(5);
-        return view("submissions.index", ['pengajuan' => $pengajuan]);
+        $pengajuan = Pengajuan::paginate(6);
+
+        if ($request->ajax()) {
+            return view('components.list_view', compact('pengajuan'));
+        }
+
+        return view('submissions.index', compact('pengajuan'));
     }
 
     public function search(Request $request)
     {
+        $query = $request->input('search');
+        $sort_by = $request->input('sort_by', 'judul_pengajuan'); // Cek apakah 'judul_pengajuan' ada di database.
+
+        $pengajuan = Pengajuan::query()
+            ->when($query, function ($q) use ($query) {
+                return $q->where('judul_pengajuan', 'like', "%{$query}%");
+            })
+            ->orderBy($sort_by)
+            ->paginate(10);
+
         if ($request->ajax()) {
-            $search = $request->get('search');
-            $sortBy = $request->get('sort_by', 'date'); // Default sorting by date
-
-            $query = Pengajuan::where('judul_pengajuan', 'like', '%'.$search.'%')
-                ->orWhere('deskripsi_masalah', 'like', '%'.$search.'%');
-
-            // Sorting logic
-            if ($sortBy === 'title') {
-                $pengajuan = $query->orderBy('judul_pengajuan')->get();
-            } else {
-                $pengajuan = $query->orderBy('created_at', 'desc')->get(); // Default sort by date
-            }
-
-            $view = $request->get('view', 'list');
-            $html = view($view === 'grid' ? 'components.grid_view' : 'components.list_view', compact('pengajuan'))->render();
-
             return response()->json([
-                'html' => $html,
-                'count' => $pengajuan->count()
+                'html' => view('components.list_view', ['pengajuan' => $pengajuan])->render(),
+                'count' => $pengajuan->total()
             ]);
         }
+
+        return view('index', compact('pengajuan'));
     }
 
     /**
