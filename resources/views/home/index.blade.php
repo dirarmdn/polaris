@@ -1,17 +1,17 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="flex flex-col justify-center items-center">
+    <div class="flex flex-col justify-center items-center mb-10">
         <div class="p-16 pb-3">
-            <h1 class="text-center text-4xl max-w-[650px]"><span class="font-semibold">Satu Portal </span>untuk Semua Kebutuhan Aplikasi
-                Internal <span class="text-orange-600 font-semibold">Polban</span></h1>
+            <h1 data-aos="fade-up" class="text-center text-4xl max-w-[650px]"><span class="font-semibold">Satu Portal </span>untuk Semua Kebutuhan Aplikasi
+                 <span class="text-orange-600 font-semibold"></span></h1>
         </div>
         <div class="p-10">
-            <a href="#" class="rounded-lg bg-primary-900 text-white px-5 py-3">Ajukan Sekarang</a>
-            <a href="#" class="rounded-lg bg-gray-300 text-black px-5 py-3">Lihat Daftar Ajuan</a>
+            <a href="{{ route('submissions.create') }}" class="rounded-lg bg-primary-900 text-white px-5 py-3">Ajukan Sekarang</a>
+            <a href="{{ route('submissions.index') }}" class="rounded-lg bg-gray-300 text-black px-5 py-3">Lihat Daftar Ajuan</a>
         </div>
         <div class="flex gap-5 items-end">
-            <div class="lg:h-96 lg:w-56 rounded-2xl overflow-hidden relative">
+            <div data-aos="fade-right" class="lg:h-96 lg:w-56 rounded-2xl overflow-hidden relative">
                 <h1 class="absolute inset-0 flex justify-end flex-end text-white text-xl p-5 z-10">
                     Platform Terintegrasi untuk Mendukung Transformasi Digital di Lingkungan Kampus
                 </h1>
@@ -20,9 +20,7 @@
 
                 <img class="w-full h-full object-cover z-0" src="{{ asset('images/Landing-2.svg') }}" alt="">
             </div>
-
-
-            <div class="lg:h-60 lg:w-56 bg-light-blue-400 p-5 rounded-2xl">
+            <div data-aos="fade-right" class="lg:h-60 lg:w-56 bg-light-blue-400 p-5 rounded-2xl">
                 <h1 class="text-xl font-semibold text-white font-manrope">Transformasi Digital <br>Polban</h1>
             </div>
             <div class="lg:h-36 lg:w-56 bg-white border-gray-300 border-2 rounded-2xl p-5">
@@ -44,7 +42,7 @@
                 <h1 class="font-semibold text-2xl mt-2">1989+</h1>
                 <h1 class="text-lg">Total Pengajuan</h1>
             </div>
-            <div class="lg:h-60 lg:w-56 rounded-2xl overflow-hidden relative">
+            <div data-aos="fade-left" class="lg:h-60 lg:w-56 rounded-2xl overflow-hidden relative">
                 <div class="absolute inset-0 flex flex-col justify-center items-center z-10 p-5 text-center">
                     <h1 class="text-xl text-white font-semibold">Tidak tahu mau apa?<br><br></h1>
                     <h1 class="text-base text-white ">Pelajari tata cara pengajuan kebutuhan aplikasi <span class="underline">disini</span></h1>
@@ -52,7 +50,7 @@
                 <div class="w-full h-full inset-0 bg-orange-600 opacity-65 rounded-md absolute z-5"></div>
                 <img class="w-full h-full object-cover z-0" src="{{ asset('images/Landing-1.svg') }}" alt="">
             </div>
-            <div class="lg:h-96 lg:w-56 bg- rounded-2xl bg-secondary-900 p-5">
+            <div data-aos="fade-left" class="lg:h-96 lg:w-56 bg- rounded-2xl bg-secondary-900 p-5">
                 <h1 class="text-white">Aplikasi SIREKAP Polban adalah aplikasi yang bertujuan untuk fafifu dan lainnya</h1>
             </div>
         </div>

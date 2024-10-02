@@ -19,7 +19,7 @@ class PengajuanFactory extends Factory
     {
         return [
             'kode_pengajuan' => $this->faker->unique()->regexify('[A-Z]{5}[0-9]{3}'), // e.g. ABCDE123
-            'id_pengaju' => \App\Models\Pengaju::factory(), // Relasi dengan tabel Pengaju
+            'id_pengaju' => Pengaju::factory(), // Gunakan relasi factory secara standar
             'isVerified' => $this->faker->boolean(),
             'judul_pengajuan' => $this->faker->sentence,
             'deskripsi_masalah' => $this->faker->paragraphs(2, true), // Deskripsi panjang
@@ -31,4 +31,5 @@ class PengajuanFactory extends Factory
             'stakeholder' => $this->faker->name,
         ];
     }
+    
 }

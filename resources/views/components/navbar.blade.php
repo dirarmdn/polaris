@@ -13,26 +13,27 @@
 
     <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
         <div class="lg:flex-grow items-center text-center font-semibold">
-            <a href="#responsive-header" class="block mt-4 lg:inline-block lg:mt-0 text-black mr-4">
+            <a href="{{ route('home') }}" class="block mt-4 lg:inline-block lg:mt-0 text-black mr-4">
                 Home
             </a>
-            <a href="#responsive-header" class="block mt-4 lg:inline-block lg:mt-0 text-black mr-4">
+            <a href="{{ route('submissions.index') }}" class="block mt-4 lg:inline-block lg:mt-0 text-black mr-4">
                 Daftar Pengajuan
             </a>
 
-            <a href="#responsive-header" class="block mt-4 lg:inline-block lg:mt-0 text-black mr-4">
+            <a href="{{ route('home.about') }}" class="block mt-4 lg:inline-block lg:mt-0 text-black mr-4">
                 About Us
             </a>
 
-            <a href="#responsive-header" class="block mt-4 lg:inline-block lg:mt-0 text-black mr-4">
+            <a href="{{ route('home') }}" class="block mt-4 lg:inline-block lg:mt-0 text-black mr-4">
                 FAQ
             </a>
         </div>
     </div>
 
     <div>
-        <a href="#"
-            class="inline-block text-sm px-4 py-2 leading-none border rounded-lg bg-orange-500 text-white border-transparent hover:bg-orange-700 mt-4 lg:mt-0">Buat
-            Pengajuan</a>
+        <a href="{{ route('submissions.create') }}" class="inline-block text-sm px-4 py-2 leading-none border rounded-lg bg-orange-500 text-white border-transparent hover:bg-orange-700 mt-4 lg:mt-0">
+            <span class="material-symbols-outlined">
+                +
+                </span>Buat Pengajuan</a>
     </div>
 </nav>

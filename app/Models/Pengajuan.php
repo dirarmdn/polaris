@@ -11,6 +11,7 @@ class Pengajuan extends Model
 
     protected $table = 'pengajuans'; // Nama tabel
     protected $primaryKey = 'kode_pengajuan';
+    public $incrementing = false;
 
     protected $fillable = [
         'kode_pengajuan',
