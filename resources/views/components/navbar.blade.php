@@ -16,7 +16,7 @@
             <a href="{{ route('home') }}" class="block mt-4 lg:inline-block lg:mt-0 text-black mr-4">
                 Home
             </a>
-            <a href="{{ route('pengajuan') }}" class="block mt-4 lg:inline-block lg:mt-0 text-black mr-4">
+            <a href="{{ route('submissions.index') }}" class="block mt-4 lg:inline-block lg:mt-0 text-black mr-4">
                 Daftar Pengajuan
             </a>
 
@@ -31,7 +31,9 @@
     </div>
 
     <div>
-        <a href="#" class="inline-block text-sm px-4 py-2 leading-none border rounded-lg bg-orange-500 text-white border-transparent hover:bg-orange-700 mt-4 lg:mt-0">
-            <span class="material-symbols-outlined">add</span>Buat Pengajuan</a>
+        <a href="{{ route('submissions.create') }}" class="inline-block text-sm px-4 py-2 leading-none border rounded-lg bg-orange-500 text-white border-transparent hover:bg-orange-700 mt-4 lg:mt-0">
+            <span class="material-symbols-outlined">
+                +
+                </span>Buat Pengajuan</a>
     </div>
 </nav>

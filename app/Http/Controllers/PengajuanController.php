@@ -16,6 +16,8 @@ class PengajuanController extends Controller
     {
         $pengajuan = Pengajuan::paginate(6);
 
+        // dd($pengajuan);
+
         if ($request->ajax()) {
             return view('components.list_view', compact('pengajuan'));
         }
@@ -42,7 +44,7 @@ class PengajuanController extends Controller
             ]);
         }
 
-        return view('index', compact('pengajuan'));
+        return view('submissions.index', compact('pengajuan'));
     }
 
     /**
@@ -58,23 +60,39 @@ class PengajuanController extends Controller
      */
     public function store(StorePengajuanRequest $request)
     {
-        //
-    }
+        $data = $request->validated();
+        // dd($data); // Tambahkan ini untuk memastikan semua field terisi, terutama `id_pengaju`
+    
+        $pengajuan = new Pengajuan($data);
+        $pengajuan->save();
+    
+        return redirect()->route('submissions.index')->with('success', 'Pengajuan berhasil dibuat!');
+    }    
 
     /**
      * Display the specified resource.
      */
-    public function show(Pengajuan $pengajuan)
+    public function show(string $kode_pengajuan)
     {
-        return view('submissions.show');
+        // Debugging nilai kode_pengajuan
+        // dd($kode_pengajuan);
+    
+        $pengajuan = Pengajuan::where('kode_pengajuan', $kode_pengajuan)->first();
+    
+        if (!$pengajuan) {
+            return redirect()->route('submissions.index')->with('error', 'Pengajuan tidak ditemukan!');
+        }
+    
+        return view('submissions.show', compact('pengajuan'));
     }
+    
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Pengajuan $pengajuan)
     {
-        //
+        return view('submissions.edit', compact('pengajuan'));
     }
 
     /**
@@ -82,7 +100,8 @@ class PengajuanController extends Controller
      */
     public function update(UpdatePengajuanRequest $request, Pengajuan $pengajuan)
     {
-        //
+        $pengajuan->update($request->validated()); // Perbarui data pengajuan
+        return redirect()->route('submissions.index')->with('success', 'Pengajuan berhasil diperbarui!');
     }
 
     /**
@@ -90,8 +109,10 @@ class PengajuanController extends Controller
      */
     public function destroy(Pengajuan $pengajuan)
     {
-        //
+        $pengajuan->delete(); // Hapus data pengajuan
+        return redirect()->route('submissions.index')->with('success', 'Pengajuan berhasil dihapus!');
     }
+    
     public function verification()
     {
         return view('submissions.verification'); // Pastikan ini mengarah ke view yang benar

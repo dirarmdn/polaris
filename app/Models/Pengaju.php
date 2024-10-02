@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pengaju extends Model
 {
-    use HasFactory;    use HasFactory;
+    use HasFactory;
 
     protected $table = 'pengajus'; // Nama tabel
     protected $primaryKey = 'id_pengaju';

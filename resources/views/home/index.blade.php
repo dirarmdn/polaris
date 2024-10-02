@@ -4,11 +4,11 @@
     <div class="flex flex-col justify-center items-center mb-10">
         <div class="p-16 pb-3">
             <h1 data-aos="fade-up" class="text-center text-4xl max-w-[650px]"><span class="font-semibold">Satu Portal </span>untuk Semua Kebutuhan Aplikasi
-                Internal <span class="text-orange-600 font-semibold">Polban</span></h1>
+                 <span class="text-orange-600 font-semibold"></span></h1>
         </div>
         <div class="p-10">
-            <a href="{{ route('pengajuan.create') }}" class="rounded-lg bg-primary-900 text-white px-5 py-3">Ajukan Sekarang</a>
-            <a href="{{ route('pengajuan') }}" class="rounded-lg bg-gray-300 text-black px-5 py-3">Lihat Daftar Ajuan</a>
+            <a href="{{ route('submissions.create') }}" class="rounded-lg bg-primary-900 text-white px-5 py-3">Ajukan Sekarang</a>
+            <a href="{{ route('submissions.index') }}" class="rounded-lg bg-gray-300 text-black px-5 py-3">Lihat Daftar Ajuan</a>
         </div>
         <div class="flex gap-5 items-end">
             <div data-aos="fade-right" class="lg:h-96 lg:w-56 rounded-2xl overflow-hidden relative">

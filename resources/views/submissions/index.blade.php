@@ -86,7 +86,7 @@
                 }
 
                 $.ajax({
-                    url: "{{ route('pengajuan.search') }}",
+                    url: "{{ route('submissions.search') }}",
                     type: "GET",
                     data: {
                         'search': query
@@ -124,7 +124,7 @@
                 const search = $searchInput.val().trim();
 
                 $.ajax({
-                    url: "{{ route('pengajuan.search') }}",
+                    url: "{{ route('submissions.search') }}",
                     type: "GET",
                     data: {
                         'search': search,
