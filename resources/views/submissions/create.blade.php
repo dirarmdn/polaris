@@ -16,6 +16,7 @@
             @endforeach
         </div>
 
+        <!-- Step Contents -->
         <!-- Step 1: Data Pengaju -->
         <div class="step-content" data-step="1">
             <h2 class="text-2xl font-semibold mb-4">Data Pengaju</h2>
@@ -103,17 +104,23 @@
             </div>
         </div>
 
-        <!-- Step 5: Konfirmasi -->
+        <!-- Step 5: Referensi dan Upload File -->
         <div class="step-content hidden" data-step="5">
-            <h2 class="text-2xl font-semibold mb-4">Konfirmasi Pengajuan</h2>
-            <p>Silakan periksa kembali data yang telah Anda masukkan sebelum mengirim pengajuan.</p>
-            <div id="summary" class="mt-4">
-                <!-- Summary will be populated dynamically -->
+            <h2 class="text-2xl font-semibold mb-4">Referensi dan Upload File</h2>
+            <div class="mb-4">
+                <label for="referensi_link" class="block mb-2">Referensi Link</label>
+                <input type="url" id="referensi_link" name="referensi_link" class="w-full border border-gray-300 rounded px-3 py-2" placeholder="https://example.com" required>
+            </div>
+            <div class="mb-4">
+                <label for="referensi_file" class="block mb-2">Upload File</label>
+                <input type="file" id="referensi_file" name="referensi_file[]" class="w-full border border-gray-300 rounded px-3 py-2" multiple required>
+                <p class="text-sm text-gray-500 mt-1">You can upload multiple files of any type.</p>
             </div>
         </div>
 
         <div class="flex justify-between mt-8">
             <button type="button" id="prevBtn" class="bg-gray-300 text-gray-700 px-4 py-2 rounded hidden">Previous</button>
+            <div class="flex-grow"></div>
             <button type="button" id="nextBtn" class="bg-blue-500 text-white px-4 py-2 rounded">Next</button>
             <button type="submit" id="submitBtn" class="bg-green-500 text-white px-4 py-2 rounded hidden">Submit</button>
         </div>
@@ -121,58 +128,98 @@
 </div>
 @endsection
 
-@push('scripts')
 <script>
-    // ... (previous JavaScript code remains the same) ...
+    document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('submissionForm');
+    const stepperSteps = document.querySelectorAll('.stepper-step');
+    const stepContents = document.querySelectorAll('.step-content');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const submitBtn = document.getElementById('submitBtn');
+    let currentStep = 1;
+
+    function updateStep(step) {
+        stepperSteps.forEach((s, index) => {
+            if (index + 1 === step) {
+                s.classList.add('border-blue-500', 'text-blue-500');
+                s.classList.remove('border-gray-300', 'text-gray-500');
+            } else {
+                s.classList.remove('border-blue-500', 'text-blue-500');
+                s.classList.add('border-gray-300', 'text-gray-500');
+            }
+        });
+
+        stepContents.forEach((content, index) => {
+            if (index + 1 === step) {
+                content.classList.remove('hidden');
+            } else {
+                content.classList.add('hidden');
+            }
+        });
+
+        prevBtn.classList.toggle('hidden', step === 1);
+        nextBtn.classList.toggle('hidden', step === 5);
+        submitBtn.classList.toggle('hidden', step !== 5);
+
+        currentStep = step;
+    }
+
+    function validateStep(step) {
+        const currentStepContent = document.querySelector(`.step-content[data-step="${step}"]`);
+        const requiredFields = currentStepContent.querySelectorAll('[required]');
+        return Array.from(requiredFields).every(field => field.value.trim() !== '');
+    }
+
+    function updateStepperClickability() {
+        stepperSteps.forEach((step, index) => {
+            if (index < currentStep) {
+                step.disabled = false;
+            } else if (index >= currentStep) {
+                step.disabled = !validateStep(currentStep);
+            }
+        });
+    }
+
+    prevBtn.addEventListener('click', () => {
+        if (currentStep > 1) {
+            updateStep(currentStep - 1);
+            updateStepperClickability();
+        }
+    });
+
+    nextBtn.addEventListener('click', () => {
+        if (validateStep(currentStep)) {
+            if (currentStep < 5) {
+                updateStep(currentStep + 1);
+                updateStepperClickability();
+            }
+        } else {
+            alert('Please fill in all required fields before proceeding.');
+        }
+    });
+
+    stepperSteps.forEach((step, index) => {
+        step.addEventListener('click', () => {
+            if (!step.disabled && validateStep(currentStep)) {
+                updateStep(index + 1);
+                updateStepperClickability();
+            } else if (step.disabled) {
+                alert('Please complete the current step before proceeding.');
+            }
+        });
+    });
 
     form.addEventListener('submit', function(e) {
         e.preventDefault();
         if (validateStep(5)) {
-            // Here you would typically send the form data to the server
             this.submit();
         } else {
             alert('Please fill in all required fields.');
         }
     });
 
-    function updateSummary() {
-        const summary = document.getElementById('summary');
-        summary.innerHTML = ''; // Clear previous content
-
-        const fields = [
-            'nama_pengaju', 'email_pengaju', 'no_telp', 'jabatan', 'kode_organisasi',
-            'judul_pengajuan', 'deskripsi_masalah', 'tujuan_aplikasi',
-            'proses_bisnis', 'aturan_bisnis',
-            'stakeholder', 'platform'
-        ];
-
-        fields.forEach(field => {
-            const element = document.getElementById(field);
-            if (element) {
-                const value = element.value;
-                if (value) {
-                    const fieldName = element.previousElementSibling.textContent;
-                    summary.innerHTML += `<p><strong>${fieldName}</strong>: ${value}</p>`;
-                }
-            }
-        });
-
-        // Add Jenis Proyek to summary
-        const jenisProyek = document.querySelector('input[name="jenis_proyek"]:checked');
-        if (jenisProyek) {
-            summary.innerHTML += `<p><strong>Jenis Proyek</strong>: ${jenisProyek.value}</p>`;
-        }
-    }
-
-    // Call updateSummary when entering Step 5
-    stepperSteps[4].addEventListener('click', updateSummary);
-    nextBtn.addEventListener('click', function() {
-        if (currentStep === 4 && validateStep(4)) {
-            updateSummary();
-        }
-    });
-
     // Initialize the form
     updateStep(currentStep);
+    updateStepperClickability();
+});
 </script>
-@endpush

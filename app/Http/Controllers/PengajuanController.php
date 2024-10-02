@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Pengajuan;
 use App\Http\Requests\StorePengajuanRequest;
 use App\Http\Requests\UpdatePengajuanRequest;
-use Illuminate\Http\Request;
+
 
 class PengajuanController extends Controller
 {
@@ -94,7 +94,7 @@ class PengajuanController extends Controller
     }
     public function verification()
     {
-        return view('submissions.verification'); // Pastikan ini mengarah ke view yang benar
+        return view('submissions.verification');
     }
 
     public function sendVerificationCode(Request $request)
