@@ -15,7 +15,7 @@ class Pengajuan extends Model
 
     protected $fillable = [
         'kode_pengajuan',
-        'id_pengaju',
+        'user_id',
         'isVerified',
         'judul_pengajuan',
         'deskripsi_masalah',
@@ -28,8 +28,8 @@ class Pengajuan extends Model
     ];
 
     // Relasi dengan model Pengaju (Many to One)
-    public function pengaju()
+    public function user()
     {
-        return $this->belongsTo('App\Models\Pengaju', 'id_pengaju');
+        return $this->belongsTo('App\Models\User', 'user_id');
     }
 }

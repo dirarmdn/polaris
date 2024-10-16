@@ -13,11 +13,8 @@ return new class extends Migration
     {
         Schema::create('admins', function (Blueprint $table) {
             $table->string('nip', 18)->primary();
-            $table->string('kode_organisasi');
-            $table->foreign('kode_organisasi')->references('kode_organisasi')->on('organisasis');
-            $table->string('nama', 150);
-            $table->string('password');
-            $table->string('role');
+            $table->integer('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

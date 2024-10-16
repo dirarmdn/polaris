@@ -24,10 +24,4 @@ class Organisasi extends Model
     {
         return $this->hasMany('App\Models\Pengaju', 'kode_organisasi');
     }
-
-    // Relasi dengan model Admin (One to Many)
-    public function admins()
-    {
-        return $this->hasMany('App\Models\Admin', 'kode_organisasi');
-    }
 }
