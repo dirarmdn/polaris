@@ -1,38 +1,51 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="flex justify-center items-center h-screen bg-gray-100">
-    <div class="bg-white p-10 rounded-xl shadow-lg w-96">
-        <h2 class="text-center text-lg font-semibold mb-4">PLEASE VERIFY YOUR EMAIL ADDRESS</h2>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">Verifikasi Email</div>
 
-        <div class="flex justify-center mb-4">
-            <img src="https://cdn-icons-png.flaticon.com/512/1000/1000035.png" alt="Email" class="h-12 w-12">
+                <div class="card-body">
+                    @if(session('success'))
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+
+                    @if($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <form method="POST" action="{{ route('send.verification.code') }}">
+                        @csrf
+                        <div class="form-group">
+                            <label for="email">Email Perusahaan</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Kirim Kode Verifikasi</button>
+                    </form>
+
+                    <hr>
+
+                    <form method="POST" action="{{ route('verify.email') }}">
+                        @csrf
+                        <div class="form-group">
+                            <label for="verification_code">Kode Verifikasi</label>
+                            <input type="text" class="form-control" id="verification_code" name="verification_code" required>
+                        </div>
+                        <button type="submit" class="btn btn-success">Verifikasi</button>
+                    </form>
+                </div>
+            </div>
         </div>
-
-        <p class="text-center text-sm mb-6">Enter your corporate email address to receive a verification code</p>
-
-        @if(session('success'))
-            <div class="bg-green-100 text-green-700 p-2 rounded mb-4">
-                {{ session('success') }}
-            </div>
-        @endif
-
-        <form action="{{ route('send.verification.code') }}" method="POST">
-            @csrf
-            <div class="mb-4">
-                <input type="email" name="email" placeholder="Enter corporate email address"
-                    class="w-full border border-gray-300 p-2 rounded">
-                @error('email')
-                    <span class="text-red-500 text-sm">{{ $message }}</span>
-                @enderror
-            </div>
-
-            <div>
-                <button type="submit" class="bg-blue-600 text-white w-full py-2 rounded hover:bg-blue-700">
-                    SEND VERIFICATION CODE
-                </button>
-            </div>
-        </form>
     </div>
 </div>
 @endsection
