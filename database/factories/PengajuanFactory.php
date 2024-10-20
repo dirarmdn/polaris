@@ -2,8 +2,9 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\User;
 use App\Models\Pengaju;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Pengajuan>
@@ -19,7 +20,7 @@ class PengajuanFactory extends Factory
     {
         return [
             'kode_pengajuan' => $this->faker->unique()->regexify('[A-Z]{5}[0-9]{3}'), // e.g. ABCDE123
-            'id_pengaju' => Pengaju::factory(), // Gunakan relasi factory secara standar
+            'user_id' => User::factory(),
             'isVerified' => $this->faker->boolean(),
             'judul_pengajuan' => $this->faker->sentence,
             'deskripsi_masalah' => $this->faker->paragraphs(2, true), // Deskripsi panjang

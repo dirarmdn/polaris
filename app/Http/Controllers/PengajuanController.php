@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Pengajuan;
 use App\Http\Requests\StorePengajuanRequest;
 use App\Http\Requests\UpdatePengajuanRequest;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\VerificationEmail;
+use Illuminate\Support\Str;
 
 class PengajuanController extends Controller
 {
@@ -16,8 +18,6 @@ class PengajuanController extends Controller
     public function index(Request $request)
     {
         $pengajuan = Pengajuan::paginate(6);
-
-        // dd($pengajuan);
 
         if ($request->ajax()) {
             return view('components.list_view', compact('pengajuan'));
@@ -61,6 +61,7 @@ class PengajuanController extends Controller
      */
     public function store(StorePengajuanRequest $request)
     {
+        dd($request);
         $data = $request->validated();
         // dd($data); // Tambahkan ini untuk memastikan semua field terisi, terutama `id_pengaju`
     
@@ -112,23 +113,5 @@ class PengajuanController extends Controller
     {
         $pengajuan->delete(); // Hapus data pengajuan
         return redirect()->route('submissions.index')->with('success', 'Pengajuan berhasil dihapus!');
-    }
-    
-    public function verification()
-    {
-        return view('submissions.verification');
-    }
-
-    public function sendVerificationCode(Request $request)
-    {
-        // Validasi input email
-        $request->validate([
-            'email' => 'required|email',
-        ]);
-
-        // Logika untuk mengirim kode verifikasi ke email
-        // Contoh: Kirim kode verifikasi
-
-        return redirect()->back()->with('success', 'Verification code has been sent!');
-    }
+    }    
 }

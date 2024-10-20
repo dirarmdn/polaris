@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('pengajuans', function (Blueprint $table) {
             $table->string('kode_pengajuan')->primary();
-            $table->bigInteger('id_pengaju');
-            $table->foreign('id_pengaju')->references('id_pengaju')->on('pengajus');
+            $table->bigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->boolean('isVerified');
             $table->string('judul_pengajuan');
             $table->text('deskripsi_masalah');

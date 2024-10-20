@@ -12,13 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pengajus', function (Blueprint $table) {
-            $table->id('id_pengaju');
+            $table->id();
+            $table->integer('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('kode_organisasi');
             $table->foreign('kode_organisasi')->references('kode_organisasi')->on('organisasis')->onDelete('cascade');
-            $table->string('nama_pengaju');
-            $table->string('email_pengaju')->unique();
             $table->string('jabatan');
-            $table->string('no_telp');
             $table->timestamps();
         });
     }
