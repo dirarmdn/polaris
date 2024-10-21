@@ -1,39 +1,50 @@
-<nav class="flex items-center justify-between flex-wrap bg-transparent p-6">
-    <div class="flex items-center flex-shrink-0 text-white mr-6">
-        <img class="max-h-12" src="{{ asset('images/Logo.png') }}" alt="" srcset="">
-    </div>
-    <div class="block lg:hidden">
-        <button class="flex items-center px-3 py-2 border rounde hover:text-white hover:border-white">
-            <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                <title>Menu</title>
-                <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
-            </svg>
-        </button>
-    </div>
-
-    <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
-        <div class="lg:flex-grow items-center text-center font-semibold">
-            <a href="{{ route('home') }}" class="block mt-4 lg:inline-block lg:mt-0 text-black mr-4">
-                Home
-            </a>
-            <a href="{{ route('submissions.index') }}" class="block mt-4 lg:inline-block lg:mt-0 text-black mr-4">
-                Daftar Pengajuan
-            </a>
-
-            <a href="{{ route('home.about') }}" class="block mt-4 lg:inline-block lg:mt-0 text-black mr-4">
-                About Us
-            </a>
-
-            <a href="{{ route('home') }}" class="block mt-4 lg:inline-block lg:mt-0 text-black mr-4">
-                FAQ
-            </a>
+<nav class="bg-white border-gray-200 dark:bg-gray-900">
+    <div class="flex flex-wrap items-center justify-between mx-auto p-4">
+        <a href="{{ route('home') }}" class="flex items-center space-x-3 rtl:space-x-reverse">
+            <img class="max-h-12" src="{{ asset('images/Logo.png') }}" alt="" srcset="">
+        </a>
+        <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse items-center">
+            <a href="{{ route('submissions.create') }}"
+                class="inline-block text-sm px-6 py-2.5 leading-none border mr-1 md:mr-3 rounded-lg font-bold bg-gray-200 text-dark-800 border-transparent hover:bg-gray-300 lg:mt-0">
+                Sign in</a>
+            <a href="{{ route('submissions.create') }}"
+                class="inline-block text-sm px-6 py-2.5 leading-none border rounded-lg font-bold bg-accent-600 text-white border-transparent hover:bg-accent-700 lg:mt-0">
+                Sign up</a>
+            <button data-collapse-toggle="navbar-cta" type="button"
+                class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                aria-controls="navbar-cta" aria-expanded="false">
+                <span class="sr-only">Open main menu</span>
+                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    viewBox="0 0 17 14">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M1 1h15M1 7h15M1 13h15" />
+                </svg>
+            </button>
         </div>
-    </div>
-
-    <div>
-        <a href="{{ route('submissions.create') }}" class="inline-block text-sm px-4 py-2 leading-none border rounded-lg bg-orange-500 text-white border-transparent hover:bg-orange-700 mt-4 lg:mt-0">
-            <span class="material-symbols-outlined">
-                +
-                </span>Buat Pengajuan</a>
+        <div class="justify-between hidden w-full md:flex items-center md:w-auto md:order-1" id="navbar-cta">
+            <ul
+                class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+                <li>
+                    <a href="{{ route('home') }}"
+                        class="{{ Route::is('home') ? 'block py-2 px-3 md:p-0 border-b-2 border-accent-light-500 font-bold' : 'block py-2 px-3 md:p-0 text-gray-900' }} hover:bg-gray-100 md:hover:bg-transparent md:hover:text-secondary-900 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                        aria-current="page">Home</a>
+                </li>
+                <li>
+                    <a href="{{ route('submissions.index') }}"
+                        class="{{ Route::is('submissions.index') ? 'block py-2 px-3 md:p-0 border-b-2 border-accent-light-500 font-bold' : 'block py-2 px-3 md:p-0 text-gray-900' }} hover:bg-gray-100 md:hover:bg-transparent md:hover:text-secondary-900 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">
+                        Daftar Pengajuan</a>
+                </li>
+                <li>
+                    <a href="{{ route('home.about') }}"
+                        class="{{ Route::is('about') ? 'block py-2 px-3 md:p-0 border-b-2 border-accent-light-500 font-bold' : 'block py-2 px-3 md:p-0 text-gray-900' }} hover:bg-gray-100 md:hover:bg-transparent md:hover:text-secondary-900 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">
+                        About</a>
+                </li>
+                <li>
+                    <a href="{{ route('home.faq') }}"
+                        class="{{ Route::is('faq') ? 'block py-2 px-3 md:p-0 border-b-2 border-accent-light-500 font-bold' : 'block py-2 px-3 md:p-0 text-gray-900' }} hover:bg-gray-100 md:hover:bg-transparent md:hover:text-secondary-900 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">
+                        FAQ</a>
+                </li>
+            </ul>
+        </div>
     </div>
 </nav>

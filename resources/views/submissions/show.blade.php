@@ -8,13 +8,13 @@
         <!-- Tabs -->
         <div class="border-b border-gray-200 relative">
             <ul class="flex justify-center space-x-10 text-center text-gray-500 relative text-xl" id="tabs">
-                <li class="cursor-pointer pb-2 transition-all duration-300 hover:text-blue-500" data-target="deskripsi">DESKRIPSI</li>
-                <li class="cursor-pointer pb-2 transition-all duration-300 hover:text-blue-500" data-target="kebutuhan">KEBUTUHAN APLIKASI</li>
-                <li class="cursor-pointer pb-2 transition-all duration-300 hover:text-blue-500" data-target="detail">DETAIL APLIKASI</li>
-                <li class="cursor-pointer pb-2 transition-all duration-300 hover:text-blue-500" data-target="referensi">REFERENSI</li>
+                <li class="cursor-pointer pb-2 transition-all duration-300 hover:text-primary-900" data-target="deskripsi">DESKRIPSI</li>
+                <li class="cursor-pointer pb-2 transition-all duration-300 hover:text-primary-900" data-target="kebutuhan">KEBUTUHAN APLIKASI</li>
+                <li class="cursor-pointer pb-2 transition-all duration-300 hover:text-primary-900" data-target="detail">DETAIL APLIKASI</li>
+                <li class="cursor-pointer pb-2 transition-all duration-300 hover:text-primary-900" data-target="referensi">REFERENSI</li>
             </ul>
             <!-- Blue underline animation -->
-            <div id="underline" class="absolute bottom-0 left-0 h-0.5 bg-blue-500 transition-all duration-300"></div>
+            <div id="underline" class="absolute bottom-0 left-0 h-0.5 bg-primary-900 transition-all duration-300"></div>
         </div>
 
         <!-- Tab Content -->

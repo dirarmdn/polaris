@@ -13,11 +13,10 @@
         @include('components.navbar')
     </header>
 
-    <div class="container mx-auto px-4 max-w-screen-xl">
+    <div class="container mx-auto px-4 overflow-hidden">
         @yield('content')
     </div>
 
-    <footer>
-    </footer>
+    @include('components.footer')
 </body>
 </html>

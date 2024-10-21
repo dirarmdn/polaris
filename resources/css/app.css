@@ -28,3 +28,24 @@ body {
 .avatars:hover .avatars_item {
     margin-right: 12px;
 }
+
+@font-face {
+    font-family: 'Material Symbols Outlined';
+    src: url('/public/fonts/MaterialIconsOutlined-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  .material-symbols-outlined {
+    font-family: 'Material Symbols Outlined';
+    font-weight: normal;
+    font-style: normal;
+    display: inline-block;
+    line-height: 1;
+    text-transform: none;
+    letter-spacing: normal;
+    word-wrap: normal;
+    white-space: nowrap;
+    direction: ltr;
+  }
+  
