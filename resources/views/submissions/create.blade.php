@@ -4,7 +4,7 @@
 <div class="container mx-auto px-4 py-8">
     <h1 class="text-3xl font-bold mb-8">Form Pengajuan</h1>
 
-    <form id="submissionForm" action="{{ route('submissions.store') }}" method="POST" enctype="multipart/form-data" class="max-w-4xl mx-auto">
+    <form id="submissionForm" action="{{ route('pengajuans.store') }}" method="POST" enctype="multipart/form-data" class="max-w-4xl mx-auto">
         @csrf
 
         <div class="relative mb-8 max-w-4xl mx-auto px-4">

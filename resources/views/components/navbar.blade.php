@@ -24,7 +24,7 @@
                 About Us
             </a>
 
-            <a href="{{ route('home') }}" class="block mt-4 lg:inline-block lg:mt-0 text-black mr-4">
+            <a href="{{ route('home.faq') }}" class="block mt-4 lg:inline-block lg:mt-0 text-black mr-4">
                 FAQ
             </a>
         </div>
