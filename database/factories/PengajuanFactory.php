@@ -27,8 +27,8 @@ class PengajuanFactory extends Factory
             'tujuan_aplikasi' => $this->faker->sentence(10),
             'proses_bisnis' => $this->faker->paragraph(5),
             'aturan_bisnis' => $this->faker->paragraph(5),
-            'platform' => $this->faker->randomElement(['Web', 'Mobile', 'Desktop','Multi-platform']),
-            'jenis_proyek' => $this->faker->randomElement(['Proyek yang sudah ada', 'Proyek Baru']),
+            'platform' => $this->faker->randomElement(['web', 'mobile', 'desktop','multi-platform']),
+            'jenis_proyek' => $this->faker->boolean(),
             'stakeholder' => $this->faker->name,
         ];
     }

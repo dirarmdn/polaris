@@ -6,7 +6,16 @@
 
     <form id="submissionForm" action="{{ route('submissions.store') }}" method="POST" enctype="multipart/form-data" class="max-w-4xl mx-auto">
         @csrf
-
+        @if($errors->any())
+            <div class="bg-red-500 text-white p-4 mb-4">
+                <ul>
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+    
         <div class="relative mb-8 max-w-4xl mx-auto px-4">
             <!-- Garis Latar -->
             <div class="absolute top-1/2 left-0 w-full h-1 bg-gray-300 transform -translate-y-1/2 rounded-full"></div>
@@ -15,22 +24,21 @@
             <div id="stepperProgress" class="absolute top-1/2 left-0 h-1 bg-blue-500 transform -translate-y-1/2 transition-all duration-500 ease-in-out rounded-full" style="width: 0%"></div>
 
             <!-- Stepper -->
-            <div class="relative flex justify-between items-center space-x-8">
+            <div class="relative flex justify-between items-center space-x-8 bg-primary-900 rounded-xl px-20 py-7">
                 @foreach(range(1, 4) as $step)
                     <div class="stepper-step flex flex-col items-center" data-step="{{ $step }}">
-                        <!-- Lingkaran Stepper -->
-                        <div class="stepper-circle w-12 h-12 rounded-full bg-white border-4 border-gray-300 flex items-center justify-center text-gray-600 font-bold text-xl mb-2 transition-all duration-300 ease-in-out">
-                            {{ $step }}
-                        </div>
-
                         <!-- Label Stepper -->
-                        <div class="stepper-label text-sm text-center text-gray-600 font-medium transition-all duration-300 ease-in-out">
+                        <div class="stepper-label text-sm text-white font-medium transition-all duration-300 ease-in-out">
                             @switch($step)
-                                @case(1) Deskripsi @break
-                                @case(2) Kebutuhan Aplikasi @break
-                                @case(3) Detail Aplikasi @break
-                                @case(4) Referensi @break
+                                @case(1)<span class="text-xl font-bold">01</span> Deskripsi @break
+                                @case(2)<span class="text-xl font-bold">02</span> Kebutuhan Aplikasi @break
+                                @case(3)<span class="text-xl font-bold">03</span> Detail Aplikasi @break
+                                @case(4)<span class="text-xl font-bold">04</span> Referensi @break
                             @endswitch
+                        </div>
+                        <!-- Lingkaran Stepper -->
+                        <div class="stepper-circle w-12 h-12 rounded-full border-4 border-gray-300 flex items-center justify-center text-gray-600 font-bold text-xl mb-2 transition-all duration-300 ease-in-out">
+                            {{ $step }}
                         </div>
                     </div>
                 @endforeach
@@ -81,18 +89,18 @@
                     <option value="web">Web</option>
                     <option value="mobile">Mobile</option>
                     <option value="desktop">Desktop</option>
-                    <option value="multiplatform">Multiplatform</option>
+                    <option value="multi-platform">Multi-platform</option>
                 </select>
             </div>
             <div class="mb-4">
                 <label class="block mb-2">Jenis Proyek</label>
                 <div class="flex items-center space-x-4">
                     <label class="inline-flex items-center">
-                        <input type="radio" name="jenis_proyek" value="Aplikasi Baru" class="form-radio" required>
+                        <input type="radio" name="jenis_proyek" value="0" class="form-radio" required>
                         <span class="ml-2">Aplikasi Baru</span>
                     </label>
                     <label class="inline-flex items-center">
-                        <input type="radio" name="jenis_proyek" value="Aplikasi Sudah Ada" class="form-radio" required>
+                        <input type="radio" name="jenis_proyek" value="1" class="form-radio" required>
                         <span class="ml-2">Aplikasi Sudah Ada</span>
                     </label>
                 </div>
@@ -225,13 +233,9 @@
     });
 
     form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        if (validateStep(4)) {
-            this.submit();
-        } else {
-            alert('Please fill in all required fields.');
-        }
-    });
+    this.submit();  // Sementara hapus preventDefault
+});
+
 
     // Initialize the form
     updateStep(currentStep);

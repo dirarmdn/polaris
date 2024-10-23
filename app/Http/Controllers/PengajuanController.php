@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Pengajuan;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Mail\VerificationEmail;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\StorePengajuanRequest;
 use App\Http\Requests\UpdatePengajuanRequest;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\VerificationEmail;
-use Illuminate\Support\Str;
 
 class PengajuanController extends Controller
 {
@@ -59,26 +60,25 @@ class PengajuanController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
     public function store(StorePengajuanRequest $request)
     {
-        dd($request);
         $data = $request->validated();
-        // dd($data); // Tambahkan ini untuk memastikan semua field terisi, terutama `id_pengaju`
+
+        $data = Arr::add($data, 'user_id', 1);
+        $data = Arr::add($data, 'kode_pengajuan', 'PGN-' . strtoupper(uniqid()));
+        $data = Arr::add($data, 'isVerified', false);
     
-        $pengajuan = new Pengajuan($data);
-        $pengajuan->save();
+        Pengajuan::create($data);
     
         return redirect()->route('submissions.index')->with('success', 'Pengajuan berhasil dibuat!');
-    }    
+    }
 
     /**
      * Display the specified resource.
      */
     public function show(string $kode_pengajuan)
     {
-        // Debugging nilai kode_pengajuan
-        // dd($kode_pengajuan);
-    
         $pengajuan = Pengajuan::where('kode_pengajuan', $kode_pengajuan)->first();
     
         if (!$pengajuan) {

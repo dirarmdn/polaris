@@ -7,13 +7,13 @@
             <img src="{{ asset('images/Logo.png') }}" alt="Logo" class="h-20">
         </div>
         <h2 class="mb-8 text-md font-bold text-center">Bergabung bersama kami</h2>
-        <form method="POST" action="{{ route('register') }}">
+        <form method="POST" action="{{ route('user.register') }}">
             @csrf
             <!-- Nama Lengkap -->
             <div class="mb-4">
                 <input type="text" id="name" name="name" placeholder="Nama Lengkap" class="w-full px-6 py-3 text-md border rounded-lg focus:outline-none focus:ring focus:ring-primary-300" value="{{ old('name') }}">
                 @error('name')
-                <span class="text-xs text-red-600">{{ $message }}</span>
+                    <span class="text-xs text-red-600">{{ $message }}</span>
                 @enderror
             </div>
 
@@ -21,7 +21,7 @@
             <div class="mb-4">
                 <input type="email" id="email" name="email" placeholder="Email" class="w-full px-6 py-3 text-md border rounded-lg focus:outline-none focus:ring focus:ring-primary-300" value="{{ old('email') }}">
                 @error('email')
-                <span class="text-xs text-red-600">{{ $message }}</span>
+                    <span class="text-xs text-red-600">{{ $message }}</span>
                 @enderror
             </div>
 
@@ -29,7 +29,7 @@
             <div class="mb-4">
                 <input type="text" id="job_position" name="job_position" placeholder="Jabatan dalam Orgranisasi" class="w-full px-6 py-3 text-md border rounded-lg focus:outline-none focus:ring focus:ring-primary-300" value="{{ old('job_position') }}">
                 @error('job_position')
-                <span class="text-xs text-red-600">{{ $message }}</span>
+                    <span class="text-xs text-red-600">{{ $message }}</span>
                 @enderror
             </div>
             
@@ -37,7 +37,7 @@
             <div class="mb-4">
                 <input type="text" id="organization_name" name="organization_name" placeholder="Nama organisasi" class="w-full px-6 py-3 text-md border rounded-lg focus:outline-none focus:ring focus:ring-primary-300" value="{{ old('organization_name') }}">
                 @error('organization_name')
-                <span class="text-xs text-red-600">{{ $message }}</span>
+                    <span class="text-xs text-red-600">{{ $message }}</span>
                 @enderror
             </div>
 
@@ -45,7 +45,7 @@
             <div class="mb-4">
                 <input type="password" id="password" name="password" placeholder="Password" class="w-full px-6 py-3 text-md border rounded-lg focus:outline-none focus:ring focus:ring-primary-300">
                 @error('password')
-                <span class="text-xs text-red-600">{{ $message }}</span>
+                    <span class="text-xs text-red-600">{{ $message }}</span>
                 @enderror
             </div>
 

@@ -27,6 +27,7 @@ class AuthController extends Controller
             'password' => 'required|string|min:8|confirmed',
             'terms' => 'required',
         ]);
+        // dd($validator);
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
@@ -40,6 +41,7 @@ class AuthController extends Controller
 
         // Buat user baru
         $user = User::create([
+            ['idP' => strtoupper(substr($request->organization, 0, 3) . rand(100, 999))],
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
