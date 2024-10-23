@@ -1,4 +1,4 @@
-<nav class="bg-white border-gray-200 dark:bg-gray-900">
+<nav class="bg-white border-gray-200 dark:bg-gray-900 px-10">
     <div class="flex flex-wrap items-center justify-between mx-auto p-4">
         <a href="{{ route('home') }}" class="flex items-center space-x-3 rtl:space-x-reverse">
             <img class="max-h-12" src="{{ asset('images/Logo.png') }}" alt="" srcset="">
@@ -36,12 +36,12 @@
                 </li>
                 <li>
                     <a href="{{ route('home.about') }}"
-                        class="{{ Route::is('about') ? 'block py-2 px-3 md:p-0 border-b-2 border-accent-light-500 font-bold' : 'block py-2 px-3 md:p-0 text-gray-900' }} hover:bg-gray-100 md:hover:bg-transparent md:hover:text-secondary-900 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">
+                        class="{{ Route::is('home.about') ? 'block py-2 px-3 md:p-0 border-b-2 border-accent-light-500 font-bold' : 'block py-2 px-3 md:p-0 text-gray-900' }} hover:bg-gray-100 md:hover:bg-transparent md:hover:text-secondary-900 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">
                         About</a>
                 </li>
                 <li>
                     <a href="{{ route('home.faq') }}"
-                        class="{{ Route::is('faq') ? 'block py-2 px-3 md:p-0 border-b-2 border-accent-light-500 font-bold' : 'block py-2 px-3 md:p-0 text-gray-900' }} hover:bg-gray-100 md:hover:bg-transparent md:hover:text-secondary-900 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">
+                        class="{{ Route::is('home.faq') ? 'block py-2 px-3 md:p-0 border-b-2 border-accent-light-500 font-bold' : 'block py-2 px-3 md:p-0 text-gray-900' }} hover:bg-gray-100 md:hover:bg-transparent md:hover:text-secondary-900 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">
                         FAQ</a>
                 </li>
             </ul>

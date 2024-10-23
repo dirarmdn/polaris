@@ -1,6 +1,6 @@
 <div class="list-view">
     @foreach($pengajuan as $p)
-        <div data-aos="fade-up" class="max-w-2xl flex flex-col md:flex-row items-center gap-5 mb-3 p-6 bg-primary-50 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+        <div data-aos="fade-up" class="max-w-2xl flex flex-col md:flex-row items-center justify-between gap-5 mb-3 p-6 bg-primary-50 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
             <div class="flex flex-col md:flex-col-reverse">
                 <span class="bg-primary-800 mr-auto opacity-85 text-white text-xs font-medium me-2 px-7 py-1 rounded-xl dark:bg-blue-900 dark:text-blue-300">{{ $p->platform }}</span>
                 <h5 class="mb-2 text-lg font-semibold tracking-tight text-gray-900 dark:text-white">{{ $p->judul_pengajuan }}</h5>
