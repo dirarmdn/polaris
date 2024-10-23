@@ -19,8 +19,4 @@ Route::get('/search', [PengajuanController::class, 'search'])->name('submissions
 Route::get('/pengajuan/verification', [PengajuanController::class, 'verification'])->name('submissions.verification');
 Route::post('/send-verification-code', [PengajuanController::class, 'sendVerificationCode'])->name('send.verification.code');
 Route::get('/pengajuan/create', [PengajuanController::class, 'create'])->name('submissions.create');
-<<<<<<< HEAD
-Route::post('/pengajuan', [PengajuanController::class, 'store'])->name('pengajuans.store');
-=======
 Route::post('/pengajuan/store', [PengajuanController::class, 'store'])->name('submissions.store');
->>>>>>> 63899f6253462e2f161e203109451124d74b37c2
