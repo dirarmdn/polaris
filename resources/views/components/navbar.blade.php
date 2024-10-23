@@ -24,16 +24,9 @@
                 About Us
             </a>
 
-            <a href="{{ route('home.faq') }}" class="block mt-4 lg:inline-block lg:mt-0 text-black mr-4">
+            <a href="{{ route('home') }}" class="block mt-4 lg:inline-block lg:mt-0 text-black mr-4">
                 FAQ
             </a>
         </div>
-    </div>
-
-    <div>
-        <a href="{{ route('submissions.create') }}" class="inline-block text-sm px-4 py-2 leading-none border rounded-lg bg-orange-500 text-white border-transparent hover:bg-orange-700 mt-4 lg:mt-0">
-            <span class="material-symbols-outlined">
-                +
-                </span>Buat Pengajuan</a>
     </div>
 </nav>

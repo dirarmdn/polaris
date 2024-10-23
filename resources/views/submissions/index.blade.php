@@ -27,7 +27,7 @@
             </div>
 
             <div class="w-2xl flex justify-between items-center my-7">
-                <h2><span id="pengajuan-count">{{ $pengajuan->count() }}</span> Pengajuan ditampilkan</h2>
+                <h2 class="text-sm md:text-base"><span id="pengajuan-count">{{ $pengajuan->count() }}</span> Pengajuan ditampilkan</h2>
                 <div class="flex items-center gap-2">
                     <button id="sort-button" data-dropdown-toggle="dropdownHover" data-dropdown-trigger="hover"
                         class="text-dark-800 border border-gray-300 bg-white hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-xs px-4 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"

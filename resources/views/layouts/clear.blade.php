@@ -9,14 +9,10 @@
     @vite(['resources/css/app.css','resources/js/app.js'])
 </head>
 <body>
-    <header>
-        @include('components.navbar')
-    </header>
 
-    <div class="container mx-auto px-4 overflow-hidden">
+    <div class="container">
         @yield('content')
     </div>
-
-    @include('components.footer')
+    
 </body>
 </html>

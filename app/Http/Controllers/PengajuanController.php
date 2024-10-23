@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Pengajuan;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Mail\VerificationEmail;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\StorePengajuanRequest;
 use App\Http\Requests\UpdatePengajuanRequest;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\VerificationEmail;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
 
 class PengajuanController extends Controller
 {
@@ -60,49 +63,23 @@ class PengajuanController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StorePengajuanRequest $request)
     {
-        $validatedData = $request->validate([
-            'judul_pengajuan' => 'required|string|max:255',
-            'deskripsi_masalah' => 'required|string',
-            'tujuan_aplikasi' => 'required|string',
-            'proses_bisnis' => 'required|string',
-            'aturan_bisnis' => 'required|string',
-            'stakeholder' => 'required|string',
-            'platform' => 'required|string',
-            'jenis_proyek' => 'required|string',
-            'referensi_file.*' => 'file|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png|max:10240', // 10MB max
-        ]);
-
-        do {
-            $kode_pengajuan = 'PGJ-' . Str::random(8);
-        } while (Pengajuan::where('kode_pengajuan', $kode_pengajuan)->exists());
-
-        $pengajuan = new Pengajuan($validatedData);
-        $pengajuan->kode_pengajuan = $kode_pengajuan;
-        $pengajuan->user_id = auth()->id(); // Menggunakan auth()->id() sebagai gantinya
-        $pengajuan->isVerified = false;
-
+        dd($request);
+        $data = $request->validated();
+        // dd($data); // Tambahkan ini untuk memastikan semua field terisi, terutama `id_pengaju`
+    
+        $pengajuan = new Pengajuan($data);
         $pengajuan->save();
-
-        if ($request->hasFile('referensi_file')) {
-            foreach ($request->file('referensi_file') as $file) {
-                $path = $file->store('referensi_files/' . $kode_pengajuan, 'public');
-                $pengajuan->files()->create(['file_path' => $path]);
-            }
-        }
-
-        return redirect()->route('pengajuans.index')->with('success', 'Pengajuan berhasil disimpan.');
-    }
+    
+        return redirect()->route('submissions.index')->with('success', 'Pengajuan berhasil dibuat!');
+    }    
 
     /**
      * Display the specified resource.
      */
     public function show(string $kode_pengajuan)
     {
-        // Debugging nilai kode_pengajuan
-        // dd($kode_pengajuan);
-    
         $pengajuan = Pengajuan::where('kode_pengajuan', $kode_pengajuan)->first();
     
         if (!$pengajuan) {

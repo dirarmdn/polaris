@@ -21,8 +21,8 @@ return new class extends Migration
             $table->text('tujuan_aplikasi');
             $table->text('proses_bisnis');
             $table->text('aturan_bisnis');
-            $table->string('platform');
-            $table->enum('jenis_proyek', ['Proyek yang sudah ada','Proyek Baru']);
+            $table->enum('platform', ['web', 'mobile', 'desktop', 'multi-platform']);
+            $table->boolean('jenis_proyek');
             $table->string('stakeholder');
             $table->timestamps();
         });
