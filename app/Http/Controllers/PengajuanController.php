@@ -10,6 +10,9 @@ use App\Mail\VerificationEmail;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\StorePengajuanRequest;
 use App\Http\Requests\UpdatePengajuanRequest;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\VerificationEmail;
+use Illuminate\Support\Str;
 
 class PengajuanController extends Controller
 {
@@ -60,19 +63,17 @@ class PengajuanController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-
     public function store(StorePengajuanRequest $request)
     {
+        dd($request);
         $data = $request->validated();
-
-        $data = Arr::add($data, 'user_id', 1);
-        $data = Arr::add($data, 'kode_pengajuan', 'PGN-' . strtoupper(uniqid()));
-        $data = Arr::add($data, 'isVerified', false);
+        // dd($data); // Tambahkan ini untuk memastikan semua field terisi, terutama `id_pengaju`
     
-        Pengajuan::create($data);
+        $pengajuan = new Pengajuan($data);
+        $pengajuan->save();
     
         return redirect()->route('submissions.index')->with('success', 'Pengajuan berhasil dibuat!');
-    }
+    }    
 
     /**
      * Display the specified resource.
@@ -113,5 +114,6 @@ class PengajuanController extends Controller
     {
         $pengajuan->delete(); // Hapus data pengajuan
         return redirect()->route('submissions.index')->with('success', 'Pengajuan berhasil dihapus!');
-    }    
+    }
+    
 }

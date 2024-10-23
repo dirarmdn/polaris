@@ -12,6 +12,7 @@ class Pengajuan extends Model
     protected $table = 'pengajuans'; // Nama tabel
     protected $primaryKey = 'kode_pengajuan';
     public $incrementing = false;
+    protected $keyType = 'string';
 
     protected $fillable = [
         'kode_pengajuan',
@@ -31,5 +32,10 @@ class Pengajuan extends Model
     public function user()
     {
         return $this->belongsTo('App\Models\User', 'user_id');
+    }
+
+    public function files()
+    {
+        return $this->hasMany(PengajuanFile::class, 'pengajuan_id', 'kode_pengajuan');
     }
 }
