@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('pengajuan_files', function (Blueprint $table) {
             $table->id();
+            $table->string('kode_pengajuan');
+            $table->foreign('kode_pengajuan')->references('kode_pengajuan')->on('pengajuans');
             $table->timestamps();
         });
     }

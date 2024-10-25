@@ -36,6 +36,6 @@ class Pengajuan extends Model
 
     public function files()
     {
-        return $this->hasMany(PengajuanFile::class, 'pengajuan_id', 'kode_pengajuan');
+        return $this->hasMany(PengajuanFile::class, 'kode_pengajuan');
     }
 }
