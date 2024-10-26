@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Daftar Pengajuan')
+
 @section('content')
     <div class="flex justify-center">
         <div class="p-10">
