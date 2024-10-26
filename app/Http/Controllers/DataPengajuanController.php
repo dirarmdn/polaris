@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\data_pengajuan;
 use Illuminate\Http\Request; 
 use Illuminate\Support\Facades\DB; 
+use App\Models\Pengajuan; // Pastikan Anda mengimpor model ini
 
 class DataPengajuanController extends Controller
 {
@@ -13,7 +14,6 @@ class DataPengajuanController extends Controller
       //  $pengajuans = DB::table('pengajuans')->get();
         //return $pengajuans;
     //}
-    use App\Models\Pengajuan; // Pastikan Anda mengimpor model ini
 
     public function index(Request $request)
 {

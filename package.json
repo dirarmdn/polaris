@@ -12,5 +12,13 @@
         "postcss": "^8.4.47",
         "tailwindcss": "^3.4.12",
         "vite": "^5.0"
+    },
+    "dependencies": {
+        "@material/web": "^2.2.0",
+        "aos": "^2.3.4",
+        "flowbite": "^2.5.2",
+        "jquery": "^3.7.1",
+        "material-icons": "^1.13.12",
+        "sweetalert2": "^11.14.4"
     }
 }

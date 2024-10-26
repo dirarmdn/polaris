@@ -61,11 +61,14 @@
         </tr>
     </thead>
     <tbody>
+    <tbody>
     @forelse($data_pengajuans as $pengajuan)
     <tr class="bg-white border-b hover:bg-gray-50">
         <td class="px-6 py-4">{{ $pengajuan->judul_pengajuan }}</td>
         <td class="px-6 py-4">{{ $pengajuan->user->name ?? 'Tidak diketahui' }}</td> 
-        <td class="px-6 py-4">{{ $pengajuan->created_at->format('Y-m-d H:i:s') }}</td> 
+        <td class="px-6 py-4">
+            {{ $pengajuan->created_at ? $pengajuan->created_at->format('Y-m-d H:i:s') : 'Tanggal tidak tersedia' }}
+        </td>
         <td class="px-6 py-4 text-center">
             @if($pengajuan->isVerified)
                 <span class="inline-block px-3 py-1 text-sm font-semibold text-white bg-green-500 rounded-full">Diverifikasi</span>
@@ -73,13 +76,18 @@
                 <span class="inline-block px-3 py-1 text-sm font-semibold text-white bg-yellow-500 rounded-full">Belum Diverifikasi</span>
             @endif
         </td>
+        <td class="px-6 py-4">
+                    <button class="flex items-center text-black-600 hover:underline">
+                        <span class="material-symbols-outlined mr-1">visibility</span> Lihat Detail
+                    </button>
+                </td>
     </tr>
     @empty
     <tr>
-        <td colspan="4" class="px-6 py-4 text-center">Tidak ada pengajuan yang ditemukan.</td>
+        <td colspan="5" class="px-6 py-4 text-center">Tidak ada pengajuan yang ditemukan.</td>
     </tr>
     @endforelse
-    </tbody>
+</tbody>
 </table>
 </div>
 

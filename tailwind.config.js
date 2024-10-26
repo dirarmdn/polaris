@@ -7,6 +7,12 @@ export default {
   ],
   theme: {
     extend: {
+      backgroundImage: {
+        'landing-bg-1': "url('/images/Landing-1.svg')",
+      },
+      fontFamily: {
+        manrope: ['Manrope', 'sans-serif'],
+      },
       colors: {
         'primary': {
         '50': '#eef8ff',
@@ -73,8 +79,23 @@ export default {
         '900': '#82380c',
         '950': '#461a04',
     },
+          'dark': {
+              '50': '#f6f6f6',
+              '100': '#e7e7e7',
+              '200': '#d1d1d1',
+              '300': '#b0b0b0',
+              '400': '#888888',
+              '500': '#6d6d6d',
+              '600': '#5d5d5d',
+              '700': '#4f4f4f',
+              '800': '#454545',
+              '900': '#383838',
+              '950': '#262626',
+          },
       }
     },
   },
-  plugins: [],
+    plugins: [
+        require('flowbite/plugin'),
+    ],
 }
