@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Polaris | Portal Layanan Ajuan Aplikasi SAtu Pintu')
+
 @section('content')
     <div class="flex flex-col justify-center items-center mb-10">
         <div class="p-16 pb-3">
