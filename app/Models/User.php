@@ -49,6 +49,6 @@ class User extends Authenticatable
 
     public function pengajuan()
     {
-        return $this->hasMany('App\Models\User', 'user_id');
+        return $this->hasMany('App\Models\Pengajuan', 'user_id');
     }
 }

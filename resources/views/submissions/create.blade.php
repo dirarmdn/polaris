@@ -159,7 +159,7 @@
             const label = s.querySelector('.stepper-label');
             if (index + 1 <= step) {
                 circle.classList.remove('bg-white', 'border-gray-300', 'text-gray-600');
-                circle.classList.add('bg-blue-500', 'border-blue-500', 'text-white');
+                circle.classList.add('bg-accent-light-500', 'border-accent-light-500', 'text-white');
                 label.classList.remove('text-gray-600');
                 label.classList.add('text-blue-600', 'font-semibold');
             } else {
@@ -317,8 +317,8 @@
     }
 
     .stepper-circle.active {
-        border-color: #3b82f6; /* Warna biru aktif */
-        background-color: #3b82f6;
+        border-color: #FD851E;
+        background-color: #FD851E;
         color: white;
     }
 
@@ -328,13 +328,13 @@
     }
 
     .stepper-label.active {
-        color: #3b82f6; /* Warna label aktif */
+        color: #FD851E; /* Warna label aktif */
     }
 
     /* Garis Progres */
     #stepperProgress {
         height: 6px;
-        background-color: #3b82f6;
+        background-color: #FD851E;
         border-radius: 9999px;
         transition: width 0.5s ease-in-out;
     }

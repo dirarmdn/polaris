@@ -9,10 +9,10 @@ class PengajuanFile extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['pengajuan_id', 'file_path'];
-
+    protected $fillable = ['kode_pengajuan', 'file_path'];
+    public $incrementing = true;
     public function pengajuan()
     {
-        return $this->belongsTo(Pengajuan::class, 'pengajuan_id', 'kode_pengajuan');
+        return $this->belongsTo(Pengajuan::class, 'kode_pengajuan');
     }
 }
