@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Detail Data Pengajuan')
+
 @section('content')
 <div class="max-w-6xl mx-auto my-10 p-6 bg-white shadow-lg rounded-xl font-manrope">
     <h1 class="text-3xl font-semibold mb-6 text-center">{{ $pengajuan->judul_pengajuan }}</h1>
