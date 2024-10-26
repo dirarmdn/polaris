@@ -16,12 +16,13 @@
             </div>
         @endif
     
-        <div class="relative mb-8 max-w-4xl mx-auto px-4">
-            <!-- Garis Latar -->
-            <div class="absolute top-1/2 left-0 w-full h-1 bg-gray-300 transform -translate-y-1/2 rounded-full"></div>
+        <div class="relative mb-8 max-w-4xl mx-auto">
+            <!-- Background Line -->
+            <div class="absolute top-1/2 left-1/2 w-3/4 h-1 bg-gray-300 transform -translate-x-1/2 -translate-y-1/2 rounded-full z-20"></div>
 
-            <!-- Garis Progres -->
-            <div id="stepperProgress" class="absolute top-1/2 left-0 h-1 bg-blue-500 transform -translate-y-1/2 transition-all duration-500 ease-in-out rounded-full" style="width: 0%"></div>
+            <!-- Progress Line -->
+            <div id="stepperProgress" class="absolute top-1/2 left-1/2 w-3/4 h-1 bg-blue-500 transform -translate-x-1/2 -translate-y-1/2 rounded-full z-20" style="width: 0%;"></div>
+
 
             <!-- Stepper -->
             <div class="relative flex justify-between items-center space-x-8 bg-primary-900 rounded-xl px-20 py-7">
@@ -37,7 +38,7 @@
                             @endswitch
                         </div>
                         <!-- Lingkaran Stepper -->
-                        <div class="stepper-circle w-12 h-12 rounded-full border-4 border-gray-300 flex items-center justify-center text-gray-600 font-bold text-xl mb-2 transition-all duration-300 ease-in-out">
+                        <div class="stepper-circle w-12 h-12 rounded-full border-4 border-gray-300 flex items-center justify-center text-gray-600 font-bold text-xl mb-2 transition-all duration-300 ease-in-out z-30">
                             {{ $step }}
                         </div>
                     </div>
@@ -46,8 +47,10 @@
         </div>
        
         <!-- Step 1: Deskripsi -->
-        <div class="step-content hidden" data-step="1">
-            <h2 class="text-2xl font-semibold mb-4">Deskripsi Pengajuan</h2>
+        <div class="bg-white rounded-xl overflow-hidden shadow-md w-full h-900 p-4 step-content hidden" data-step="1">
+            <h2 class="text-2xl font-semibold mb-4 my-5">Deskripsi Pengajuan</h2>
+            <p class="font-sans text-gray-400 text-xxs my-0">Isi form deskripsi pengajuan sesuai dengan apa yang diinginkan secara detail</p>
+            <hr class="border-gray-950 border-t-1 w-full mx-auto my-5">
             <div class="mb-4">
                 <label for="judul_pengajuan" class="block mb-2">Judul Pengajuan</label>
                 <input type="text" id="judul_pengajuan" name="judul_pengajuan" class="w-full border border-gray-300 rounded px-3 py-2" required>
@@ -63,8 +66,10 @@
         </div>
 
         <!-- Step 2: Kebutuhan Aplikasi -->
-        <div class="step-content hidden" data-step="2">
-            <h2 class="text-2xl font-semibold mb-4">Kebutuhan Aplikasi</h2>
+        <div class="bg-white rounded-xl overflow-hidden shadow-md w-full h-900 p-4 step-content hidden" data-step="2">
+            <h2 class="text-2xl font-semibold mb-4 my-5">Kebutuhan Aplikasi</h2>
+            <p class="font-sans text-gray-400 text-xxs my-0">Isi form kebutuhan aplikasi sesuai dengan apa yang diinginkan secara detail</p>
+            <hr class="border-gray-950 border-t-1 w-full mx-auto my-5">
             <div class="mb-4">
                 <label for="proses_bisnis" class="block mb-2">Proses Bisnis</label>
                 <textarea id="proses_bisnis" name="proses_bisnis" rows="4" class="w-full border border-gray-300 rounded px-3 py-2" required></textarea>
@@ -76,8 +81,10 @@
         </div>
 
         <!-- Step 3: Detail Aplikasi -->
-        <div class="step-content hidden" data-step="3">
-            <h2 class="text-2xl font-semibold mb-4">Detail Aplikasi</h2>
+        <div class="bg-white rounded-xl overflow-hidden shadow-md w-full h-900 p-4 step-content hidden" data-step="3">
+            <h2 class="text-2xl font-semibold mb-4 my-5">Detail Aplikasi</h2>
+            <p class="font-sans text-gray-400 text-xxs my-0">Isi form detail aplikasi sesuai dengan apa yang diinginkan secara detail</p>
+            <hr class="border-gray-950 border-t-1 w-full mx-auto my-5">
             <div class="mb-4">
                 <label for="stakeholder" class="block mb-2">Stakeholder</label>
                 <textarea id="stakeholder" name="stakeholder" rows="4" class="w-full border border-gray-300 rounded px-3 py-2" required></textarea>
@@ -108,8 +115,10 @@
         </div>
 
         <!-- Step 4: Referensi dan Upload File -->
-        <div class="step-content hidden" data-step="4">
-            <h2 class="text-2xl font-semibold mb-4">Referensi dan Upload File</h2>
+        <div class="bg-white rounded-xl overflow-hidden shadow-md w-full h-900 p-4 step-content hidden" data-step="4">
+            <h2 class="text-2xl font-semibold mb-4 my-5">Referensi dan Upload File</h2>
+            <p class="font-sans text-gray-400 text-xxs my-0">Isi form referensi (opsional) yang relevan dengan aplikasi yang diinginkan</p>
+            <hr class="border-gray-950 border-t-1 w-full mx-auto my-5">
             <div class="mb-4">
                 <label for="referensi_link" class="block mb-2">Referensi Link</label>
                 <input type="url" id="referensi_link" name="referensi_link" class="w-full border border-gray-300 rounded px-3 py-2" placeholder="https://example.com" required>
