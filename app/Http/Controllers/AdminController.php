@@ -38,15 +38,12 @@ class AdminController extends Controller
      */
     public function show($id)
     {
-        // Mencari admin berdasarkan user_id
-        $admin = Admin::where('user_id', $id)->first();
+        $user = User::findOrFail($id);
         
-        // Mencari user berdasarkan ID yang sama
-        $user = User::find($id);
-        
-        return view('admin.admins.show', compact('admin', 'user'));
+        return view('admin.admins.show', compact('user'));
     }
-    
+
+
     
     
     /**

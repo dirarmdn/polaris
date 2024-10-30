@@ -19,16 +19,16 @@
         <div class="bg-white mt-6 p-6 rounded-lg shadow-md">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <p class="text-black-600 font-bold">NIP</p>
-                    <p class="text-black-800">{{ $admin->nip }}</p>
-                </div>
-                <div>
                     <p class="text-black-600 font-bold">Nama Lengkap</p>
                     <p class="text-black-800">{{ $user->name }}</p>
                 </div>
                 <div>
                     <p class="text-black-600 font-bold">Email</p>
                     <p class="text-black-800">{{ $user->email }}</p>
+                </div>
+                <div>
+                    <p class="text-black-600 font-bold">Jabatan</p>
+                    <p class="text-black-800">{{ $user->jabatan }}</p>
                 </div>
                 <div>
                     <p class="text-black-600 font-bold">Dibuat pada</p>
