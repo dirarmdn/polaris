@@ -4,7 +4,7 @@
             <img class="max-h-12" src="{{ asset('images/Logo.png') }}" alt="" srcset="">
         </a>
         <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse items-center">
-            <a href="{{ route('submissions.create') }}"
+            <a href="{{ route('dashboard.submissions.create') }}"
                 class="inline-block text-sm px-6 py-2.5 leading-none border mr-1 md:mr-3 rounded-lg font-bold bg-gray-200 text-dark-800 border-transparent hover:bg-gray-300 lg:mt-0">
                 Sign in</a>
             <a href="{{ route('register') }}"

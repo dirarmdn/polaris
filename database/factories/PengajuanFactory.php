@@ -20,7 +20,7 @@ class PengajuanFactory extends Factory
     {
         return [
             'kode_pengajuan' => $this->faker->unique()->regexify('[A-Z]{5}[0-9]{3}'), // e.g. ABCDE123
-            'user_id' => User::factory(),
+            'user_id' => User::factory()->create()->id,
             'isVerified' => $this->faker->boolean(),
             'judul_pengajuan' => $this->faker->sentence,
             'deskripsi_masalah' => $this->faker->paragraphs(2, true), // Deskripsi panjang

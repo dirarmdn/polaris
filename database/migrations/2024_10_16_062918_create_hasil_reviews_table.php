@@ -12,9 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('hasil_reviews', function (Blueprint $table) {
-            $table->id();
-            $table->string('nip');
-            $table->foreign('nip')->references('nip')->on('admins');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('user_id')->constrained('users');
             $table->string('kode_pengajuan');
             $table->foreign('kode_pengajuan')->references('kode_pengajuan')->on('pengajuans');
             $table->text('deskripsi_review');

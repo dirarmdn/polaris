@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pengajuan;
+use App\Models\Referensi;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -54,7 +55,7 @@ class PengajuanController extends Controller
      */
     public function create()
     {
-        return view("submissions.create");
+        return view("dashboard.submissions.create");
     }
 
     /**
@@ -70,6 +71,13 @@ class PengajuanController extends Controller
         $data = Arr::add($data, 'isVerified', false);
     
         Pengajuan::create($data);
+
+        if($request->has('referensi')) { 
+            foreach ($request->referensi as $referensiData) { 
+                $referensi = new Referensi($referensiData); 
+                $data->referensi()->save($referensi); 
+            } 
+        }
     
         return redirect()->route('submissions.index')->with('success', 'Pengajuan berhasil dibuat!');
     }
@@ -79,7 +87,7 @@ class PengajuanController extends Controller
      */
     public function show(string $kode_pengajuan)
     {
-        $pengajuan = Pengajuan::where('kode_pengajuan', $kode_pengajuan)->first();
+        $pengajuan = Pengajuan::with('referensi')->where('kode_pengajuan', $kode_pengajuan)->first();
     
         if (!$pengajuan) {
             return redirect()->route('submissions.index')->with('error', 'Pengajuan tidak ditemukan!');
