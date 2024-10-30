@@ -8,14 +8,16 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DataPengajuanController;
 use App\Http\Controllers\LoginController;
 
+Route::get('/', [HomeController::class,'index'])->name('home');
 Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register/user', [AuthController::class, 'register'])->name('user.register');
-Route::get('/', [HomeController::class,'index'])->name('home');
 Route::get('/about', [HomeController::class,'about'])->name('home.about');
 Route::get('/faq', [HomeController::class,'faq'])->name('home.faq');
+
 Route::get('/pengajuan', [PengajuanController::class, 'index'])->name('submissions.index');
 Route::get('/pengajuan/detail/{kode_pengajuan}', [PengajuanController::class,'show'])->name('submissions.show');
-Route::get('/pengajuan/create', [PengajuanController::class, 'create'])->name('submissions.create');
+Route::get('/pengajuan/create', [PengajuanController::class, 'create'])->name('dashboard.submissions.create');
+Route::post('/pengajuan/store', [PengajuanController::class, 'store'])->name('dashboard.submissions.store');
 Route::get('/search', [PengajuanController::class, 'search'])->name('submissions.search');
 
 Route::get('/pengajuan/verification', [PengajuanController::class, 'verification'])->name('submissions.verification');
@@ -25,12 +27,3 @@ Route::post('/pengajuan/store', [PengajuanController::class, 'store'])->name('su
 
 Route :: get('admin/pengajuan',[DataPengajuanController::class,'index']);
 Route::get('/admin/pengajuan', [DataPengajuanController::class, 'index'])->name('admin.submissions.index');
-
-Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login.show');
-Route::post('/login', [LoginController::class, 'login'])->name('login');
-
-Route::get('/admin/create', [AdminController::class, 'create'])->name('admin.create');
-Route::post('/admin/store', [AdminController::class, 'store'])->name('admin.store');
-
-Route::get('/admin/edit', [AdminController::class, 'edit'])->name('admin.edit');
-Route::post('/admin/update', [AdminController::class, 'update'])->name('admin.update');

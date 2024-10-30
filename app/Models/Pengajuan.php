@@ -15,8 +15,6 @@ class Pengajuan extends Model
     protected $keyType = 'string';
 
     protected $fillable = [
-        'kode_pengajuan',
-        'user_id',
         'isVerified',
         'judul_pengajuan',
         'deskripsi_masalah',
@@ -34,8 +32,8 @@ class Pengajuan extends Model
         return $this->belongsTo('App\Models\User', 'user_id');
     }
 
-    public function files()
+    public function referensi()
     {
-        return $this->hasMany(PengajuanFile::class, 'kode_pengajuan');
+        return $this->hasMany(Referensi::class, 'kode_pengajuan');
     }
 }

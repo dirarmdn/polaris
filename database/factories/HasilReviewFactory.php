@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use App\Models\Admin;
 use App\Models\Pengajuan;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -19,7 +20,7 @@ class HasilReviewFactory extends Factory
     public function definition(): array
     {
         return [
-            'nip' => Admin::factory()->create()->nip, 
+            'user_id' => User::factory()->create()->id, 
             'kode_pengajuan' => Pengajuan::factory()->create()->kode_pengajuan, 
             'deskripsi_review' => $this->faker->paragraph(3), 
         ];

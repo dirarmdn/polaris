@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.dashboard')
 
 @section('title', 'Detail Data Pengajuan')
 
@@ -52,7 +52,10 @@
                     <p class="text-lg text-gray-600">{{ $pengajuan->stakeholder }}</p>
 
                     <h3 class="text-lg font-semibold mt-4 mb-2">Jenis Proyek:</h3>
-                    <p class="text-lg text-gray-600">{{ $pengajuan->jenis_proyek }}</p>
+                    <p class="text-lg text-gray-600">
+                        {{ $pengajuan->jenis_proyek ? 'Proyek yang sudah ada' : 'Proyek Baru' }}
+                    </p>
+                    
 
                     <h3 class="text-lg font-semibold mt-4 mb-2">Platform:</h3>
                     <p class="text-lg text-gray-600">{{ $pengajuan->platform }}</p>

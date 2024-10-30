@@ -15,8 +15,12 @@ class Organisasi extends Model
     protected $keyType = 'string';
 
     protected $fillable = [
-        'kode_organisasi',
-        'nama'
+        'nama',
+        'deskripsi_perusahaan',
+        'alamat',
+        'website',
+        'bidang_usaha',
+        'logo'      
     ];
 
     // Relasi dengan model Pengaju (One to Many)
