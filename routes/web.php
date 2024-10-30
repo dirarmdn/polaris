@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DataPengajuanController;
+use App\Http\Controllers\LoginController;
 
 Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register/user', [AuthController::class, 'register'])->name('user.register');
@@ -24,3 +25,12 @@ Route::post('/pengajuan/store', [PengajuanController::class, 'store'])->name('su
 
 Route :: get('admin/pengajuan',[DataPengajuanController::class,'index']);
 Route::get('/admin/pengajuan', [DataPengajuanController::class, 'index'])->name('admin.submissions.index');
+
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login.show');
+Route::post('/login', [LoginController::class, 'login'])->name('login');
+
+Route::get('/admin/create', [AdminController::class, 'create'])->name('admin.create');
+Route::post('/admin/store', [AdminController::class, 'store'])->name('admin.store');
+
+Route::get('/admin/edit', [AdminController::class, 'edit'])->name('admin.edit');
+Route::post('/admin/update', [AdminController::class, 'update'])->name('admin.update');
