@@ -20,7 +20,7 @@
             </div>
 
             <div class="flex-1 mt-8 lg:mx-12 lg:mt-0">
-                <div>
+                <!--<div>
                     <button class="flex items-center focus:outline-none">
                         <svg class="flex-shrink-0 w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path></svg>
 
@@ -34,7 +34,29 @@
                             Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni, eum quae. Harum officiis reprehenderit ex quia ducimus minima id provident molestias optio nam vel, quidem iure voluptatem, repellat et ipsa.
                         </p>
                     </div>
+                </div>-->
+
+                <div class="flex justify-center">
+                    <!-- Products -->
+                    <div class="relative w-[900px]">
+                        <!-- Input Checkbox -->
+                        <input type="checkbox" id="input" class="absolute opacity-0 peer">
+                        <!-- Heading Label -->
+                        <div class="absolute top-[15px] left-[-30px] flex items-center cursor-pointer rotate-0 peer-checked:rotate-180">
+                            <span class="material-symbols-outlined text-2xl text-blue-500 dark:text-blue-500 pr-2 transition-transform duration-500 transform" style="rotate: 270deg;">arrow_back_ios</span>
+                        </div>
+                        <label for="input" class="block mx-4 text-xl text-gray-700 dark:text-white h-[50px] flex items-center cursor-pointer">   
+                            How can I play for my appointment?
+                        </label> 
+                        <!-- Content -->
+                        <div class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out peer-checked:max-h-[200px]">
+                            <p class="max-w-3xl px-4 text-gray-500 dark:text-gray-300">
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni, eum quae. Harum officiis reprehenderit ex quia ducimus minima id provident molestias optio nam vel, quidem iure voluptatem, repellat et ipsa.
+                            </p>
+                        </div>
+                    </div>
                 </div>
+
 
                 <hr class="my-8 border-gray-200 dark:border-gray-700">
 
@@ -88,3 +110,11 @@
     </div>
 </section>
 @endsection
+
+<script>
+    function toggleIcon() {
+        const icon = document.getElementById("icon");
+        const checkbox = document.getElementById("input");
+        icon.textContent = checkbox.checked ? "remove" : "add";
+    }
+</script>
