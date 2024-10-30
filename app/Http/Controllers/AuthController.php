@@ -59,4 +59,10 @@ class AuthController extends Controller
 
         return redirect()->route('home');
     }
+
+    public function viewProfile() {
+        $user = User::with('organisasi')->findOrFail("0668dc9c-c3e4-3e54-b512-793ede97fd80");
+        // dd($user);
+        return view('auth.profile', compact('user'));
+    }
 }

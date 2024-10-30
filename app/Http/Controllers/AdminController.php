@@ -50,22 +50,22 @@ class AdminController extends Controller
    
     public function edit()
     {
-      return view('admin.admins.edit');
+        return view('admin.admins.edit');
     }
 
     public function update(Request $request)
     {
-      $validated = $request->validate([
-          'nip' => 'required|string|max:255',
-          'name' => 'required|string|max:255',
-          'email' => 'required|email|max:255',
-          'password' => 'nullable|string|min:8', 
-          'role' => 'required|string'
-      ]);
+        $validated = $request->validate([
+            'nip' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'password' => 'nullable|string|min:8', 
+            'role' => 'required|string'
+        ]);
 
-      $admin->save();
+        $validated->save();
 
-      return redirect()->route('admin.edit')->with('success', 'Admin updated successfully.');
+        return redirect()->route('admin.edit')->with('success', 'Admin updated successfully.');
     }
 
     /**
@@ -75,3 +75,4 @@ class AdminController extends Controller
     {
         //
     }
+}

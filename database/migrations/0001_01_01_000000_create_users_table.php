@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('no_telp', 20);
             $table->integer('role');
             $table->string('jabatan')->nullable();
+            $table->string('kode_organisasi');
+            $table->foreign('kode_organisasi')->references('kode_organisasi')->on('organisasis');      
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
