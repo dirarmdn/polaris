@@ -5,7 +5,8 @@ use App\Http\Controllers\PengajuanController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DataPengajuanController;
+
+Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
 
 Route::get('/', [HomeController::class,'index'])->name('home');
 Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
@@ -21,5 +22,5 @@ Route::get('/search', [PengajuanController::class, 'search'])->name('submissions
 
 Route::get('/pengajuan/verification', [PengajuanController::class, 'verification'])->name('submissions.verification');
 Route::post('/send-verification-code', [PengajuanController::class, 'sendVerificationCode'])->name('send.verification.code');
-Route::get('/admin/pengajuan', [DataPengajuanController::class, 'index'])->name('dashboard.submissions.index');
-Route::get('/admin/pengajuan/detail/{kode_pengajuan}', [DataPengajuanController::class, 'show'])->name('dashboard.submissions.show');
+Route::get('/pengajuan/create', [PengajuanController::class, 'create'])->name('submissions.create');
+Route::post('/pengajuan', [PengajuanController::class, 'store'])->name('submissions.store');
