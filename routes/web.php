@@ -25,3 +25,5 @@ Route::post('/pengajuan', [PengajuanController::class, 'store'])->name('submissi
 
 Route::get('/admin/detail/{id}', [AdminController::class, 'show'])->name('admin.admins.show');
 Route::get('/admin/pengajuan', [DataPengajuanController::class, 'index'])->name('dashboard.submissions.index');
+
+Route::get('/faq', [HomeController::class, 'faq'])->name('home.faq');
