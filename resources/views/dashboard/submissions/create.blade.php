@@ -6,7 +6,7 @@
 <div class="container mx-auto px-4 py-8">
     <h1 class="text-3xl font-bold mb-8">Form Pengajuan</h1>
 
-    <form id="submissionForm" action="{{ route('dashboard.submissions.store') }}" method="POST" enctype="multipart/form-data" class="max-w-4xl mx-auto">
+    <form id="submissionForm" action="{{ route('submissions.store') }}" method="POST" enctype="multipart/form-data" class="max-w-4xl mx-auto">
         @csrf
         @if($errors->any())
             <div class="bg-red-500 text-white p-4 mb-4">
@@ -55,15 +55,15 @@
             <hr class="border-gray-950 border-t-1 w-full mx-auto my-5">
             <div class="mb-4">
                 <label for="judul_pengajuan" class="block mb-2">Judul Pengajuan</label>
-                <input type="text" id="judul_pengajuan" name="judul_pengajuan" class="w-full border border-gray-300 rounded px-3 py-2" required>
+                <input type="text" id="judul_pengajuan" name="judul_pengajuan" class="w-full border border-gray-300 rounded px-3 py-2">
             </div>
             <div class="mb-4">
                 <label for="deskripsi_masalah" class="block mb-2">Deskripsi Masalah</label>
-                <textarea id="deskripsi_masalah" name="deskripsi_masalah" rows="4" class="w-full border border-gray-300 rounded px-3 py-2" required></textarea>
+                <textarea id="deskripsi_masalah" name="deskripsi_masalah" rows="4" class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
             </div>
             <div class="mb-4">
                 <label for="tujuan_aplikasi" class="block mb-2">Tujuan Aplikasi</label>
-                <textarea id="tujuan_aplikasi" name="tujuan_aplikasi" rows="4" class="w-full border border-gray-300 rounded px-3 py-2" required></textarea>
+                <textarea id="tujuan_aplikasi" name="tujuan_aplikasi" rows="4" class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
             </div>
         </div>
 
@@ -74,11 +74,11 @@
             <hr class="border-gray-950 border-t-1 w-full mx-auto my-5">
             <div class="mb-4">
                 <label for="proses_bisnis" class="block mb-2">Proses Bisnis</label>
-                <textarea id="proses_bisnis" name="proses_bisnis" rows="4" class="w-full border border-gray-300 rounded px-3 py-2" required></textarea>
+                <textarea id="proses_bisnis" name="proses_bisnis" rows="4" class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
             </div>
             <div class="mb-4">
                 <label for="aturan_bisnis" class="block mb-2">Aturan Bisnis</label>
-                <textarea id="aturan_bisnis" name="aturan_bisnis" rows="4" class="w-full border border-gray-300 rounded px-3 py-2" required></textarea>
+                <textarea id="aturan_bisnis" name="aturan_bisnis" rows="4" class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
             </div>
         </div>
 
@@ -89,11 +89,11 @@
             <hr class="border-gray-950 border-t-1 w-full mx-auto my-5">
             <div class="mb-4">
                 <label for="stakeholder" class="block mb-2">Stakeholder</label>
-                <textarea id="stakeholder" name="stakeholder" rows="4" class="w-full border border-gray-300 rounded px-3 py-2" required></textarea>
+                <textarea id="stakeholder" name="stakeholder" rows="4" class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
             </div>
             <div class="mb-4">
                 <label for="platform" class="block mb-2">Platform</label>
-                <select id="platform" name="platform" class="w-full border border-gray-300 rounded px-3 py-2" required>
+                <select id="platform" name="platform" class="w-full border border-gray-300 rounded px-3 py-2">
                     <option value="">Select Platform</option>
                     <option value="web">Web</option>
                     <option value="mobile">Mobile</option>
@@ -105,11 +105,11 @@
                 <label class="block mb-2">Jenis Proyek</label>
                 <div class="flex items-center space-x-4">
                     <label class="inline-flex items-center">
-                        <input type="radio" name="jenis_proyek" value="0" class="form-radio" required>
+                        <input type="radio" name="jenis_proyek" value="0" class="form-radio">
                         <span class="ml-2">Aplikasi Baru</span>
                     </label>
                     <label class="inline-flex items-center">
-                        <input type="radio" name="jenis_proyek" value="1" class="form-radio" required>
+                        <input type="radio" name="jenis_proyek" value="1" class="form-radio">
                         <span class="ml-2">Aplikasi Sudah Ada</span>
                     </label>
                 </div>
@@ -121,19 +121,31 @@
             <h2 class="text-2xl font-semibold mb-4 my-5">Referensi dan Upload File</h2>
             <p class="font-sans text-gray-400 text-xxs my-0">Isi form referensi (opsional) yang relevan dengan aplikasi yang diinginkan</p>
             <hr class="border-gray-950 border-t-1 w-full mx-auto my-5">
-            <div class="mb-4">
-                <label for="referensi_link" class="block mb-2">Referensi Link</label>
-                <input type="url" id="referensi_link" name="referensi_link" class="w-full border border-gray-300 rounded px-3 py-2" placeholder="https://example.com" required>
+            <div id="ref-input">
+                <div class="ref-block mb-5 border-[1px] border-gray-200 p-5 rounded-xl">
+                    <label for="referensi_link" class="block mb-2">Tipe Referensi</label>
+                    <select id="tipe" name="tipe" class="w-full border border-gray-300 rounded px-3 py-2 mb-4">
+                        <option value="">Select Tipe</option>
+                        <option value="link">Link</option>
+                        <option value="file">File</option>
+                    </select>
+                
+                    <div class="link-input mb-4 hidden">
+                        <label for="referensi_link" class="block mb-2">Referensi Link</label>
+                        <input type="url" id="referensi_link" name="referensi_link" class="w-full border border-gray-300 rounded px-3 py-2" placeholder="https://example.com">
+                    </div>
+                
+                    <div class="file-input mb-4 hidden">
+                        <label for="referensi_file" class="block mb-2 font-semibold">Attach File (Optional)</label>
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-gray-400 transition-colors duration-300">
+                            <input type="file" id="referensi_file" name="referensi_file[]" class="hidden" multiple>
+                            <p class="text-gray-500">Drag & drop a file to attach it, or</p>
+                            <p class="text-gray-500">browse for a file...</p>
+                        </div>
+                    </div>
+                </div>                
             </div>
-            <div class="mb-4">
-                <label for="referensi_file" class="block mb-2 font-semibold">Attach File (Optional)</label>
-                <div id="file-drop-area" class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-gray-400 transition-colors duration-300">
-                    <input type="file" id="referensi_file" name="referensi_file[]" class="hidden" multiple>
-                    <p class="text-gray-500">Drag & drop a file to attach it, or</p>
-                    <p class="text-gray-500">browse for a file...</p>
-            </div>
-        <div id="file-list" class="mt-4 space-y-2"></div>
-</div>
+            <button id="addmore" type="button" class="bg-secondary-800 text-white px-4 py-2 rounded mt-4 float-right">Tambahkan Referensi Baru</button>
         </div>
 
         <div class="flex justify-between mt-8">
@@ -228,7 +240,7 @@
                 updateStepperClickability();
             }
         } else {
-            alert('Please fill in all required fields before proceeding.');
+            alert('Please fill in all fields before proceeding.');
         }
     });
 
@@ -315,6 +327,68 @@
             });
         });
     }
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let refCount = 0; // A counter to keep track of dynamically added references
+
+    // Define the toggleInputs function
+    function toggleInputs(tipeSelect) {
+        const container = tipeSelect.closest('.ref-block'); // Look for the closest container with class 'ref-block'
+        const selectedType = tipeSelect.value;
+        const linkInput = container.querySelector('.link-input');
+        const fileInput = container.querySelector('.file-input');
+        
+        if (linkInput) {
+            linkInput.classList.toggle('hidden', selectedType !== 'link');
+        }
+        if (fileInput) {
+            fileInput.classList.toggle('hidden', selectedType !== 'file');
+        }
+    }
+
+    // Event delegation to handle dynamic elements
+    document.body.addEventListener('change', function(event) {
+        if (event.target.matches('select[name="tipe"]')) {
+            toggleInputs(event.target);
+        }
+    });
+
+    const firstSelect = document.querySelector('.ref-block select[name="tipe"]');
+    if (firstSelect) {
+        toggleInputs(firstSelect); // Ensure the first select input is processed
+    }
+
+    $("#addmore").click(function() {
+        refCount++; // Increment the reference count for unique identification
+
+        $("#ref-input").append(`
+            <div class="ref-block border-[1px] border-gray-200 mb-5 p-5 rounded-xl" data-ref-id="${refCount}">
+                <label for="referensi_tipe_${refCount}" class="block mb-2">Tipe Referensi</label>
+                <select id="referensi_tipe_${refCount}" name="tipe" class="w-full border border-gray-300 rounded px-3 py-2 mb-4">
+                    <option value="">Select Tipe</option>
+                    <option value="link">Link</option>
+                    <option value="file">File</option>
+                </select>
+                
+                <div class="link-input mb-4 hidden">
+                    <label for="referensi_link_${refCount}" class="block mb-2">Referensi Link</label>
+                    <input type="url" id="referensi_link_${refCount}" name="referensi_link_${refCount}" class="w-full border border-gray-300 rounded px-3 py-2" placeholder="https://example.com">
+                </div>
+                
+                <div class="file-input mb-4 hidden">
+                    <label for="referensi_file_${refCount}" class="block mb-2 font-semibold">Attach File (Optional)</label>
+                    <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-gray-400 transition-colors duration-300">
+                        <input type="file" id="referensi_file_${refCount}" name="referensi_file_${refCount}[]" class="hidden" multiple>
+                        <p class="text-gray-500">Drag & drop a file to attach it, or</p>
+                        <p class="text-gray-500">browse for a file...</p>
+                    </div>
+                </div>
+            </div>
+        `);
+    });
 });
 </script>
 
