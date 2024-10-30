@@ -7,7 +7,7 @@
             <a href="{{ route('submissions.create') }}"
                 class="inline-block text-sm px-6 py-2.5 leading-none border mr-1 md:mr-3 rounded-lg font-bold bg-gray-200 text-dark-800 border-transparent hover:bg-gray-300 lg:mt-0">
                 Sign in</a>
-            <a href="{{ route('register') }}"
+            <a href="{{ route('user.register') }}"
                 class="inline-block text-sm px-6 py-2.5 leading-none border rounded-lg font-bold bg-accent-600 text-white border-transparent hover:bg-accent-700 lg:mt-0">
                 Sign up</a>
             <button data-collapse-toggle="navbar-cta" type="button"

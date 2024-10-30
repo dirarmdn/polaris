@@ -8,11 +8,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DataPengajuanController;
 use App\Http\Controllers\LoginController;
 
-Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
+Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('user.register');
 Route::post('/', [AuthController::class, 'register'])->name('register.post');
 
+Route::get('/user/profil', [AuthController::class, 'viewProfile'])->name('user.profile');
 Route::get('/', [HomeController::class,'index'])->name('home');
 Route::get('/about', [HomeController::class,'about'])->name('home.about');
+Route::get('/faq', [HomeController::class,'faq'])->name('home.faq');
 Route::get('/pengajuan', [PengajuanController::class, 'index'])->name('submissions.index');
 Route::get('/pengajuan/detail/{kode_pengajuan}', [PengajuanController::class,'show'])->name('submissions.show');
 Route::get('/pengajuan/create', [PengajuanController::class, 'create'])->name('submissions.create');
@@ -25,5 +27,3 @@ Route::post('/pengajuan', [PengajuanController::class, 'store'])->name('submissi
 
 Route::get('/admin/detail/{id}', [AdminController::class, 'show'])->name('admin.admins.show');
 Route::get('/admin/pengajuan', [DataPengajuanController::class, 'index'])->name('dashboard.submissions.index');
-
-Route::get('/faq', [HomeController::class, 'faq'])->name('home.faq');

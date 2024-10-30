@@ -23,9 +23,9 @@ class Organisasi extends Model
         'logo'      
     ];
 
-    // Relasi dengan model Pengaju (One to Many)
-    public function pengajus()
+    // Relasi dengan model User (One to Many)
+    public function user()
     {
-        return $this->hasMany('App\Models\Pengaju', 'kode_organisasi');
+        return $this->hasMany('App\Models\User', 'kode_organisasi');
     }
 }
