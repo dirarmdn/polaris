@@ -16,7 +16,7 @@
             <div class="ornament absolute -right-1/4 md:right-0 top-1/2 md:top-72 -z-10"><img
                     src="{{ asset('images/ornament_landing_2.svg') }}" alt=""></div>
             <div class="flex gap-2 flex-col md:flex-row">
-                <a href="{{ route('dashboard.submissions.create') }}" class="rounded-lg bg-primary-900 text-white px-5 py-3">Ajukan
+                <a href="{{ route('submissions.create') }}" class="rounded-lg bg-primary-900 text-white px-5 py-3">Ajukan
                     Sekarang</a>
                 <a href="{{ route('submissions.index') }}" class="rounded-lg bg-gray-300 text-black px-5 py-3">Lihat Daftar
                     Ajuan</a>
