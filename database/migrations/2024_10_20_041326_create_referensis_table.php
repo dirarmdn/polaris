@@ -11,8 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pengajuan_files', function (Blueprint $table) {
-            $table->id();
+        Schema::create('referensis', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->text('keterangan');
+            $table->enum('tipe', ['link', 'file', 'image']);
+            $table->string('path');
             $table->string('kode_pengajuan');
             $table->foreign('kode_pengajuan')->references('kode_pengajuan')->on('pengajuans');
             $table->timestamps();

@@ -71,7 +71,7 @@ class PengajuanTest extends TestCase
         ];
     
         // Act: Mengakses route store
-        $response = $this->post(route('submissions.store'), $data);
+        $response = $this->post(route('dashboard.submissions.store'), $data);
     
         $response->assertSessionHasNoErrors();
     

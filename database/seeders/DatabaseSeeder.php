@@ -4,10 +4,12 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Models\Admin;
-use App\Models\Organisasi;
 use App\Models\Pengaju;
 use App\Models\Pengajuan;
+use App\Models\Referensi;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Organisasi;
+use App\Models\HasilReview;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -17,9 +19,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        Organisasi::factory(10)->create(); // Buat 10 organisasi
-        \App\Models\Pengaju::factory(20)->create(); // Buat 20 pengaju
-        Admin::factory(5)->create(); // Buat 5 admin
-        Pengajuan::factory(30)->create(); // Buat 30 pengajuan
+        Organisasi::factory(10)->create();
+        User::factory(10)->create();
+        Pengajuan::factory(30)->create();
+        Referensi::factory(5)->create();
+        HasilReview::factory(5)->create();
     }
 }

@@ -28,7 +28,7 @@ class DataPengajuanController extends Controller
         ->paginate(10);
 
     // Kirimkan data ke view dengan hasil pencarian
-    return view('admin.submissions.index', [
+    return view('dashboard.submissions.index', [
         'data_pengajuans' => $data_pengajuans,
         'judul_pengajuan' => $judul_pengajuan
     ]);
@@ -40,20 +40,25 @@ class DataPengajuanController extends Controller
     //$data_pengajuans = Pengajuan::paginate(10);  // Misalnya menggunakan pagination
 
     // Mengirim data ke view
-    //return view('admin.submissions.index', compact('data_pengajuans'));
+    //return view('dashboard.submissions.index', compact('data_pengajuans'));
     //}
 
     // Menampilkan halaman pengajuan (submissions)
     public function indexSubmissions()
     {
-        return view('admin.submissions.index'); 
+        return view('dashboard.submissions.index'); 
     }
 
     // Menampilkan detail pengajuan tertentu
-    public function show(Pengajuan $pengajuan)
+    public function show(string $kode_pengajuan)
     {
-        return view('submissions.show', compact('pengajuan'));
-    }
+        $pengajuan = Pengajuan::with('referensi')->where('kode_pengajuan', $kode_pengajuan)->first();
 
+        if (!$pengajuan) {
+            return redirect()->route('submissions.index')->with('error', 'Pengajuan tidak ditemukan!');
+        }
+    
+        return view('dashboard.submissions.show', compact('pengajuan'));
+    }
     
 }

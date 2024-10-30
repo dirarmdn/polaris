@@ -2,29 +2,29 @@
 
 namespace App\Models;
 
-use App\Models\Admin;
+use App\Models\User;
+use App\Models\Pengajuan;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class HasilReview extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUuids;
 
     protected $table = 'hasil_reviews';
 
     protected $fillable = [
-        'nip',
         'deskripsi_review',
-        'kode_pengajuan'
     ];
 
     // Relasi dengan model Organisasi (Many to One)
-    public function admin()
+    public function user()
     {
-        return $this->belongsTo(Admin::class, 'nipS');
+        return $this->belongsTo(User::class, 'user_id');
     }
     public function review()
     {
-        return $this->belongsTo(HasilReview::class,'kode_pengajuan');
+        return $this->belongsTo(Pengajuan::class,'kode_pengajuan');
     }
 }
