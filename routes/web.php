@@ -9,7 +9,7 @@ use App\Http\Controllers\DataPengajuanController;
 use App\Http\Controllers\LoginController;
 
 Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('user.register');
-Route::post('/', [AuthController::class, 'register'])->name('register.post');
+Route::post('/register ', [AuthController::class, 'register'])->name('register.post');
 
 Route::get('/user/profil', [AuthController::class, 'viewProfile'])->name('user.profile');
 Route::get('/', [HomeController::class,'index'])->name('home');

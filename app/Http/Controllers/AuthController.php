@@ -20,38 +20,41 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
+            'nama' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'position' => 'required|string|max:255',
-            'organization' => 'required|string|max:255',
+            'jabatan' => 'required|string|max:255',
+            'nama_organisasi' => 'required|string|max:255',
             'password' => 'required|string|min:8|confirmed',
             'terms' => 'required',
         ]);
-        // dd($validator);
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
+        // Generate kode organisasi
+        $kode_organisasi = strtoupper(substr($request->nama_organisasi, 0, 3) . rand(100, 999));
+
         // Cek apakah organisasi sudah ada atau belum
         $organisasi = Organisasi::firstOrCreate(
-            ['nama' => $request->organization],
-            ['kode_organisasi' => strtoupper(substr($request->organization, 0, 3) . rand(100, 999))]
+            ['nama' => $request->nama_organisasi],
+            ['kode_organisasi' => $kode_organisasi]
         );
 
         // Buat user baru
         $user = User::create([
-            ['idP' => strtoupper(substr($request->organization, 0, 3) . rand(100, 999))],
-            'name' => $request->name,
+            'nama' => $request->nama,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'jabatan' => $request-> jabatan,
+            'kode_organisasi' => $organisasi -> kode_organisasi,
         ]);
 
         // Simpan data ke tabel pengajus
         Pengaju::create([
             'user_id' => $user->id,
             'kode_organisasi' => $organisasi->kode_organisasi,
-            'jabatan' => $request->position,
+            'jabatan' => $request->jabatan,
         ]);
 
         // Login user setelah registrasi
