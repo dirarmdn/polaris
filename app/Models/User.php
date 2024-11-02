@@ -87,4 +87,10 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\Pengajuan', 'user_id');
     }
+
+    public function organisasi() {
+        return $this->belongsTo(Organisasi::class, 'kode_organisasi', 'kode_organisasi');
+    }
+    
+    
 }

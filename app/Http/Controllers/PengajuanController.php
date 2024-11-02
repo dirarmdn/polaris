@@ -119,7 +119,7 @@ class PengajuanController extends Controller
      */
     public function destroy(Pengajuan $pengajuan)
     {
-        $pengajuan->delete(); // Hapus data pengajuan
+        $pengajuan->delete();
         return redirect()->route('submissions.index')->with('success', 'Pengajuan berhasil dihapus!');
     }    
 }
