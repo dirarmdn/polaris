@@ -27,7 +27,6 @@ Route::post('/pengajuan', [PengajuanController::class, 'store'])->name('submissi
 
 Route::get('/admin/detail/{id}', [AdminController::class, 'show'])->name('admin.admins.show');
 Route::get('/admin/pengajuan', [DataPengajuanController::class, 'index'])->name('dashboard.submissions.index');
-<<<<<<< HEAD
 
 Route::get('/admin/create', [AdminController::class, 'create'])->name('admin.create');
 Route::post('/admin/store', [AdminController::class, 'store'])->name('admin.store');
@@ -38,7 +37,5 @@ Route::put('/admin/{id}', [AdminController::class, 'update'])->name('admin.updat
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login.show');
 Route::post('/login/submit', [LoginController::class, 'submitlogin'])->name('login.submit');
 
-
-=======
 Route::get('/admin/pengajuan/detail/{kode_pengajuan}', [DataPengajuanController::class, 'show'])->name('dashboard.submissions.show');
->>>>>>> bc5cc68e059de2d7be5f8770a176cc6aa2299eea
+
