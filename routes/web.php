@@ -23,3 +23,14 @@ Route::get('/search', [PengajuanController::class, 'search'])->name('submissions
 Route::get('/pengajuan/verification', [PengajuanController::class, 'verification'])->name('submissions.verification');
 Route::post('/send-verification-code', [PengajuanController::class, 'sendVerificationCode'])->name('send.verification.code');
 Route::get('/admin/pengajuan', [DataPengajuanController::class, 'index'])->name('dashboard.submissions.index');
+
+Route::get('/admin/create', [AdminController::class, 'create'])->name('admin.create');
+Route::post('/admin/store', [AdminController::class, 'store'])->name('admin.store');
+
+Route::get('/admin/{id}/edit', [AdminController::class, 'edit'])->name('admin.edit');
+Route::put('/admin/{id}', [AdminController::class, 'update'])->name('admin.update');
+
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login.show');
+Route::post('/login/submit', [LoginController::class, 'submitlogin'])->name('login.submit');
+
+

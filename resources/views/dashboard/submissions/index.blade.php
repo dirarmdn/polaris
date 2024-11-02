@@ -77,7 +77,7 @@
                             @endif
                         </td>
                         <td class="px-6 py-4">
-                            <a href="{{ route('dashboard.submissions.show', ['kode_pengajuan' => $pengajuan->kode_pengajuan]) }}" class="flex items-center text-nowrap text-black-600">
+                            <a href="{{ route('submissions.show', ['kode_pengajuan' => $pengajuan->kode_pengajuan]) }}" class="flex items-center text-nowrap text-black-600">
                                 <span class="material-symbols-outlined mr-1 text-lg">visibility</span> Lihat Detail
                             </a>
                         </td>
