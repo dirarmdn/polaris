@@ -6,6 +6,10 @@ use App\Models\User;
 
 class AdminController extends Controller
 {
+
+    public function index() {
+        return view('dashboard.admins.index');
+    }
     public function create()
     {
         return view('dashboard.admins.create');
@@ -14,7 +18,7 @@ class AdminController extends Controller
     public function store(Request $request)
     {
     $validated = $request->validate([
-        'name' => 'required|string|max:255',
+        'nama' => 'required|string|max:255',
         'email' => 'required|email|max:255|unique:users,email',
         'password' => 'required|string|min:8',
         'role' => 'required|string',
@@ -33,19 +37,19 @@ class AdminController extends Controller
 
     //  untuk penyimpanan
     $data = [
-        'nama' => $request->input('name'),
+        'nama' => $request->input('nama'),
         'email' => $request->input('email'),
         'password' => bcrypt($request->input('password')),
+        'kode_organisasi' => 'POL852',
         'role' => $roleMap[$request->input('role')],
+        'jabatan' => 'Civitas Akademika',
         'no_telp' => $request->input('no_telp'),
     ];
 
-
-    // Buat catatan di database
     User::create($data);
 
     // Redirect dengan pesan sukses
-    //return redirect()->route('admins.create')->with('success', 'User created successfully.');
+    return redirect()->route('admin')->with('success', 'User created successfully.');
     }
 
     public function edit($id)

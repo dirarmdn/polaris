@@ -5,7 +5,6 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\LoginController;
-use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PengajuanController;
 use App\Http\Controllers\OrganisasiController;
 use App\Http\Controllers\HasilReviewController;
@@ -32,6 +31,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::prefix('admin')
     ->group(function () {
+        Route::get('/index', [AdminController::class, 'index'])->name('admin');
         Route::get('/create', [AdminController::class, 'create'])->name('admin.create');
         Route::post('/store', [AdminController::class, 'store'])->name('admin.store');
         Route::get('/detail/{id}', [AdminController::class, 'show'])->name('admin.admins.show');
