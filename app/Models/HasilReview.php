@@ -15,7 +15,8 @@ class HasilReview extends Model
     protected $table = 'hasil_reviews';
 
     protected $fillable = [
-        'deskripsi_review',
+        'kode_pengajuan',
+        'deskripsi_review'
     ];
 
     // Relasi dengan model Organisasi (Many to One)

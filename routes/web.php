@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DataPengajuanController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\HasilReviewController;
 
 Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('user.register');
 Route::post('/', [AuthController::class, 'register'])->name('register.post');
@@ -27,3 +28,7 @@ Route::post('/pengajuan', [PengajuanController::class, 'store'])->name('submissi
 
 Route::get('/admin/detail/{id}', [AdminController::class, 'show'])->name('admin.admins.show');
 Route::get('/admin/pengajuan', [DataPengajuanController::class, 'index'])->name('dashboard.submissions.index');
+
+Route::get('/admin/review', [HasilReviewController::class,'review'])->name('dashboard.submissions.review');
+Route::get('/admin/review/create', [HasilReviewController::class, 'create'])->name('dashboard.submissions.review.create');
+Route::post('/admin/review/store', [HasilReviewController::class, 'store'])->name('dashboard.submissions.review.store');

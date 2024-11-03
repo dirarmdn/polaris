@@ -21,6 +21,7 @@ class Pengajuan extends Model
         'tujuan_aplikasi',
         'proses_bisnis',
         'aturan_bisnis',
+        'stakeholder',
         'platform',
         'jenis_proyek',
         'stakeholder'
