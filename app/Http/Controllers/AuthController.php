@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use view;
 use App\Models\User;
 use App\Models\Pengaju;
 use App\Models\Organisasi;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -23,11 +25,10 @@ class AuthController extends Controller
             'nama' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'jabatan' => 'required|string|max:255',
-            'nama_organisasi' => 'required|string|max:255',
+            'nama_organisasi' => 'required|string',
             'password' => 'required|string|min:8|confirmed',
             'terms' => 'required',
         ]);
-
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
@@ -47,14 +48,7 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'jabatan' => $request-> jabatan,
-            'kode_organisasi' => $organisasi -> kode_organisasi,
-        ]);
-
-        // Simpan data ke tabel pengajus
-        Pengaju::create([
-            'user_id' => $user->id,
             'kode_organisasi' => $organisasi->kode_organisasi,
-            'jabatan' => $request->jabatan,
         ]);
 
         // Login user setelah registrasi
@@ -63,9 +57,18 @@ class AuthController extends Controller
         return redirect()->route('home');
     }
 
+
     public function viewProfile() {
-        $user = User::with('organisasi')->findOrFail("0668dc9c-c3e4-3e54-b512-793ede97fd80");
-        // dd($user);
+        $user = Auth::user()->load('organisasi');
         return view('auth.profile', compact('user'));
+    }
+
+    public function signOut(Request $request)
+    {
+        Auth::logout(); // Logout user dari session
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/')->with('success', 'Anda telah berhasil logout.');
     }
 }

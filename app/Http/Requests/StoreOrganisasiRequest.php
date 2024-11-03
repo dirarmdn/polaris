@@ -23,6 +23,12 @@ class StoreOrganisasiRequest extends FormRequest
     {
         return [
             //
+            'kode_organisasi' => 'required|string',
+            'nama' => 'required|string',
+            'deskripsi' => 'string',
+            'alamat' => 'string',
+            'website' => 'string',
+            'bidang_usaha' => 'string',
         ];
     }
 }

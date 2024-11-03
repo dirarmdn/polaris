@@ -4,12 +4,42 @@
             <img class="max-h-12" src="{{ asset('images/Logo.png') }}" alt="" srcset="">
         </a>
         <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse items-center">
-            <a href="{{ route('submissions.create') }}"
+            @auth
+            <a href="{{ route('dashboard') }}" class="inline-block text-sm px-6 py-2.5 leading-none border rounded-lg hover:bg-gray-200 mr-5 font-medium border-transparent lg:mt-0">
+            Dashboard</a>
+            <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-start" class="w-10 h-10 rounded-lg cursor-pointer object-cover" src="{{ asset('images/Avatar.svg') }}" alt="User dropdown">
+
+            <div id="userDropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+                <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
+                <div>{{ Auth::user()->nama }}</div>
+                <div class="font-medium truncate">{{ Auth::user()->email }}</div>
+                </div>
+                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="avatarButton">
+                <li>
+                    <a href="{{ route('user.profile') }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Profile</a>
+                </li>
+                <li>
+                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>
+                </li>
+                </ul>
+                <div class="py-1">
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                    <button type="submit" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign out</button>
+                    </form>
+                </div>
+            </div>
+            @endauth
+
+            @guest                
+            <a href="{{ route('login') }}"
                 class="inline-block text-sm px-6 py-2.5 leading-none border mr-1 md:mr-3 rounded-lg font-bold bg-gray-200 text-dark-800 border-transparent hover:bg-gray-300 lg:mt-0">
                 Sign in</a>
             <a href="{{ route('user.register') }}"
                 class="inline-block text-sm px-6 py-2.5 leading-none border rounded-lg font-bold bg-accent-600 text-white border-transparent hover:bg-accent-700 lg:mt-0">
                 Sign up</a>
+            @endguest
+
             <button data-collapse-toggle="navbar-cta" type="button"
                 class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
                 aria-controls="navbar-cta" aria-expanded="false">

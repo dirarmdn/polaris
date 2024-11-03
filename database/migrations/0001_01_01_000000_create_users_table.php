@@ -15,8 +15,8 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('nama');
             $table->string('email')->unique();
-            $table->string('no_telp', 20);
-            $table->integer('role');
+            $table->string('no_telp', 20)->nullable();
+            $table->integer('role')->default(1);
             $table->string('jabatan')->nullable();
             $table->string('kode_organisasi');
             $table->foreign('kode_organisasi')->references('kode_organisasi')->on('organisasis');      
@@ -34,7 +34,7 @@ return new class extends Migration
 
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary(); // ID session
-            $table->foreignId('user_id')->nullable()->index();
+            $table->foreignUuid('user_id')->nullable()->index();
             $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();
             $table->longText('payload');
@@ -43,7 +43,6 @@ return new class extends Migration
         });
         
     }
-
     /**
      * Reverse the migrations.
      */

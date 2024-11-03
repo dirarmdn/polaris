@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Organisasi;
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreOrganisasiRequest;
 use App\Http\Requests\UpdateOrganisasiRequest;
 
@@ -14,6 +15,13 @@ class OrganisasiController extends Controller
     public function index()
     {
         //
+    }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+        $organisations = Organisasi::where('nama', 'LIKE', "%{$query}%")->get();
+        return response()->json($organisations);
     }
 
     /**
@@ -29,7 +37,11 @@ class OrganisasiController extends Controller
      */
     public function store(StoreOrganisasiRequest $request)
     {
-        //
+        $data = $request->validated();
+
+        Organisasi::create($data);
+
+        return response()->json(['success' => true, 'kode_organisasi' => $data->kode_organisasi]);
     }
 
     /**

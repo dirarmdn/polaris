@@ -55,6 +55,7 @@ class User extends Authenticatable
         'nama',
         'email',
         'no_telp',
+        'kode_organisasi',
         'jabatan',
         'role',
         'password',
