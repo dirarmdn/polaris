@@ -5,8 +5,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PengajuanController;
 use App\Http\Controllers\OrganisasiController;
+use App\Http\Controllers\HasilReviewController;
 use App\Http\Controllers\DataPengajuanController;
 
 Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('user.register');
@@ -35,6 +37,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/detail/{id}', [AdminController::class, 'show'])->name('admin.admins.show');
         Route::get('/{id}/edit', [AdminController::class, 'edit'])->name('admin.edit');
         Route::put('/{id}', [AdminController::class, 'update'])->name('admin.update');
+        Route::get('/review', [HasilReviewController::class,'review'])->name('dashboard.submissions.review');
+        Route::get('/review/create', [HasilReviewController::class, 'create'])->name('dashboard.submissions.review.create');
+        Route::post('/review/store', [HasilReviewController::class, 'store'])->name('dashboard.submissions.review.store');
     });
 
     Route::prefix('dashboard')
