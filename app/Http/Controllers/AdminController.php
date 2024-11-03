@@ -1,78 +1,103 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\Models\Admin;
+use Illuminate\Http\Request;
 use App\Models\User;
-use App\Http\Requests\StoreAdminRequest;
-use App\Http\Requests\UpdateAdminRequest;
 
 class AdminController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        return view('admin.admins.create');
+        return view('dashboard.admins.create');
     }
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'nip' => 'required|string|max:255',
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'password' => 'required|string|min:8',
-            'role' => 'required|string'
-        ]);
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|max:255|unique:users,email',
+        'password' => 'required|string|min:8',
+        'role' => 'required|string',
+        'no_telp' => 'required|string|max:20' 
+    ]);
 
-        return redirect()->route('admin.create')->with('success', 'Admin created successfully.');
+    $roleMap = [
+        'admin' => 1,
+        'reviewer' => 2,
+    ];
+
+    // Validasi role
+    if (!array_key_exists($request->input('role'), $roleMap)) {
+        return back()->withErrors(['role' => 'Role is not valid.'])->withInput();
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show($id)
+    //  untuk penyimpanan
+    $data = [
+        'nama' => $request->input('name'),
+        'email' => $request->input('email'),
+        'password' => bcrypt($request->input('password')),
+        'role' => $roleMap[$request->input('role')],
+        'no_telp' => $request->input('no_telp'),
+    ];
+
+
+    // Buat catatan di database
+    User::create($data);
+
+    // Redirect dengan pesan sukses
+    //return redirect()->route('admins.create')->with('success', 'User created successfully.');
+    }
+
+    public function edit($id)
     {
-        $user = User::findOrFail($id);
-        
-        return view('admin.admins.show', compact('user'));
-    }
-   
-    public function edit()
-    {
-        return view('admin.admins.edit');
+        // Ambil data admin berdasarkan ID
+        $admin = User::findOrFail($id);
+        return view('dashboard.admins.edit', compact('admin'));
     }
 
-    public function update(Request $request)
-    {
-        $validated = $request->validate([
-            'nip' => 'required|string|max:255',
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'password' => 'nullable|string|min:8', 
-            'role' => 'required|string'
-        ]);
+    public function update(Request $request, $id)
+{
+    // Validasi input
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|max:255',
+        'password' => 'nullable|string|min:8',
+        'role' => 'required|string',
+        'no_telp' => 'nullable|string|max:15' 
+    ]);
+    $roleMap = [
+        'admin' => 1,
+        'reviewer' => 2,
+    ];
 
-        $validated->save();
-
-        return redirect()->route('admin.edit')->with('success', 'Admin updated successfully.');
+    // Validasi role
+    if (!array_key_exists($request->input('role'), $roleMap)) {
+        return back()->withErrors(['role' => 'Role is not valid.'])->withInput();
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Admin $admin)
-    {
-        //
+    // Siapkan data untuk di-update
+    $data = [
+        'nama' => $validated['name'],
+        'email' => $validated['email'],
+        'role' => $roleMap[$request->input('role')],
+        'no_telp' => $request->input('no_telp'), 
+    ];
+
+    // Enkripsi password 
+    if ($request->filled('password')) {
+        $data['password'] = bcrypt($validated['password']);
     }
+
+    // Update data  berdasarkan ID
+    $user = User::find($id);
+    if (!$user) {
+        // Jika ID tidak ditemukan
+        return redirect()->route('admins.index')->with('error', 'Admin not found.');
+    }
+
+    $user->update($data);
+
+    // Redirect ke halaman edit dengan pesan sukses
+    //return redirect()->route('admins.edit', $id)->with('success', 'Admin updated successfully.');
+}
 }
