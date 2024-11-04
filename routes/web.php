@@ -40,6 +40,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/review', [HasilReviewController::class,'review'])->name('dashboard.submissions.review');
         Route::get('/review/create', [HasilReviewController::class, 'create'])->name('dashboard.submissions.review.create');
         Route::post('/review/store', [HasilReviewController::class, 'store'])->name('dashboard.submissions.review.store');
+        Route::resource('/mitra', OrganisasiController::class);
     });
 
     Route::prefix('dashboard')

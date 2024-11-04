@@ -13,7 +13,7 @@
         @include('components.navbar')
     </header>
 
-    <div class="container mx-auto px-4 overflow-hidden">
+    <div class="mx-auto overflow-hidden">
         @yield('content')
     </div>
 

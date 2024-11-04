@@ -15,6 +15,8 @@ class OrganisasiController extends Controller
     public function index()
     {
         //
+        $organisasi = Organisasi::with('user');
+        return view('dashboard.organizations.index', compact('organisasi'));
     }
 
     public function search(Request $request)
@@ -30,6 +32,7 @@ class OrganisasiController extends Controller
     public function create()
     {
         //
+        return view('dashboard.organizations.create');
     }
 
     /**
