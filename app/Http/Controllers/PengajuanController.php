@@ -8,7 +8,9 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Mail\VerificationEmail;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StorePengajuanRequest;
 use App\Http\Requests\UpdatePengajuanRequest;
 
@@ -64,22 +66,63 @@ class PengajuanController extends Controller
 
     public function store(StorePengajuanRequest $request)
     {
-        $data = $request->validated();
+        // try {
+             // Validate and get the main submission data
+            $data = $request->validated();
+            
+             // Add additional data
+            $data['user_id'] = Auth::user()->id;
+            $data['kode_pengajuan'] = 'PGN-' . strtoupper(uniqid());
+            $data['isVerified'] = false;
+            
+             // Create the pengajuan record
+            $pengajuan = Pengajuan::create($data);
 
-        $data = Arr::add($data, 'user_id', 1);
-        $data = Arr::add($data, 'kode_pengajuan', 'PGN-' . strtoupper(uniqid()));
-        $data = Arr::add($data, 'isVerified', false);
-    
-        Pengajuan::create($data);
-
-        if($request->has('referensi')) { 
-            foreach ($request->referensi as $referensiData) { 
-                $referensi = new Referensi($referensiData); 
-                $data->referensi()->save($referensi); 
-            } 
-        }
-    
-        return redirect()->route('submissions.index')->with('success', 'Pengajuan berhasil dibuat!');
+             // Handle references if they exist
+            if ($request->has('tipe')) {
+                $tipes = is_array($request->tipe) ? $request->tipe : [$request->tipe];
+                
+                foreach ($tipes as $index => $tipe) {
+                    $referensi = new Referensi();
+                    $referensi->kode_pengajuan = $pengajuan->kode_pengajuan;
+                    $referensi->tipe = $tipe;
+                    
+                     // Handle link type reference
+                    if ($tipe === 'link') {
+                        $linkFieldName = "referensi_link_" . $index;
+                        $keteranganFieldName = "keterangan_referensi_" . $index;
+                        
+                        $referensi->link = $request->$linkFieldName;
+                        $referensi->keterangan = $request->$keteranganFieldName;
+                    }
+                     // Handle file type reference
+                    elseif ($tipe === 'file' && $request->hasFile("referensi_file_" . $index)) {
+                        $files = $request->file("referensi_file_" . $index);
+                        foreach ($files as $file) {
+                            $path = $file->store('referensi_files', 'public');
+                            
+                            $fileReferensi = new Referensi();
+                            $fileReferensi->kode_pengajuan = $pengajuan->kode_pengajuan;
+                            $fileReferensi->tipe = 'file';
+                            $fileReferensi->file_path = $path;
+                            $fileReferensi->keterangan = $request->{"keterangan_referensi_" . $index} ?? null;
+                            $fileReferensi->save();
+                        }
+                         continue; // Skip the current iteration after handling files
+                    }
+                    
+                    $referensi->save();
+                }
+            }
+ 
+            return redirect()->route('submissions.index')
+                ->with('success', 'Pengajuan berhasil dibuat!');
+ 
+        //  } catch (\Exception $e) {
+        //      return redirect()->back()
+        //          ->withInput()
+        //          ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        //  }
     }
 
     /**

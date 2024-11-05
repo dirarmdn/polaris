@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('referensis', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->text('keterangan');
+            $table->text('keterangan')->nullable();
             $table->enum('tipe', ['link', 'file', 'image']);
             $table->string('path');
             $table->string('kode_pengajuan');

@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
+use Ramsey\Uuid\Uuid; 
+use Illuminate\Support\Str;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Ramsey\Uuid\Uuid; 
 
 class User extends Authenticatable
 {
@@ -55,6 +56,7 @@ class User extends Authenticatable
         'nama',
         'email',
         'no_telp',
+        'kode_organisasi',
         'jabatan',
         'role',
         'password',
@@ -92,5 +94,7 @@ class User extends Authenticatable
         return $this->belongsTo(Organisasi::class, 'kode_organisasi', 'kode_organisasi');
     }
     
-    
+    public function notifikasi() {
+        return $this->hasMany(Notification::class, 'user_id');
+    }
 }

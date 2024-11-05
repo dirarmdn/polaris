@@ -27,7 +27,7 @@
                     <label for="name" class="w-1/4 text-black-700 font-semibold">
                         Nama Lengkap<span class="required-asterisk">*</span>
                     </label>
-                    <input type="text" name="name" id="name" class="w-1/2 max-w-[400px] custom-input py-4 text-xs" required> 
+                    <input type="text" name="nama" id="name" class="w-1/2 max-w-[400px] custom-input py-4 text-xs" required> 
                 </div>
 
                 <div class="mb-8 flex items-center">

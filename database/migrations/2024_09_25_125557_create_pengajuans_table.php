@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('pengajuans', function (Blueprint $table) {
             $table->string('kode_pengajuan')->primary();
             $table->foreignUuid('user_id')->constrained('users');
-            $table->boolean('isVerified');
+            $table->enum('status', ['belum_direview', 'terverifikasi', 'ditolak', 'diarsipkan']);
             $table->string('judul_pengajuan');
             $table->text('deskripsi_masalah');
             $table->text('tujuan_aplikasi');

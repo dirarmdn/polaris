@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('hasil_reviews', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+        Schema::create('notifications', function (Blueprint $table) {
+            $table->id();
             $table->foreignUuid('user_id')->constrained('users');
-            $table->string('kode_pengajuan');
-            $table->foreign('kode_pengajuan')->references('kode_pengajuan')->on('pengajuans');
-            $table->text('deskripsi_review');
-            $table->boolean('isVerified');
+            $table->boolean('isRead');
+            $table->string('message');
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('hasil_reviews');
+        Schema::dropIfExists('notifications');
     }
 };
