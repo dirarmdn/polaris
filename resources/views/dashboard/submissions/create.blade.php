@@ -19,19 +19,20 @@
         @endif
     
         <div class="relative mb-8 max-w-4xl mx-auto">
-            <!-- Background Line -->
-            <div class="absolute top-1/2 left-1/2 w-3/4 h-1 bg-gray-300 transform -translate-x-1/2 -translate-y-1/2 rounded-full z-20"></div>
+            <!-- Stepper Container dengan Background Biru Tua -->
+            <div class="relative flex justify-between items-center bg-primary-900 rounded-xl px-20 py-4">
+                <!-- Background Line - Sekarang di dalam container -->
+                <div class="absolute left-0 right-0 top-1/2 transform -translate-y-1/2 mx-20">
+                    <div class="h-1 bg-gray-300 rounded-full"></div>
+                    <!-- Progress Line - Positioned absolutely over background line -->
+                    <div id="stepperProgress" class="absolute top-0 left-0 h-1 bg-accent-light-500 rounded-full transition-all duration-500 ease-in-out" style="width: 0%"></div>
+                </div>
 
-            <!-- Progress Line -->
-            <div id="stepperProgress" class="absolute top-1/2 left-1/2 w-3/4 h-1 bg-blue-500 transform -translate-x-1/2 -translate-y-1/2 rounded-full z-20" style="width: 0%;"></div>
-
-
-            <!-- Stepper -->
-            <div class="relative flex justify-between items-center space-x-8 bg-primary-900 rounded-xl px-20 py-7">
+                <!-- Stepper Steps -->
                 @foreach(range(1, 4) as $step)
-                    <div class="stepper-step flex flex-col items-center" data-step="{{ $step }}">
+                    <div class="stepper-step flex flex-col items-center relative z-10" data-step="{{ $step }}">
                         <!-- Label Stepper -->
-                        <div class="stepper-label text-sm text-white font-medium transition-all duration-300 ease-in-out">
+                        <div class="stepper-label text-sm text-white font-medium mb-2 transition-all duration-300 ease-in-out">
                             @switch($step)
                                 @case(1)<span class="text-xl font-bold">01</span> Deskripsi @break
                                 @case(2)<span class="text-xl font-bold">02</span> Kebutuhan Aplikasi @break
@@ -39,8 +40,8 @@
                                 @case(4)<span class="text-xl font-bold">04</span> Referensi @break
                             @endswitch
                         </div>
-                        <!-- Lingkaran Stepper -->
-                        <div class="stepper-circle w-12 h-12 rounded-full border-4 border-gray-300 flex items-center justify-center text-gray-600 font-bold text-xl mb-2 transition-all duration-300 ease-in-out z-30">
+                        <!-- Circle Stepper -->
+                        <div class="stepper-circle w-12 h-12 rounded-full border-4 border-gray-300 bg-white flex items-center justify-center text-gray-600 font-bold text-xl transition-all duration-300 ease-in-out absolute top-0 -translate-y-1/4">
                             {{ $step }}
                         </div>
                     </div>
@@ -161,8 +162,19 @@
             <button type="submit" id="submitBtn" class="bg-accent-light-500 text-white px-4 py-2 rounded hidden">Submit</button>
         </div>
     </form>
+
+    <div id="successPopup" class="hidden fixed top-4 right-4 z-50">
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative shadow-lg" role="alert">
+            <div class="flex items-center">
+                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <span class="block sm:inline">Data berhasil disimpan!</span>
+            </div>
+        </div>
+    </div>
 </div>
-@endsection
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -344,15 +356,55 @@
         
         // Form submission handler
         form.addEventListener('submit', function(e) {
-            console.log('Form submitted');
-            for (let step = 1; step <= 3; step++) {
-                if (!isStepComplete(step)) {
-                    e.preventDefault();
-                    alert('Silakan lengkapi semua field yang diperlukan di semua step.');
-                    return;
-                }
+        e.preventDefault();
+        console.log('Form submitted');
+
+        // Check all required fields
+        for (let step = 1; step <= 3; step++) {
+            if (!isStepComplete(step)) {
+                alert('Silakan lengkapi semua field yang diperlukan di semua step.');
+                return;
             }
+        }
+
+        // Get the form data
+        const formData = new FormData(this);
+
+        // Show success popup
+        const successPopup = document.getElementById('successPopup');
+        successPopup.classList.remove('hidden');
+        successPopup.classList.add('animate-fade-in');
+
+        // Submit the form using fetch
+        fetch(this.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Show success message
+            successPopup.classList.remove('hidden');
+            
+            // Hide popup after 3 seconds
+            setTimeout(() => {
+                successPopup.classList.add('hidden');
+                // Redirect or reset form after showing message
+                window.location.href = '/submissions'; // Sesuaikan dengan route yang diinginkan
+            }, 3000);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Terjadi kesalahan. Silakan coba lagi.');
         });
+    });
 
 
         // Initialize form
@@ -542,6 +594,71 @@
                 }
             }, 100);
         });
+
+        function showSuccessNotification() {
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-4 right-4 z-50 transform transition-transform duration-300 ease-in-out translate-x-0';
+            notification.innerHTML = `
+                <div class="bg-green-50 border border-green-200 text-green-800 rounded-lg p-4 shadow-lg flex items-center">
+                    <svg class="h-5 w-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span>Data berhasil disimpan!</span>
+                </div>
+            `;
+
+            document.body.appendChild(notification);
+
+            // Remove the notification after 3 seconds
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Update your form submission handler
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Check if all required fields are filled
+            for (let step = 1; step <= 3; step++) {
+                if (!isStepComplete(step)) {
+                    alert('Silakan lengkapi semua field yang diperlukan di semua step.');
+                    return;
+                }
+            }
+
+            // Create FormData object
+            const formData = new FormData(this);
+
+            // Submit the form using fetch
+            fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showSuccessNotification();
+                    // Optional: Reset form or redirect
+                    setTimeout(() => {
+                        window.location.href = '/your-redirect-url';
+                    }, 3000);
+                } else {
+                    // Handle errors
+                    alert('Terjadi kesalahan. Silakan coba lagi.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan. Silakan coba lagi.');
+            });
+        });
     });
 </script>
 
@@ -626,7 +743,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (selectedValue === 'link') {
                 refBlock.find('.link-input').removeClass('hidden');
-                refBlock.find('.keterangan-input').removeClass('hidden');
+                refBlock.find('.text-input').removeClass('hidden');
             } else if (selectedValue === 'file') {
                 refBlock.find('.file-input').removeClass('hidden');
                 refBlock.find('.text-input').removeClass('hidden');
@@ -637,8 +754,9 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <style>
-    /* Lingkaran Stepper */
     .stepper-circle {
+        position: relative;
+        z-index: 20;
         transition: all 0.3s ease-in-out;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
@@ -649,20 +767,33 @@ document.addEventListener('DOMContentLoaded', function() {
         color: white;
     }
 
-    /* Label Stepper */
     .stepper-label {
-        transition: color 0.3s ease-in-out;
+        transition: all 0.3s ease-in-out;
+        white-space: nowrap;
     }
 
     .stepper-label.active {
-        color: #FD851E; /* Warna label aktif */
+        color: #FD851E;
     }
 
-    /* Garis Progres */
     #stepperProgress {
-        height: 6px;
-        background-color: #FD851E;
-        border-radius: 9999px;
         transition: width 0.5s ease-in-out;
     }
+
+    /* Animation for success popup */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateX(100%);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    .animate-fade-in {
+        animation: fadeIn 0.3s ease-in-out forwards;
+    }
 </style>
+@endsection
