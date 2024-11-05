@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\data_pengajuan;
 use Illuminate\Http\Request; 
 use Illuminate\Support\Facades\DB; 
-use App\Models\Pengajuan; // Pastikan Anda mengimpor model ini
+use App\Models\Pengajuan; 
 
 class DataPengajuanController extends Controller
 {

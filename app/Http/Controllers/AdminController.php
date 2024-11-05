@@ -3,9 +3,17 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\DB; 
 
 class AdminController extends Controller
 {
+    public function index()
+    {    
+        $admins = User::whereIn('role', [1, 2])->paginate(10); 
+        return view('dashboard.admins.index', compact('admins'));
+    }
+
     public function create()
     {
         return view('dashboard.admins.create');

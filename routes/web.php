@@ -39,3 +39,4 @@ Route::post('/login/submit', [LoginController::class, 'submitlogin'])->name('log
 
 Route::get('/admin/pengajuan/detail/{kode_pengajuan}', [DataPengajuanController::class, 'show'])->name('dashboard.submissions.show');
 
+Route::get('/admins', [AdminController::class, 'index'])->name('admins.index');
