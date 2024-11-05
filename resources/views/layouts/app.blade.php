@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="icon" href="{{ asset('images/Logo-mini.png') }}" type="image/x-icon"/>
     <title>@yield('title')</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     @vite('resources/css/app.css')
 </head>
 <body>

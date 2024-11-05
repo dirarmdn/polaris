@@ -9,7 +9,6 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
     @vite(['resources/css/app.css','resources/js/app.js'])
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
 </head>
 <body>
     <div class="container">
@@ -17,3 +16,11 @@
     </div>
 </body>
 </html>
+
+<script>
+    $.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+</script>
