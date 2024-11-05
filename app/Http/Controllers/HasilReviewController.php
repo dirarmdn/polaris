@@ -6,6 +6,8 @@ use App\Models\HasilReview;
 use App\Models\Pengajuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\StoreHasilReviewRequest;
 use App\Http\Requests\UpdateHasilReviewRequest;
 
@@ -62,29 +64,34 @@ class HasilReviewController extends Controller
         DB::beginTransaction();
         
         try {
+            // Convert status to boolean for isVerified
+            $isVerified = null;
+            switch($request->status) {
+                case 'terverifikasi':
+                    $isVerified = true;
+                    break;
+                case 'ditolak':
+                    $isVerified = false;
+                    break;
+                case 'belum_diverifikasi':
+                    $isVerified = null;
+                    break;
+            }
+
             // Simpan hasil review
             HasilReview::create([
                 'kode_pengajuan' => $request->kode_pengajuan,
+                'user_id' => Auth::id(), // Tambahkan user_id dari user yang sedang login
                 'deskripsi_review' => $request->deskripsi_review,
+                'isVerified' => $isVerified
             ]);
 
             // Update status di tabel pengajuan
             $pengajuan = Pengajuan::where('kode_pengajuan', $request->kode_pengajuan)->first();
-            
-            // Update isVerified berdasarkan status
-            switch($request->status) {
-                case 'terverifikasi':
-                    $pengajuan->isVerified = true;
-                    break;
-                case 'ditolak':
-                    $pengajuan->isVerified = false;
-                    break;
-                case 'belum_diverifikasi':
-                    $pengajuan->isVerified = null;
-                    break;
+            if ($pengajuan) {
+                $pengajuan->isVerified = $isVerified;
+                $pengajuan->save();
             }
-            
-            $pengajuan->save();
             
             DB::commit();
 

@@ -3,6 +3,8 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\DB; 
 
 class AdminController extends Controller
 {
@@ -14,7 +16,7 @@ class AdminController extends Controller
     public function store(Request $request)
     {
     $validated = $request->validate([
-        'name' => 'required|string|max:255',
+        'nama' => 'required|string|max:255',
         'email' => 'required|email|max:255|unique:users,email',
         'password' => 'required|string|min:8',
         'role' => 'required|string',
@@ -33,19 +35,19 @@ class AdminController extends Controller
 
     //  untuk penyimpanan
     $data = [
-        'nama' => $request->input('name'),
+        'nama' => $request->input('nama'),
         'email' => $request->input('email'),
         'password' => bcrypt($request->input('password')),
+        'kode_organisasi' => 'POL852',
         'role' => $roleMap[$request->input('role')],
+        'jabatan' => 'Civitas Akademika',
         'no_telp' => $request->input('no_telp'),
     ];
 
-
-    // Buat catatan di database
     User::create($data);
 
     // Redirect dengan pesan sukses
-    //return redirect()->route('admins.create')->with('success', 'User created successfully.');
+    return redirect()->route('admin')->with('success', 'User created successfully.');
     }
 
     public function edit($id)

@@ -11,8 +11,8 @@ class Referensi extends Model
     use HasFactory, HasUuids;
 
     protected $fillable = [
-        'keterangan' => 'required|string',
-        'tipe' => 'required|string|max:255',
+        'keterangan',
+        'tipe',
         'path',
     ];
     public $incrementing = true;

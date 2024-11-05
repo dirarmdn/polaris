@@ -15,7 +15,9 @@ class Pengajuan extends Model
     protected $keyType = 'string';
 
     protected $fillable = [
-        'isVerified',
+        'kode_pengajuan',
+        'user_id',
+        'status',
         'judul_pengajuan',
         'deskripsi_masalah',
         'tujuan_aplikasi',

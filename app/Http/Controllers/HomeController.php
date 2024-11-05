@@ -26,4 +26,8 @@ class HomeController extends Controller
     public function faq() {
         return view("home.faq");
     }
+
+    public function dashboard() {
+        return view("dashboard.index");
+    }
 }

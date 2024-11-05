@@ -15,6 +15,7 @@ class Organisasi extends Model
     protected $keyType = 'string';
 
     protected $fillable = [
+        'kode_organisasi',
         'nama',
         'deskripsi_perusahaan',
         'alamat',

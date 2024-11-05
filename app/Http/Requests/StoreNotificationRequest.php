@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreOrganisasiRequest extends FormRequest
+class StoreNotificationRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,12 +23,6 @@ class StoreOrganisasiRequest extends FormRequest
     {
         return [
             //
-            'kode_organisasi' => 'required|string',
-            'nama' => 'required|string',
-            'deskripsi' => 'string',
-            'alamat' => 'string',
-            'website' => 'string',
-            'bidang_usaha' => 'string',
         ];
     }
 }
