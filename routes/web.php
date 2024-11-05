@@ -9,7 +9,7 @@ use App\Http\Controllers\PengajuanController;
 use App\Http\Controllers\OrganisasiController;
 use App\Http\Controllers\HasilReviewController;
 use App\Http\Controllers\DataPengajuanController;
-
+Route::get('/admins', [AdminController::class, 'index'])->name('admins.index');
 Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('user.register');
 Route::post('/register/user', [AuthController::class, 'register'])->name('register.post');
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -54,6 +54,6 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post('/logout', [AuthController::class, 'signOut'])->name('logout');
 
-Route::get('/admins', [AdminController::class, 'index'])->name('admins.index');
 });
+    Route::get('/admins', [AdminController::class, 'index'])->name('admins.index');
 

@@ -8,6 +8,28 @@ use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
+    //public function index()
+    //{    
+      //  $admins = User::whereIn('role', [1, 2])->paginate(10); 
+        //return view('dashboard.admins.index', compact('admins'));
+    //}
+    public function index(Request $request)
+{
+    // Retrieve the search input from the request
+    $nama = $request->input('nama'); // Get the search query for 'nama'
+
+    // Query for users with roles 1 or 2 and apply search and pagination
+    $admins = User::whereIn('role', [1, 2])
+        ->when($nama, function ($query) use ($nama) {
+            return $query->where('nama', 'LIKE', '%' . $nama . '%');
+        })
+        ->paginate(10);
+
+    // Pass data to the view
+    return view('dashboard.admins.index', compact('admins', 'nama'));
+    }
+
+
     public function create()
     {
         return view('dashboard.admins.create');
