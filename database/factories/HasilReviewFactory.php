@@ -23,6 +23,7 @@ class HasilReviewFactory extends Factory
             'user_id' => User::factory()->create()->id, 
             'kode_pengajuan' => Pengajuan::factory()->create()->kode_pengajuan, 
             'deskripsi_review' => $this->faker->paragraph(3), 
+            'isVerified' => $this->faker->boolean(),
         ];
     }
 }

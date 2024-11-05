@@ -16,3 +16,6 @@ AOS.init();
 
 import Swal from 'sweetalert2';
 window.Swal = Swal;
+
+import { DataTable } from "simple-datatables";
+const dataTable = DataTable("#default-table");
