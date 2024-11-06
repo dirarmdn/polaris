@@ -7,6 +7,7 @@
     <link rel="icon" href="{{ asset('images/Logo-mini.png') }}" type="image/x-icon"/>
     <title>@yield('title')</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    @vite('resources/js/app.js')
     @vite('resources/css/app.css')
 </head>
 <body>
@@ -20,6 +21,5 @@
 
     @include('components.footer')
 
-    @vite('resources/js/app.js')
 </body>
 </html>

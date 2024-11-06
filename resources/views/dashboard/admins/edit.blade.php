@@ -27,7 +27,7 @@
 
                 <div class="mb-8 flex items-center">
                     <label for="name" class="w-1/4 text-black-700 font-semibold">Nama Lengkap:</label>
-                    <input type="text" name="name" id="name" value="{{ old('name', $admin->name) }}" required class="w-1/2 max-w-[400px] custom-input py-4 text-xs">
+                    <input type="text" name="nama" id="name" value="{{ old('name', $admin->nama) }}" required class="w-1/2 max-w-[400px] custom-input py-4 text-xs">
                 </div>
 
                 <div class="mb-8 flex items-center">
@@ -39,7 +39,7 @@
                     <label for="no_telp" class="w-1/4 text-black-700 font-semibold">No Telepon:</label>
                     <input type="text" name="no_telp" id="no_telp" value="{{ old('nip', $admin->no_telp) }}" required class="w-1/2 max-w-[400px] custom-input py-7 text-xs">
                 </div>
-
+{{-- 
                 <div class="mb-8 flex items-center">
                 <label for="password" class="w-1/4 text-black-700 font-semibold">Password:</label>
                 <div class="relative w-full max-w-[300px]">
@@ -48,7 +48,7 @@
                         <span class="material-icons cursor-pointer" id="eye-icon">visibility</span>
                     </button>
                 </div>
-            </div>
+            </div> --}}
 
 
                 <div class="mb-8 flex items-center">

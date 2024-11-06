@@ -3,9 +3,9 @@
 @section('content')
 <div class="flex items-center justify-center min-h-screen w-screen bg-cover bg-center" style="background-image: url('{{ asset('images/SignUp_BG.png') }}')">
     <div class="w-full max-w-md px-8 py-4 bg-white shadow-md rounded-xl">
-        <div class="flex justify-center mb-6 mt-8">
+        <a href="{{ route('home') }}" class="flex justify-center mb-6 mt-8">
             <img src="{{ asset('images/Logo.png') }}" alt="Logo" class="h-20">
-        </div>
+        </a>
         <form method="POST" action="{{ route('login.submit') }}">
             @csrf 
             

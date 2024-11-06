@@ -28,7 +28,7 @@ class StorePengajuanRequest extends FormRequest
             'referensi' => 'nullable|array',
             'referensi.*.tipe' => 'required|in:link,file',
             'referensi.*.link_path' => 'nullable',
-            'referensi.*.file_path' => 'required_if:referensi.*.tipe,file|file|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png',
+            'referensi.*.file_path' => 'nullable|file',
             'referensi.*.keterangan' => 'nullable|string|max:255',
         ];
     }

@@ -3,20 +3,20 @@
 @section('title', 'Daftar Pengajuan')
 
 @push('styles')
-<style>
-    .no-shadow {
-        box-shadow: none;
-    }
+    <style>
+        .no-shadow {
+            box-shadow: none;
+        }
 
-    .header-container {
-        justify-content: space-between;
-    }
+        .header-container {
+            justify-content: space-between;
+        }
 
-    th,
-    td {
-        text-align: center;
-    }
-</style>
+        th,
+        td {
+            text-align: center;
+        }
+    </style>
 @endpush
 
 @section('content')
@@ -68,19 +68,44 @@
                             {{ $pengajuan->created_at ? $pengajuan->created_at->format('Y-m-d H:i:s') : 'Tanggal tidak tersedia' }}
                         </td>
                         <td class="px-6 py-4 text-center">
-                            @if ($pengajuan->isVerified)
+                            @if ($pengajuan->status == 'terverifikasi')
                                 <span
                                     class="inline-block px-3 py-1 text-sm font-semibold text-white bg-green-500 rounded-full">Diverifikasi</span>
-                            @else
+                            @elseif ($pengajuan->status == 'belum_direview')
                                 <span
-                                    class="inline-block min-w-40 px-3 py-1 text-sm font-semibold text-white bg-gray-400 rounded-full">Belum Diverifikasi</span>
+                                    class="inline-block min-w-40 px-3 py-1 text-sm font-semibold text-white bg-gray-400 rounded-full">Belum
+                                    Diverifikasi</span>
+                            @elseif ($pengajuan->status == 'ditolak')
+                                <span
+                                    class="inline-block min-w-40 px-3 py-1 text-sm font-semibold text-white bg-red-500 rounded-full">
+                                    Ditolak</span>
+                            @elseif ($pengajuan->status == 'diarsipkan')
+                                    <span
+                                        class="inline-block min-w-40 px-3 py-1 text-sm font-semibold text-white bg-gray-300 rounded-full">
+                                        Diarsipkan</span>
                             @endif
                         </td>
-                        <td class="px-6 py-4">
-                            <a href="{{ route('submissions.show', ['kode_pengajuan' => $pengajuan->kode_pengajuan]) }}" class="flex items-center text-nowrap text-black-600">
-                                <span class="material-symbols-outlined mr-1 text-lg">visibility</span> Lihat Detail
-                            </a>
-                        </td>
+                        @if (auth()->user()->role == 3)
+                            <td class="px-6 py-4">
+                                <a href="{{ route('dashboard.submissions.review.create', ['kode_pengajuan' => $pengajuan->kode_pengajuan]) }}"
+                                    class="flex items-center text-black-600 mx-auto">
+                                    <span
+                                        class="inline-flex items-center px-4 py-1 text-sm font-semibold text-white bg-blue-500 rounded-full">
+                                        <span class="material-symbols-outlined">
+                                            rate_review
+                                        </span>
+                                        <span class="ml-1">Review</span>
+                                    </span>
+                                </a>
+                            </td>
+                        @else
+                            <td class="px-6 py-4">
+                                <a href="{{ route('submissions.show', ['kode_pengajuan' => $pengajuan->kode_pengajuan]) }}"
+                                    class="flex items-center text-nowrap text-black-600">
+                                    <span class="material-symbols-outlined mr-1 text-lg">visibility</span> Lihat Detail
+                                </a>
+                            </td>
+                        @endif
                     </tr>
                 @empty
                     <tr>

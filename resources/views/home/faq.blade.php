@@ -12,18 +12,18 @@
             <!-- Left Column: Tabs -->
             <div class="lg:w-1/4 ml-12">
                 <div class="space-y-4">
-                    <a href="#" data-tab="general" class="tab-link block text-xl font-semibold text-gray-800 dark:text-white hover:underline">General</a>
-                    <a href="#" data-tab="trust-safety" class="tab-link block text-xl font-semibold text-gray-800 dark:text-white hover:underline">Trust & Safety</a>
-                    <a href="#" data-tab="services" class="tab-link block text-xl font-semibold text-gray-800 dark:text-white hover:underline">Services</a>
-                    <a href="#" data-tab="billing" class="tab-link block text-xl font-semibold text-gray-800 dark:text-white hover:underline">Billing</a>
-                    <a href="#" data-tab="office-cleaning" class="tab-link block text-xl font-semibold text-gray-800 dark:text-white hover:underline">Office Cleaning</a>
+                    <a href="#" data-tab="general" class="tab-link block text-xl font-semibold text-gray-800 dark:text-white py-5 px-4 shadow-md rounded-full">General</a>
+                    <a href="#" data-tab="trust-safety" class="tab-link block text-xl font-semibold text-gray-800 dark:text-white py-5 px-4 shadow-md rounded-full">Trust & Safety</a>
+                    <a href="#" data-tab="services" class="tab-link block text-xl font-semibold text-gray-800 dark:text-white py-5 px-4 shadow-md rounded-full">Services</a>
+                    <a href="#" data-tab="billing" class="tab-link block text-xl font-semibold text-gray-800 dark:text-white py-5 px-4 shadow-md rounded-full">Billing</a>
+                    <a href="#" data-tab="office-cleaning" class="tab-link block text-xl font-semibold text-gray-800 dark:text-white py-5 px-4 shadow-md rounded-full">Office Cleaning</a>
                 </div>
             </div>
 
             <!-- Right Column: Tab Content -->
-            <div class="lg:w-3/4">
+            <div class="lg:w-3/4 ml-7">
                 <!-- General Content -->
-                <div id="general" class="tab-content hidden">
+                <div id="general" class="tab-content">
                     <h2 class="text-xl font-semibold text-gray-800 dark:text-white">General Questions</h2>
                     <p class="text-gray-500 dark:text-gray-300 mt-4">Here are some of the most common questions in the General category.</p>
                     <hr class="my-4 border-gray-200 dark:border-gray-700">
