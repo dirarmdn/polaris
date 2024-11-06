@@ -60,7 +60,7 @@ class AdminController extends Controller
         'nama' => $request->input('nama'),
         'email' => $request->input('email'),
         'password' => bcrypt($request->input('password')),
-        'kode_organisasi' => 'POL852',
+        'kode_organisasi' => 'POL1234',
         'role' => $roleMap[$request->input('role')],
         'jabatan' => 'Civitas Akademika',
         'no_telp' => $request->input('no_telp'),
