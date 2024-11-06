@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('kode_pengajuan');
             $table->foreign('kode_pengajuan')->references('kode_pengajuan')->on('pengajuans');
             $table->text('deskripsi_review');
-            $table->boolean('isVerified');
+            $table->boolean('isVerified')->nullable();
             $table->timestamps();
         });
     }

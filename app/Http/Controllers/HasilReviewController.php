@@ -60,55 +60,37 @@ class HasilReviewController extends Controller
             ], 422);
         }
 
-        // Mulai transaksi database
-        DB::beginTransaction();
-        
-        try {
-            // Convert status to boolean for isVerified
-            $isVerified = null;
-            switch($request->status) {
-                case 'terverifikasi':
-                    $isVerified = true;
-                    break;
-                case 'ditolak':
-                    $isVerified = false;
-                    break;
-                case 'belum_diverifikasi':
-                    $isVerified = null;
-                    break;
-            }
-
-            // Simpan hasil review
-            HasilReview::create([
-                'kode_pengajuan' => $request->kode_pengajuan,
-                'user_id' => Auth::id(), // Tambahkan user_id dari user yang sedang login
-                'deskripsi_review' => $request->deskripsi_review,
-                'isVerified' => $isVerified
-            ]);
-
-            // Update status di tabel pengajuan
-            $pengajuan = Pengajuan::where('kode_pengajuan', $request->kode_pengajuan)->first();
-            if ($pengajuan) {
-                $pengajuan->isVerified = $isVerified;
-                $pengajuan->save();
-            }
-            
-            DB::commit();
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Review berhasil disimpan dan status pengajuan diperbarui!'
-            ]);
-                
-        } catch (\Exception $e) {
-            DB::rollback();
-            return response()->json([
-                'success' => false,
-                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
-            ], 500);
+        // Konversi status ke boolean untuk isVerified
+        $isVerified = null;
+        switch($request->status) {
+            case 'terverifikasi':
+                $isVerified = true;
+                break;
+            case 'ditolak':
+                $isVerified = false;
+                break;
+            case 'belum_diverifikasi':
+                $isVerified = null;
+                break;
         }
-    }
 
+        // Simpan hasil review
+        HasilReview::create([
+            'kode_pengajuan' => $request->kode_pengajuan,
+            'user_id' => Auth::id(),
+            'deskripsi_review' => $request->deskripsi_review,
+            'isVerified' => $isVerified
+        ]);
+
+        // Update status di tabel pengajuan
+        $pengajuan = Pengajuan::where('kode_pengajuan', $request->kode_pengajuan)->first();
+        if ($pengajuan) {
+            $pengajuan->status = $request->status;
+            $pengajuan->save();
+        }
+
+        return redirect()->route('dashboard.submissions.index');
+    }
 
 
     /**

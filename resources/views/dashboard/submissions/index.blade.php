@@ -68,7 +68,7 @@
                             {{ $pengajuan->created_at ? $pengajuan->created_at->format('Y-m-d H:i:s') : 'Tanggal tidak tersedia' }}
                         </td>
                         <td class="px-6 py-4 text-center">
-                            @if ($pengajuan->isVerified)
+                            @if ($pengajuan->status == "terverifikasi")
                                 <span
                                     class="inline-block px-3 py-1 text-sm font-semibold text-white bg-green-500 rounded-full">Diverifikasi</span>
                             @else

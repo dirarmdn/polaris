@@ -56,4 +56,3 @@ Route::group(['middleware' => 'auth'], function () {
 
 Route::get('/admins', [AdminController::class, 'index'])->name('admins.index');
 });
-

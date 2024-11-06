@@ -69,7 +69,7 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
             'jabatan' => $request->jabatan,
             'kode_organisasi' => $organisasi->kode_organisasi,
-        ])-> sendEmailVerificationNotification();
+        ]);
     
         // Login user setelah registrasi
         auth()->login($user);
