@@ -17,5 +17,11 @@ window.Swal = swal;
 
 AOS.init();
 
+import 'flowbite';
 import { DataTable } from "simple-datatables";
-const dataTable = new DataTable("#default-table");
+if (document.getElementById("mitra-table")) {
+    const dataTable = new DataTable("#mitra-table", {
+        searchable: true,
+        sortable: true
+    });
+}
