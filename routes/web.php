@@ -37,8 +37,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/detail/{id}', [AdminController::class, 'show'])->name('admin.admins.show');
         Route::get('/{id}/edit', [AdminController::class, 'edit'])->name('admin.edit');
         Route::put('/{id}', [AdminController::class, 'update'])->name('admin.update');
-        Route::get('/review', [HasilReviewController::class,'review'])->name('dashboard.submissions.review');
-        Route::get('/review/create', [HasilReviewController::class, 'create'])->name('dashboard.submissions.review.create');
+        // Route::get('/review', action: [HasilReviewController::class,'review'])->name('dashboard.submissions.review');
+        Route::get('/review/create/{kode_pengajuan}', [HasilReviewController::class, 'create'])->name('dashboard.submissions.review.create');
         Route::post('/review/store', [HasilReviewController::class, 'store'])->name('dashboard.submissions.review.store');
         Route::resource('/mitra', OrganisasiController::class);
     });

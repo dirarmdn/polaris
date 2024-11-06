@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\HasilReview;
 use App\Models\Pengajuan;
+use App\Models\HasilReview;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\StoreHasilReviewRequest;
 use App\Http\Requests\UpdateHasilReviewRequest;
 
@@ -28,13 +29,12 @@ class HasilReviewController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(string $kode_pengajuan)
     {
-        // Ambil semua judul pengajuan dari database
-        $judul_pengajuan = Pengajuan::all(); // Pastikan model dan tabel sudah benar
+        $pengajuan = Pengajuan::with('referensi')->where('kode_pengajuan', $kode_pengajuan)->first();
 
         // Kembalikan view dengan variabel judul_pengajuan
-        return view('submission.review', compact('judul_pengajuan')); // Sesuaikan nama view
+        return view('dashboard.submissions.review', compact('pengajuan')); // Sesuaikan nama view
     }
 
 
@@ -43,11 +43,12 @@ class HasilReviewController extends Controller
      */
     public function store(Request $request)
     {
+        $user = auth()->user();
         // Validasi input
         $validator = Validator::make($request->all(), [
             'kode_pengajuan' => 'required|exists:pengajuans,kode_pengajuan',
             'deskripsi_review' => 'required',
-            'status' => 'required|in:ditolak,terverifikasi,belum_diverifikasi'
+            'status' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -66,6 +67,8 @@ class HasilReviewController extends Controller
             HasilReview::create([
                 'kode_pengajuan' => $request->kode_pengajuan,
                 'deskripsi_review' => $request->deskripsi_review,
+                'user_id' => $user->id,
+                'isVerified' => $request->status,
             ]);
 
             // Update status di tabel pengajuan
@@ -73,14 +76,11 @@ class HasilReviewController extends Controller
             
             // Update isVerified berdasarkan status
             switch($request->status) {
-                case 'terverifikasi':
-                    $pengajuan->isVerified = true;
+                case 1:
+                    $pengajuan->status = 'terverifikasi';
                     break;
-                case 'ditolak':
-                    $pengajuan->isVerified = false;
-                    break;
-                case 'belum_diverifikasi':
-                    $pengajuan->isVerified = null;
+                case 0:
+                    $pengajuan->status = 'ditolak';
                     break;
             }
             
@@ -88,17 +88,14 @@ class HasilReviewController extends Controller
             
             DB::commit();
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Review berhasil disimpan dan status pengajuan diperbarui!'
-            ]);
+            return redirect()->route('dashboard.submissions.index')->with(
+                'success',
+                'Berhasil menyimpan review');
                 
         } catch (\Exception $e) {
-            DB::rollback();
-            return response()->json([
-                'success' => false,
-                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
-            ], 500);
+            return redirect()->route('dashboard.submissions.index')->with(
+                'error',
+                'Gagal menyimpan review');
         }
     }
 

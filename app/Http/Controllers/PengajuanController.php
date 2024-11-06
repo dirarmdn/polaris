@@ -66,56 +66,48 @@ class PengajuanController extends Controller
 
     public function store(StorePengajuanRequest $request)
     {
-        // try {
-        dd($request);
-            // Validate and get the main submission data
-            $data = $request->validated();
+        $data = $request->validated();
 
-            // Add additional data
-            $data['user_id'] = Auth::user()->id;
-            $data['kode_pengajuan'] = 'PGN-' . strtoupper(uniqid());
-            $data['status'] = 'belum_direview';
+        // Add additional data
+        $data['user_id'] = Auth::user()->id;
+        $data['kode_pengajuan'] = 'PGN-' . strtoupper(uniqid());
+        $data['status'] = 'belum_direview';
 
-            // Create the pengajuan record
-            $pengajuan = Pengajuan::create($data);
+        // Create the pengajuan record
+        $pengajuan = Pengajuan::create($data);
+        // Penanganan referensi
+        $referensiData = $request->input('referensi', []);
 
-            // Handle referensi
-            $referensiData = $request->input('referensi', []);
+        foreach ($referensiData as $index => $data) {
+            if (!isset($data['tipe'])) {
+                continue;
+            }
 
-            foreach ($referensiData as $index => $data) {
-                if (!isset($data['tipe'])) {
-                    continue;
+            $path = null;
+
+            // Pastikan file tersedia jika tipe adalah 'file'
+            if ($data['tipe'] === 'file' && isset($data['file_path'])) {
+                $file = $data['file_path']; // Ambil dari data array
+                if ($file instanceof \Illuminate\Http\UploadedFile) {
+                    $fileName = time() . '_' . $file->getClientOriginalName();
+                    $path = $file->storeAs('uploads', $fileName);
                 }
+            } elseif ($data['tipe'] === 'link') {
+                $path = $data['link_path'] ?? null;
+            }
 
-                $path = null;
-
-                // Handle file upload
-                if ($data['tipe'] === 'file') {
-                    // Check if file exists in request
-                    $fileKey = "referensi.{$index}.path";
-                    if ($request->hasFile($fileKey)) {
-                        $file = $request->file($fileKey);
-                        $path = $file->store('ref-' . $pengajuan->kode_pengajuan, 'public');
-                    }
-                } elseif ($data['tipe'] === 'link') {
-                    $path = $data['path'] ?? null;
-                }
-
-                // Create referensi record
+            // Hanya buat entri jika path sudah di-set
+            if ($path !== null) {
                 $pengajuan->referensi()->create([
                     'keterangan' => $data['keterangan'] ?? null,
                     'tipe' => $data['tipe'],
                     'path' => $path,
                 ]);
             }
+        }
+        
 
-            return redirect()->route('submissions.index')->with('success', 'Pengajuan berhasil dibuat!');
-        // } catch (\Exception $e) {
-        //     return redirect()
-        //         ->back()
-        //         ->withInput()
-        //         ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
-        // }
+        return redirect()->route('submissions.index')->with('success', 'Pengajuan berhasil dibuat!');
     }
 
     /**
