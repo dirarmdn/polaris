@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\HasilReview;
 use App\Models\Pengajuan;
+use App\Models\HasilReview;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\StoreHasilReviewRequest;
 use App\Http\Requests\UpdateHasilReviewRequest;
 
@@ -30,13 +28,12 @@ class HasilReviewController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(string $kode_pengajuan)
     {
-        // Ambil semua judul pengajuan dari database
-        $judul_pengajuan = Pengajuan::all(); // Pastikan model dan tabel sudah benar
+        $pengajuan = Pengajuan::with('referensi')->where('kode_pengajuan', $kode_pengajuan)->first();
 
         // Kembalikan view dengan variabel judul_pengajuan
-        return view('submission.review', compact('judul_pengajuan')); // Sesuaikan nama view
+        return view('dashboard.submissions.review', compact('pengajuan')); // Sesuaikan nama view
     }
 
 
@@ -45,11 +42,12 @@ class HasilReviewController extends Controller
      */
     public function store(Request $request)
     {
+        $user = auth()->user();
         // Validasi input
         $validator = Validator::make($request->all(), [
             'kode_pengajuan' => 'required|exists:pengajuans,kode_pengajuan',
             'deskripsi_review' => 'required',
-            'status' => 'required|in:ditolak,terverifikasi,belum_diverifikasi'
+            'status' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -60,37 +58,50 @@ class HasilReviewController extends Controller
             ], 422);
         }
 
-        // Konversi status ke boolean untuk isVerified
-        $isVerified = null;
-        switch($request->status) {
-            case 'terverifikasi':
-                $isVerified = true;
-                break;
-            case 'ditolak':
-                $isVerified = false;
-                break;
-            case 'belum_diverifikasi':
-                $isVerified = null;
-                break;
-        }
+        // Mulai transaksi database
+        DB::beginTransaction();
+        
+        try {
+            // Simpan hasil review
+            HasilReview::create([
+                'kode_pengajuan' => $request->kode_pengajuan,
+                'deskripsi_review' => $request->deskripsi_review,
+            ]);
 
-        // Simpan hasil review
-        HasilReview::create([
-            'kode_pengajuan' => $request->kode_pengajuan,
-            'user_id' => Auth::id(),
-            'deskripsi_review' => $request->deskripsi_review,
-            'isVerified' => $isVerified
-        ]);
-
-        // Update status di tabel pengajuan
-        $pengajuan = Pengajuan::where('kode_pengajuan', $request->kode_pengajuan)->first();
-        if ($pengajuan) {
-            $pengajuan->status = $request->status;
+            // Update status di tabel pengajuan
+            $pengajuan = Pengajuan::where('kode_pengajuan', $request->kode_pengajuan)->first();
+            
+            // Update isVerified berdasarkan status
+            switch($request->status) {
+                case 'terverifikasi':
+                    $pengajuan->isVerified = true;
+                    break;
+                case 'ditolak':
+                    $pengajuan->isVerified = false;
+                    break;
+                case 'belum_diverifikasi':
+                    $pengajuan->isVerified = null;
+                    break;
+            }
+            
             $pengajuan->save();
-        }
+            
+            DB::commit();
 
-        return redirect()->route('dashboard.submissions.index');
+            return response()->json([
+                'success' => true,
+                'message' => 'Review berhasil disimpan dan status pengajuan diperbarui!'
+            ]);
+                
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
+        }
     }
+
 
 
     /**

@@ -9,7 +9,7 @@ use App\Http\Controllers\PengajuanController;
 use App\Http\Controllers\OrganisasiController;
 use App\Http\Controllers\HasilReviewController;
 use App\Http\Controllers\DataPengajuanController;
-
+Route::get('/admins', [AdminController::class, 'index'])->name('admins.index');
 Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('user.register');
 Route::post('/register/user', [AuthController::class, 'register'])->name('register.post');
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -37,8 +37,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/detail/{id}', [AdminController::class, 'show'])->name('admin.admins.show');
         Route::get('/{id}/edit', [AdminController::class, 'edit'])->name('admin.edit');
         Route::put('/{id}', [AdminController::class, 'update'])->name('admin.update');
-        Route::get('/review', [HasilReviewController::class,'review'])->name('dashboard.submissions.review');
-        Route::get('/review/create', [HasilReviewController::class, 'create'])->name('dashboard.submissions.review.create');
+        // Route::get('/review', action: [HasilReviewController::class,'review'])->name('dashboard.submissions.review');
+        Route::get('/review/create/{kode_pengajuan}', [HasilReviewController::class, 'create'])->name('dashboard.submissions.review.create');
         Route::post('/review/store', [HasilReviewController::class, 'store'])->name('dashboard.submissions.review.store');
         Route::resource('/mitra', OrganisasiController::class);
     });
@@ -54,5 +54,5 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post('/logout', [AuthController::class, 'signOut'])->name('logout');
 
-Route::get('/admins', [AdminController::class, 'index'])->name('admins.index');
 });
+

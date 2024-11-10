@@ -45,7 +45,7 @@ class PengajuanController extends Controller
         if ($request->ajax()) {
             return response()->json([
                 'html' => view('components.list_view', ['pengajuan' => $pengajuan])->render(),
-                'count' => $pengajuan->total()
+                'count' => $pengajuan->total(),
             ]);
         }
 
@@ -57,73 +57,73 @@ class PengajuanController extends Controller
      */
     public function create()
     {
-        return view("dashboard.submissions.create");
+        return view('dashboard.submissions.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
 
-     public function store(StorePengajuanRequest $request)
-     {
-         try {
+    public function store(StorePengajuanRequest $request)
+    {
+        // try {
              // Validate and get the main submission data
             $data = $request->validated();
             
              // Add additional data
-             $data['user_id'] = auth()->id() ?? 1; // Use authenticated user ID or fallback to 1
-             $data['kode_pengajuan'] = 'PGN-' . strtoupper(uniqid());
-             $data['isVerified'] = false;
-             
+            $data['user_id'] = Auth::user()->id;
+            $data['kode_pengajuan'] = 'PGN-' . strtoupper(uniqid());
+            $data['isVerified'] = false;
+            
              // Create the pengajuan record
-             $pengajuan = Pengajuan::create($data);
- 
+            $pengajuan = Pengajuan::create($data);
+
              // Handle references if they exist
-             if ($request->has('tipe')) {
-                 $tipes = is_array($request->tipe) ? $request->tipe : [$request->tipe];
-                 
-                 foreach ($tipes as $index => $tipe) {
-                     $referensi = new Referensi();
-                     $referensi->kode_pengajuan = $pengajuan->kode_pengajuan;
-                     $referensi->tipe = $tipe;
-                     
+            if ($request->has('tipe')) {
+                $tipes = is_array($request->tipe) ? $request->tipe : [$request->tipe];
+                
+                foreach ($tipes as $index => $tipe) {
+                    $referensi = new Referensi();
+                    $referensi->kode_pengajuan = $pengajuan->kode_pengajuan;
+                    $referensi->tipe = $tipe;
+                    
                      // Handle link type reference
-                     if ($tipe === 'link') {
-                         $linkFieldName = "referensi_link_" . $index;
-                         $keteranganFieldName = "keterangan_referensi_" . $index;
-                         
-                         $referensi->link = $request->$linkFieldName;
-                         $referensi->keterangan = $request->$keteranganFieldName;
-                     }
+                    if ($tipe === 'link') {
+                        $linkFieldName = "referensi_link_" . $index;
+                        $keteranganFieldName = "keterangan_referensi_" . $index;
+                        
+                        $referensi->link = $request->$linkFieldName;
+                        $referensi->keterangan = $request->$keteranganFieldName;
+                    }
                      // Handle file type reference
-                     elseif ($tipe === 'file' && $request->hasFile("referensi_file_" . $index)) {
-                         $files = $request->file("referensi_file_" . $index);
-                         foreach ($files as $file) {
-                             $path = $file->store('referensi_files', 'public');
-                             
-                             $fileReferensi = new Referensi();
-                             $fileReferensi->kode_pengajuan = $pengajuan->kode_pengajuan;
-                             $fileReferensi->tipe = 'file';
-                             $fileReferensi->file_path = $path;
-                             $fileReferensi->keterangan = $request->{"keterangan_referensi_" . $index} ?? null;
-                             $fileReferensi->save();
-                         }
+                    elseif ($tipe === 'file' && $request->hasFile("referensi_file_" . $index)) {
+                        $files = $request->file("referensi_file_" . $index);
+                        foreach ($files as $file) {
+                            $path = $file->store('referensi_files', 'public');
+                            
+                            $fileReferensi = new Referensi();
+                            $fileReferensi->kode_pengajuan = $pengajuan->kode_pengajuan;
+                            $fileReferensi->tipe = 'file';
+                            $fileReferensi->file_path = $path;
+                            $fileReferensi->keterangan = $request->{"keterangan_referensi_" . $index} ?? null;
+                            $fileReferensi->save();
+                        }
                          continue; // Skip the current iteration after handling files
-                     }
-                     
-                     $referensi->save();
-                 }
-             }
+                    }
+                    
+                    $referensi->save();
+                }
+            }
  
-             return redirect()->route('submissions.index')
-                 ->with('success', 'Pengajuan berhasil dibuat!');
+            return redirect()->route('submissions.index')
+                ->with('success', 'Pengajuan berhasil dibuat!');
  
-         } catch (\Exception $e) {
-             return redirect()->back()
-                 ->withInput()
-                 ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
-         }
-     }
+        //  } catch (\Exception $e) {
+        //      return redirect()->back()
+        //          ->withInput()
+        //          ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        //  }
+    }
 
     /**
      * Display the specified resource.
@@ -131,14 +131,13 @@ class PengajuanController extends Controller
     public function show(string $kode_pengajuan)
     {
         $pengajuan = Pengajuan::with('referensi')->where('kode_pengajuan', $kode_pengajuan)->first();
-    
+
         if (!$pengajuan) {
             return redirect()->route('submissions.index')->with('error', 'Pengajuan tidak ditemukan!');
         }
-    
+
         return view('submissions.show', compact('pengajuan'));
     }
-    
 
     /**
      * Show the form for editing the specified resource.
@@ -164,5 +163,5 @@ class PengajuanController extends Controller
     {
         $pengajuan->delete();
         return redirect()->route('submissions.index')->with('success', 'Pengajuan berhasil dihapus!');
-    }    
+    }
 }

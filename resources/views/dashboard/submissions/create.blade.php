@@ -125,7 +125,7 @@
             <div id="ref-input">
                 <div class="ref-block mb-5 border-[1px] border-gray-200 p-5 rounded-xl">
                     <label for="referensi_link" class="block mb-2">Tipe Referensi</label>
-                    <select id="tipe" name="tipe" class="w-full border border-gray-300 rounded px-3 py-2 mb-4">
+                    <select id="tipe" name="referensi[0][tipe]" class="w-full border border-gray-300 rounded px-3 py-2 mb-4">
                         <option value="">Select Tipe</option>
                         <option value="link">Link</option>
                         <option value="file">File</option>
@@ -133,13 +133,14 @@
                 
                     <div class="link-input mb-4 hidden">
                         <label for="referensi_link" class="block mb-2">Referensi Link</label>
-                        <input type="url" id="referensi_link" name="referensi_link" class="w-full border border-gray-300 rounded px-3 py-2" placeholder="https://example.com">
+                        <input type="url" id="referensi_link" name="referensi[0][link_path]" class="w-full border border-gray-300 rounded px-3 py-2" placeholder="https://example.com">
                     </div>
                 
                     <div class="file-input mb-4 hidden">
                         <label for="referensi_file" class="block mb-2 font-semibold">Attach File (Optional)</label>
                         <div id="file-drop-area" class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-gray-400 transition-colors duration-300">
-                        <input type="file" id="referensi_file" name="referensi_file[]" class="hidden" multiple>
+                        <input type="file" id="referensi_file" name="referensi[0][file_path]" class="
+                        " multiple>
                             <p class="text-gray-500">Drag & drop a file to attach it, or</p>
                             <p class="text-gray-500">browse for a file...</p>
                         </div>
@@ -147,7 +148,7 @@
 
                     <div class="text-input mb-4 hidden">
                         <label for="keterangan_referensi" class="block mb-2">Keterangaan</label>
-                        <input type="text" id="keterangan_referensi" name="keterangan_referensi" class="w-full border border-gray-300 rounded px-3 py-2">
+                        <input type="text" id="keterangan_referensi" name="referensi[0][keterangan]" class="w-full border border-gray-300 rounded px-3 py-2">
                     </div>
 
                 </div>                
@@ -664,72 +665,68 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    let refCount = 0; // A counter to keep track of dynamically added references
+    let refCount = 0;
 
-    // Define the toggleInputs function
-    function toggleInputs(tipeSelect) {
-        const container = tipeSelect.closest('.ref-block'); // Look for the closest container with class 'ref-block'
-        const selectedType = tipeSelect.value;
+    // Function to toggle input visibility
+    function toggleInputs(select) {
+        const container = select.closest('.ref-block');
+        const selectedType = select.value;
         const linkInput = container.querySelector('.link-input');
         const fileInput = container.querySelector('.file-input');
-        const textInput = container.querySelector('.text-input'); // Select the Keterangan input
+        const textInput = container.querySelector('.text-input');
 
-        // Toggle visibility of link and file inputs based on selected type
-        if (linkInput) {
-            linkInput.classList.toggle('hidden', selectedType !== 'link');
-        }
-        if (fileInput) {
-            fileInput.classList.toggle('hidden', selectedType !== 'file');
-        }
-        
-        // Toggle visibility of text input (Keterangan) based on selected type
-        if (textInput) {
-            textInput.classList.toggle('hidden', selectedType !== 'link' && selectedType !== 'file');
+        // Hide all inputs first
+        linkInput?.classList.add('hidden');
+        fileInput?.classList.add('hidden');
+        textInput?.classList.add('hidden');
+
+        // Show relevant inputs based on selection
+        if (selectedType === 'link') {
+            linkInput?.classList.remove('hidden');
+            textInput?.classList.remove('hidden');
+        } else if (selectedType === 'file') {
+            fileInput?.classList.remove('hidden');
+            textInput?.classList.remove('hidden');
         }
     }
 
-    // Event delegation to handle dynamic elements
-    document.body.addEventListener('change', function(event) {
-        if (event.target.matches('select[name="tipe"]')) {
-            toggleInputs(event.target);
-        }
-    });
-
-    const firstSelect = document.querySelector('.ref-block select[name="tipe"]');
+    // Initialize the first reference block
+    const firstSelect = document.querySelector('select[name="referensi[0][tipe]"]');
     if (firstSelect) {
-        toggleInputs(firstSelect); // Ensure the first select input is processed
+        firstSelect.addEventListener('change', (e) => toggleInputs(e.target));
     }
 
-    $("#addmore").click(function() {
-    refCount++;
-    
-        $("#ref-input").append(`
-            <div class="ref-block border-[1px] border-gray-200 mb-5 p-5 rounded-xl" data-ref-id="${refCount}">
-                <label for="referensi_tipe_${refCount}" class="block mb-2">Tipe Referensi</label>
-                <select id="referensi_tipe_${refCount}" name="tipe[]" class="w-full border border-gray-300 rounded px-3 py-2 mb-4">
-                    <option value="">Select Tipe</option>
-                    <option value="link">Link</option>
-                    <option value="file">File</option>
-                </select>
-                
-                <div class="link-input mb-4 hidden">
-                    <label for="referensi_link_${refCount}" class="block mb-2">Referensi Link</label>
-                    <input type="url" id="referensi_link_${refCount}" name="referensi_link[]" class="w-full border border-gray-300 rounded px-3 py-2" placeholder="https://example.com">
+    // Add More References Handler
+    document.getElementById('addmore')?.addEventListener('click', function() {
+        refCount++;
+        
+        const newRefBlock = document.createElement('div');
+        newRefBlock.className = 'ref-block mb-5 border-[1px] border-gray-200 p-5 rounded-xl';
+        newRefBlock.innerHTML = `
+            <label for="referensi_tipe_${refCount}" class="block mb-2">Tipe Referensi</label>
+            <select id="referensi_tipe_${refCount}" name="referensi[${refCount}][tipe]" class="w-full border border-gray-300 rounded px-3 py-2 mb-4">
+                <option value="">Select Tipe</option>
+                <option value="link">Link</option>
+                <option value="file">File</option>
+            </select>
+            
+            <div class="link-input mb-4 hidden">
+                <label for="referensi_link_${refCount}" class="block mb-2">Referensi Link</label>
+                <input type="url" id="referensi_link_${refCount}" name="referensi[${refCount}][link_path]" class="w-full border border-gray-300 rounded px-3 py-2" placeholder="https://example.com">
+            </div>
+            
+            <div class="file-input mb-4 hidden">
+                <label for="referensi_file_${refCount}" class="block mb-2 font-semibold">Attach File (Optional)</label>
+                <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-gray-400 transition-colors duration-300">
+                    <input type="file" id="referensi_file_${refCount}" name="referensi[${refCount}][file_path]" class="hidden" accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png">
+                    <p class="text-gray-500">Drag & drop a file to attach it, or</p>
+                    <p class="text-gray-500">browse for a file...</p>
                 </div>
-                
-                <div class="file-input mb-4 hidden">
-                    <label for="referensi_file_${refCount}" class="block mb-2 font-semibold">Attach File (Optional)</label>
-                    <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-gray-400 transition-colors duration-300">
-                        <input type="file" id="referensi_file_${refCount}" name="referensi_file[${refCount}][]" class="hidden" multiple>
-                        <p class="text-gray-500">Drag & drop a file to attach it, or</p>
-                        <p class="text-gray-500">browse for a file...</p>
-                    </div>
-                </div>
+            </div>
 
-                <div class="text-input mb-4 hidden">
-                    <label for="keterangan_referensi_${refCount}" class="block mb-2">Keterangan</label>
-                    <input type="text" id="keterangan_referensi_${refCount}" name="keterangan_referensi[]" class="w-full border border-gray-300 rounded px-3 py-2">
-                </div>
+            <div class="text-input mb-4 hidden">
+                <label for="keterangan_referensi_${refCount}" class="block mb-2">Keterangan</label>
+                <input type="text" id="keterangan_referensi_${refCount}" name="referensi[${refCount}][keterangan]" class="w-full border border-gray-300 rounded px-3 py-2">
             </div>
         `);
 
@@ -743,7 +740,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (selectedValue === 'link') {
                 refBlock.find('.link-input').removeClass('hidden');
-                refBlock.find('.text-input').removeClass('hidden');
+                refBlock.find('.keterangan-input').removeClass('hidden');
             } else if (selectedValue === 'file') {
                 refBlock.find('.file-input').removeClass('hidden');
                 refBlock.find('.text-input').removeClass('hidden');

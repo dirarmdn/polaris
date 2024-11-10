@@ -3,8 +3,9 @@
 @section('title', 'Review Pengajuan')
 
 @section('content')
-<!-- Alert Container
+<!-- Alert Container - Hidden by default -->
 <div id="alertMessage" class="fixed top-4 right-4 z-50 transform transition-transform duration-300 translate-x-full">
+    <!-- Success Message -->
     <div id="successAlert" class="hidden bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative w-80" role="alert">
         <strong class="font-bold">Berhasil!</strong>
         <span id="successText" class="block sm:inline"></span>
@@ -26,28 +27,48 @@
             </svg>
         </button>
     </div>
-</div> -->
+</div>
 
-<!-- Form Content -->
+<!-- Loading Spinner -->
+<div id="loadingSpinner" class="hidden fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
+    <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-accent-light-500"></div>
+</div>
+
+<!-- Confirmation Modal -->
+<div id="confirmModal" class="hidden fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-6 w-96">
+        <h3 class="text-lg font-bold mb-4">Konfirmasi</h3>
+        <p class="mb-4">Apakah Anda yakin ingin menyimpan review ini?</p>
+        <div class="flex justify-end space-x-4">
+            <button onclick="closeConfirmModal()" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">
+                Batal
+            </button>
+            <button onclick="submitForm()" class="px-4 py-2 bg-accent-light-500 text-white rounded hover:bg-accent-light-600">
+                Ya, Simpan
+            </button>
+        </div>
+    </div>
+</div>
+
 <div class="container mx-auto px-4 py-8">
     <h1 class="text-3xl font-bold mb-8">Form Review Pengajuan</h1>
 
     <form id="submissionForm" method="POST" action="{{ route('dashboard.submissions.review.store') }}" class="max-w-4xl mx-auto">
         @csrf
+        @if($errors->any())
+            <div class="bg-red-500 text-white p-4 mb-4">
+                <ul>
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <div class="bg-white rounded-xl overflow-hidden shadow-md w-full h-900 p-4">
             <h2 class="text-2xl font-semibold mb-4">Review Pengajuan</h2>
             <p class="font-sans text-gray-400 text-xxs">Isi form review pengajuan dengan detail dan lengkap</p>
             <hr class="border-gray-950 border-t-1 w-full mx-auto my-5">
-
-            <div class="mb-4">
-                <label for="kode_pengajuan" class="block mb-2">Judul Pengajuan</label>
-                <select id="kode_pengajuan" name="kode_pengajuan" class="w-full border border-gray-300 rounded px-3 py-2" required>
-                    <option value="">Pilih Judul Pengajuan</option>
-                    @foreach($judul_pengajuan as $pengajuan)
-                        <option value="{{ $pengajuan->kode_pengajuan }}">{{ $pengajuan->judul_pengajuan }}</option>
-                    @endforeach
-                </select>
-            </div>
 
             <div class="mb-4">
                 <label for="deskripsi_review" class="block mb-2">Review Pengajuan</label>
@@ -60,7 +81,7 @@
                     <option value="">Pilih Status</option>
                     <option value="ditolak">Ditolak</option>
                     <option value="terverifikasi">Terverifikasi</option>
-                    <!-- <option value="belum_diverifikasi">Belum Diverifikasi</option> -->
+                    <option value="belum_diverifikasi">Belum Diverifikasi</option>
                 </select>
             </div>
         </div>
@@ -148,30 +169,108 @@ function closeAlert(alertId) {
     }, 300);
 }
 
-// Form validation
+// Show/hide loading spinner
+function toggleLoading(show) {
+    const spinner = document.getElementById('loadingSpinner');
+    spinner.classList.toggle('hidden', !show);
+}
+
+// Show confirmation modal
+function showConfirmModal() {
+    document.getElementById('confirmModal').classList.remove('hidden');
+}
+
+// Close confirmation modal
+function closeConfirmModal() {
+    document.getElementById('confirmModal').classList.add('hidden');
+}
+
+// Submit form
+function submitForm() {
+    closeConfirmModal();
+    toggleLoading(true);
+    
+    const form = document.getElementById('submissionForm');
+    
+    // Submit form using fetch
+    fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        toggleLoading(false);
+        if (data.success) {
+            showAlert('success', data.message);
+            form.reset();
+        } else {
+            showAlert('error', data.message || 'Terjadi kesalahan');
+        }
+    })
+    .catch(error => {
+        toggleLoading(false);
+        showAlert('error', 'Terjadi kesalahan saat menyimpan data');
+    });
+}
+
+// Show alerts from session if any
+@if(session('success'))
+    showAlert('success', "{{ session('success') }}");
+@endif
+
+@if(session('error'))
+    showAlert('error', "{{ session('error') }}");
+@endif
+
 function validateForm() {
+    // Get all form elements
     const kodePengajuan = document.getElementById('kode_pengajuan');
     const deskripsiReview = document.getElementById('deskripsi_review');
     const status = document.getElementById('status');
     
+    // Reset any existing error styles
+    resetErrorStyles();
+    
     let isValid = true;
-    
-    if (!kodePengajuan.value) {
-        kodePengajuan.classList.add('border-red-500');
+    const errors = [];
+
+    // Validate kode_pengajuan
+    if (!kodePengajuan.value || kodePengajuan.value === "") {
         isValid = false;
+        errors.push("Silakan pilih judul pengajuan");
+        addErrorStyle(kodePengajuan);
     }
-    
+
+    // Validate deskripsi_review
     if (!deskripsiReview.value.trim()) {
-        deskripsiReview.classList.add('border-red-500');
         isValid = false;
+        errors.push("Review pengajuan tidak boleh kosong");
+        addErrorStyle(deskripsiReview);
     }
-    
-    if (!status.value) {
-        status.classList.add('border-red-500');
+
+    // Validate status
+    if (!status.value || status.value === "") {
         isValid = false;
+        errors.push("Silakan pilih status");
+        addErrorStyle(status);
     }
-    
-    return isValid;
+
+    // Show error message if validation fails
+    if (!isValid) {
+        showAlert('error', errors.join('\n'));
+        return false;
+    }
+
+    return true;
+}
+
+// Add error style to invalid fields
+function addErrorStyle(element) {
+    element.classList.add('border-red-500');
+    element.classList.add('bg-red-50');
 }
 
 // Remove error styling on input
@@ -180,6 +279,40 @@ document.querySelectorAll('select, textarea').forEach(element => {
         this.classList.remove('border-red-500');
     });
 });
+</script>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const tabs = document.querySelectorAll('#tabs li');
+        const contents = document.querySelectorAll('.tab-content');
+        const underline = document.getElementById('underline');
+
+        function setUnderlinePosition(target) {
+            underline.style.left = target.offsetLeft + 'px';
+            underline.style.width = target.offsetWidth + 'px';
+        }
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function () {
+                // Remove active state from all tabs
+                tabs.forEach(t => t.classList.remove('border-primary-500', 'text-primary-600'));
+                contents.forEach(c => c.classList.add('hidden'));
+
+                // Add active state to clicked tab
+                this.classList.add('border-primary-500', 'text-primary-600');
+                document.getElementById(this.getAttribute('data-target')).classList.remove('hidden');
+
+                // Move underline
+                setUnderlinePosition(this);
+            });
+        });
+
+        // Set the first tab and content active by default
+        tabs[0].classList.add('border-primary-500', 'text-primary-600');
+        contents[0].classList.remove('hidden');
+        setUnderlinePosition(tabs[0]);
+    });
 </script>
 
 <style>
