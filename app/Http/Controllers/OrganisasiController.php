@@ -15,7 +15,7 @@ class OrganisasiController extends Controller
     public function index()
     {
         //
-        $organisasi = Organisasi::with('user');
+        $organisasi = Organisasi::all();
         return view('dashboard.organizations.index', compact('organisasi'));
     }
 
@@ -53,6 +53,7 @@ class OrganisasiController extends Controller
     public function show(Organisasi $organisasi)
     {
         //
+        return view('dashboard.organizations.show');
     }
 
     /**

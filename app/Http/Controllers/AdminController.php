@@ -56,16 +56,16 @@ class AdminController extends Controller
                 ->withInput();
         }
 
-        //  untuk penyimpanan
-        $data = [
-            'nama' => $request->input('nama'),
-            'email' => $request->input('email'),
-            'password' => bcrypt($request->input('password')),
-            'kode_organisasi' => 'POL1234',
-            'role' => $roleMap[$request->input('role')],
-            'jabatan' => 'Civitas Akademika',
-            'no_telp' => $request->input('no_telp'),
-        ];
+    //  untuk penyimpanan
+    $data = [
+        'nama' => $request->input('nama'),
+        'email' => $request->input('email'),
+        'password' => bcrypt($request->input('password')),
+        'kode_organisasi' => 'POL1234',
+        'role' => $roleMap[$request->input('role')],
+        'jabatan' => 'Civitas Akademika',
+        'no_telp' => $request->input('no_telp'),
+    ];
 
         User::create($data);
 
