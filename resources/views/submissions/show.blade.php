@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="max-w-6xl mx-auto my-10 p-6 bg-white shadow-lg rounded-xl font-manrope">
-    <h1 class="text-3xl font-semibold mb-6 text-center">{{ $pengajuan->judul_pengajuan }}</h1>
+    <h1 class="text-3xl font-semibold mb-6 text-center">{{ $submission->submission_title }}</h1>
 
     <div>
         <!-- Tabs -->
@@ -25,9 +25,9 @@
             <div id="deskripsi" class="tab-content transition-opacity duration-300 text-left">
                 <div class="bg-gray-100 p-6 shadow-lg rounded-lg">
                     <h2 class="text-xl font-bold mb-6">Deskripsi Masalah</h2>
-                    <p class="text-lg text-gray-600">{{ $pengajuan->deskripsi_masalah }}</p>
+                    <p class="text-lg text-gray-600">{{ $submission->problem_description }}</p>
                     <h2 class="text-xl font-bold mb-6">Tujuan Aplikasi</h2>
-                    <p class="text-lg text-gray-600">{{ $pengajuan->tujuan_aplikasi }}</p>
+                    <p class="text-lg text-gray-600">{{ $submission->application_purpose }}</p>
                 </div>
             </div>
 
@@ -36,10 +36,10 @@
                 <div class="bg-gray-100 p-6 shadow-lg rounded-lg">
                     <h2 class="text-xl font-bold mb-6">Kebutuhan Aplikasi</h2>
                     <h3 class="text-lg font-semibold mb-2">Proses Bisnis:</h3>
-                    <p class="text-lg text-gray-600">{{ $pengajuan->proses_bisnis }}</p>
+                    <p class="text-lg text-gray-600">{{ $submission->business_process }}</p>
 
                     <h3 class="text-lg font-semibold mt-4 mb-2">Aturan Bisnis:</h3>
-                    <p class="text-lg text-gray-600">{{ $pengajuan->aturan_bisnis }}</p>
+                    <p class="text-lg text-gray-600">{{ $submission->business_rules }}</p>
                 </div>
             </div>
 
@@ -49,15 +49,15 @@
                     <h2 class="text-xl font-bold mb-6">Detail Aplikasi</h2>
 
                     <h3 class="text-lg font-semibold mt-4 mb-2">Stakeholder:</h3>
-                    <p class="text-lg text-gray-600">{{ $pengajuan->stakeholder }}</p>
+                    <p class="text-lg text-gray-600">{{ $submission->stakeholders }}</p>
 
                     <h3 class="text-lg font-semibold mt-4 mb-2">Jenis Proyek:</h3>
                     <p class="text-lg text-gray-600">
-                        {{ $pengajuan->jenis_proyek ? 'Proyek yang sudah ada' : 'Proyek Baru' }}
+                        {{ $submission->project_type ? 'Proyek yang sudah ada' : 'Proyek Baru' }}
                     </p>
 
                     <h3 class="text-lg font-semibold mt-4 mb-2">Platform:</h3>
-                    <p class="text-lg text-gray-600">{{ $pengajuan->platform }}</p>
+                    <p class="text-lg text-gray-600">{{ $submission->platform }}</p>
                 </div>
             </div>
 
@@ -65,11 +65,9 @@
             <div id="referensi" class="tab-content hidden transition-opacity duration-300 text-left">
                 <div class="bg-gray-100 p-6 shadow-lg rounded-lg">
                     <h2 class="text-xl font-bold mb-6">Referensi</h2>
-                    @foreach ($pengajuan->referensi as $ref)
-                        <p class="text-lg text-gray-600">{{ $ref->keterangan }}</p>
-                        @if($ref->tipe == 'image') 
-                            <img src="{{ $ref->path }}" alt="Referensi Image"> 
-                        @endif
+                    @foreach ($submission->reference as $ref)
+                        <p class="text-lg text-gray-600">{{ $ref->description }}</p>
+                        <img src="{{ $ref->path }}" alt="Referensi Image"> 
                     @endforeach
                 </div>
             </div>

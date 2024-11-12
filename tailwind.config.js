@@ -101,5 +101,6 @@ export default {
           datatables: true,
         }),
         require('tailwind-scrollbar'),
+        require('@tailwindcss/forms'),
     ],
 }

@@ -30,9 +30,9 @@
         <!-- Search bar  -->
         <form action="{{ route('dashboard.submissions.index') }}" method="GET" class="relative"
             style="margin-right: 7rem; margin-top: -10px;">
-            <input type="text" name="judul_pengajuan" id="table-search"
+            <input type="text" name="submission_title" id="table-search"
                 class="block w-80 p-2 pr-12 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:ring-secondary-600 focus:border-primary-900"
-                placeholder="Search Here" value="{{ request('judul_pengajuan') }}">
+                placeholder="Search Here" value="{{ request('submission_title') }}">
             <button type="submit"
                 class="absolute inset-y-0 right-0 flex items-center p-2 text-white bg-primary-900 rounded-r-lg hover:bg-primary-950">
                 <span class="sr-only">Search</span>
@@ -62,8 +62,8 @@
             <tbody>
                 @forelse($data_pengajuans as $pengajuan)
                     <tr class="bg-white border-b hover:bg-gray-50">
-                        <td class="px-6 py-4">{{ $pengajuan->judul_pengajuan }}</td>
-                        <td class="px-6 py-4">{{ $pengajuan->user->nama ?? 'Tidak diketahui' }}</td>
+                        <td class="px-6 py-4">{{ $pengajuan->submission_title }}</td>
+                        <td class="px-6 py-4">{{ $pengajuan->user->name ?? 'Tidak diketahui' }}</td>
                         <td class="px-6 py-4">
                             {{ $pengajuan->created_at ? $pengajuan->created_at->format('Y-m-d H:i:s') : 'Tanggal tidak tersedia' }}
                         </td>
@@ -87,7 +87,7 @@
                         </td>
                         @if (auth()->user()->role == 3)
                             <td class="px-6 py-4">
-                                <a href="{{ route('dashboard.submissions.review.create', ['kode_pengajuan' => $pengajuan->kode_pengajuan]) }}"
+                                <a href="{{ route('dashboard.submissions.review.create', ['submission_code' => $pengajuan->submission_code]) }}"
                                     class="flex items-center text-black-600 mx-auto">
                                     <span
                                         class="inline-flex items-center px-4 py-1 text-sm font-semibold text-white bg-blue-500 rounded-full">
@@ -100,7 +100,7 @@
                             </td>
                         @else
                             <td class="px-6 py-4">
-                                <a href="{{ route('submissions.show', ['kode_pengajuan' => $pengajuan->kode_pengajuan]) }}"
+                                <a href="{{ route('submissions.show', ['submission_code' => $pengajuan->submission_code]) }}"
                                     class="flex items-center text-nowrap text-black-600">
                                     <span class="material-symbols-outlined mr-1 text-lg">visibility</span> Lihat Detail
                                 </a>

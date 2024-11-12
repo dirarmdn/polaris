@@ -8,25 +8,22 @@ use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
-    //public function index()
-    //{
-    //  $admins = User::whereIn('role', [1, 2])->paginate(10);
-    //return view('dashboard.admins.index', compact('admins'));
-    //}
+
     public function index(Request $request)
     {
         // Retrieve the search input from the request
-        $nama = $request->input('nama'); // Get the search query for 'nama'
+        $nama = $request->input('name'); // Get the search query for 'nama'
 
         // Query for users with roles 1 or 2 and apply search and pagination
         $admins = User::whereIn('role', [2, 3])
             ->when($nama, function ($query) use ($nama) {
-                return $query->where('nama', 'LIKE', '%' . $nama . '%');
+                return $query->where('name', 'LIKE', '%' . $nama . '%');
             })
+            ->with('admin')
             ->paginate(10);
 
         // Pass data to the view
-        return view('dashboard.admins.index', compact('admins', 'nama'));
+        return view('dashboard.admins.index', compact('admins', 'name'));
     }
 
     public function create()
@@ -37,11 +34,11 @@ class AdminController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nama' => 'required|string|max:255',
+            'name' => 'required|string|max:150',
             'email' => 'required|email|max:255|unique:users,email',
             'password' => 'required|string|min:8',
-            'role' => 'required|string',
-            'no_telp' => 'required|string|max:20',
+            'role' => 'required',
+            'no_telp' => 'nullable|string|max:20',
         ]);
 
         $roleMap = [
@@ -58,13 +55,12 @@ class AdminController extends Controller
 
         //  untuk penyimpanan
         $data = [
-            'nama' => $request->input('nama'),
+            'name' => $request->input('name'),
             'email' => $request->input('email'),
             'password' => bcrypt($request->input('password')),
-            'kode_organisasi' => 'POL1234',
+            'organization_code' => 'POL1234',
             'role' => $roleMap[$request->input('role')],
-            'jabatan' => 'Civitas Akademika',
-            'no_telp' => $request->input('no_telp'),
+            'phone_number' => $request->input('phone_number'),
         ];
 
         User::create($data);
@@ -87,8 +83,8 @@ class AdminController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'password' => 'nullable|string|min:8',
-            'role' => 'required|string',
-            'no_telp' => 'nullable|string|max:15',
+            'role' => 'required',
+            'phone_number' => 'nullable|string|max:15',
         ]);
         $roleMap = [
             'admin' => 2,
@@ -104,10 +100,10 @@ class AdminController extends Controller
 
         // Siapkan data untuk di-update
         $data = [
-            'nama' => $validated['name'],
+            'name' => $validated['name'],
             'email' => $validated['email'],
             'role' => $roleMap[$request->input('role')],
-            'no_telp' => $request->input('no_telp'),
+            'phone_number' => $request->input('phone_number'),
         ];
 
         // Enkripsi password

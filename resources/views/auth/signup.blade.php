@@ -1,5 +1,7 @@
 @extends('layouts.clear')
 
+@section('title', 'POLARIS | Sign up')
+
 @section('content')
 <div class="flex items-center justify-center min-h-screen w-screen bg-cover bg-center" style="background-image: url('{{ asset('images/SignUp_BG.png') }}')">
     <div class="w-full max-w-xl px-12 py-4 bg-white shadow-md rounded-xl">
@@ -11,8 +13,8 @@
             @csrf <!-- {{ csrf_field() }} -->
             <!-- Nama Lengkap -->
             <div class="mb-4">
-                <input type="text" id="nama" name="nama" placeholder="Nama Lengkap" class="w-full px-6 py-3 text-sm border rounded-lg focus:outline-none focus:ring focus:ring-primary-300" value="{{ old('nama') }}">
-                @error('nama')
+                <input type="text" id="name" name="name" placeholder="Nama Lengkap" class="w-full px-6 py-3 text-sm border rounded-lg focus:outline-none focus:ring focus:ring-primary-300" value="{{ old('name') }}">
+                @error('name')
                     <span class="text-xs text-red-600">{{ $message }}</span>
                 @enderror
             </div>
@@ -27,19 +29,19 @@
 
             <!-- Jabatan -->
             <div class="mb-4">
-                <input type="text" id="jabatan" name="jabatan" placeholder="Jabatan dalam Organisasi" class="w-full px-6 py-3 text-sm border rounded-lg focus:outline-none focus:ring focus:ring-primary-300" value="{{ old('jabatan') }}">
-                @error('jabatan')
+                <input type="text" id="position" name="position" placeholder="Jabatan dalam Organisasi" class="w-full px-6 py-3 text-sm border rounded-lg focus:outline-none focus:ring focus:ring-primary-300" value="{{ old('jabatan') }}">
+                @error('position')
                     <span class="text-xs text-red-600">{{ $message }}</span>
                 @enderror
             </div>
             
             <!-- Organisasi -->
             <div class="mb-4 relative flex flex-col">
-                <input type="text" id="nama_organisasi" name="nama_organisasi" placeholder="Nama organisasi" class="w-full px-6 py-3 text-sm border rounded-lg focus:outline-none focus:ring focus:ring-primary-300" value="{{ old('nama_organisasi') }}">
-                <input type="hidden" id="kode_organisasi" name="kode_organisasi"> <!-- Menyimpan ID organisasi jika ditemukan -->
-                <select id="organisation-dropdown" class="absolute w-full mt-14 bg-white border border-gray-300 text-gray-900 text-sm rounded-e-lg border-s-gray-100 dark:border-s-gray-700 border-s-2 focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 z-10" size="5" style="display: none; max-height: 150px; overflow-y: auto;"></select>
+                <input type="text" id="organization_name" name="organization_name" placeholder="Nama organisasi" class="w-full px-6 py-3 text-sm border rounded-lg focus:outline-none focus:ring focus:ring-primary-300" value="{{ old('organization_name') }}">
+                <input type="hidden" id="organization_code" name="organization_code"> <!-- Menyimpan ID organisasi jika ditemukan -->
+                <select id="organization-dropdown" class="absolute w-full mt-14 bg-white border border-gray-300 text-gray-900 text-sm rounded-e-lg border-s-gray-100 dark:border-s-gray-700 border-s-2 focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 z-10" size="5" style="display: none; max-height: 150px; overflow-y: auto;"></select>
 
-                @error('nama_organisasi')
+                @error('organization_name')
                     <span class="text-xs text-red-600">{{ $message }}</span>
                 @enderror
             </div>            
@@ -95,20 +97,20 @@
         }
     }
 
-    $('#nama_organisasi').on('input', function () {
+    $('#organization_name').on('input', function () {
             let query = $(this).val();
             if (query.length >= 1) { // Mulai mencari setelah 1 karakter
                 $.ajax({
-                    url: '{{ route("organisation.search") }}',
+                    url: '{{ route("organization.search") }}',
                     type: 'GET',
                     data: { query: query },
                     success: function (data) {
-                        let dropdown = $('#organisation-dropdown');
+                        let dropdown = $('#organization-dropdown');
                         dropdown.empty();
                         if (data.length) {
                             dropdown.show();
-                            data.forEach(function (organisation) {
-                                dropdown.append(`<option class="hover:bg-secondary-800 hover:text-white" value="${organisation.kode_organisasi}" data-name="${organisation.nama}">${organisation.nama}</option>`);
+                            data.forEach(function (organization) {
+                                dropdown.append(`<option class="hover:bg-secondary-800 hover:text-white" value="${organization.organization_code}" data-name="${organization.organization_name}">${organization.organization_name}</option>`);
                             });
                         } else {
                             dropdown.hide();
@@ -119,22 +121,22 @@
         });
 
         // Mengisi input dan id organisasi saat dipilih
-        $('#organisation-dropdown').on('click', 'option', function () {
+        $('#organization-dropdown').on('click', 'option', function () {
             const name = $(this).data('name');
             const id = $(this).val();
 
-            $('#nama_organisasi').val(name);
-            $('#organisation_id').val(id);
+            $('#organization_name').val(name);
+            $('#organization_code').val(id);
 
-            $('#organisation-dropdown').hide();
-            $('#add-organisation-btn').hide();
+            $('#organization-dropdown').hide();
+            $('#add-organization-btn').hide();
         });
 
         // Tampilkan tombol tambah jika organisasi tidak ditemukan
-        $('#nama_organisasi').on('blur', function () {
+        $('#organization_name').on('blur', function () {
             setTimeout(function () {
-                if (!$('#organisation_id').val()) {
-                    $('#add-organisation-btn').show();
+                if (!$('#organization_code').val()) {
+                    $('#add-organization-btn').show();
                 }
             }, 100);
         });

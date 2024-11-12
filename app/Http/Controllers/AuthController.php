@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Submitter;
 use view;
 use App\Models\User;
 use App\Models\Pengaju;
-use App\Models\Organisasi;
+use App\Models\Organization;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -19,14 +20,13 @@ class AuthController extends Controller
         return view('auth.signup');
     }
 
-
     public function register(Request $request)
     {
         // Daftar domain umum yang tidak diizinkan
         $blockedDomains = ['gmail.com', 'yahoo.com', 'outlook.com', 'hotmail.com'];
     
         $validator = Validator::make($request->all(), [
-            'nama' => 'required|string|max:255',
+            'name' => 'required|string|max:150',
             'email' => [
                 'required',
                 'string',
@@ -43,8 +43,8 @@ class AuthController extends Controller
                     }
                 },
             ],
-            'jabatan' => 'required|string|max:255',
-            'nama_organisasi' => 'required|string',
+            'position' => 'required|string|max:255',
+            'organization_name' => 'required|string',
             'password' => 'required|string|min:8|confirmed',
             'terms' => 'required',
         ]);
@@ -54,41 +54,53 @@ class AuthController extends Controller
         }
     
         // Generate kode organisasi
-        $kode_organisasi = strtoupper(substr($request->nama_organisasi, 0, 3) . rand(100, 999));
+        $organization_code = strtoupper(substr($request->organization_name, 0, 3) . rand(100, 999));
     
         // Cek apakah organisasi sudah ada atau belum
-        $organisasi = Organisasi::firstOrCreate(
-            ['nama' => $request->nama_organisasi],
-            ['kode_organisasi' => $kode_organisasi]
+        $organization = Organization::firstOrCreate(
+            ['organization_name' => $request->organization_name],
+            ['organization_code' => $organization_code]
         );
     
         // Buat user baru
         $user = User::create([
-            'nama' => $request->nama,
+            'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'jabatan' => $request->jabatan,
-            'kode_organisasi' => $organisasi->kode_organisasi,
+        ]);
+
+        $submitter = Submitter::create([
+            'user_id' => $user->user_id,
+            'position_in_organization' => $request->position,
+            'organization_code' => $organization->organization_code,
         ]);
     
-        // Login user setelah registrasi
         auth()->login($user);
     
         return redirect()->route('home');
     }
-    
 
-    public function viewProfile() {
-        $user = Auth::user()->load('organisasi');
-        return view('auth.profile', compact('user'));
-    }
-
-    public function signOut(Request $request)
+    public function showLoginForm()
     {
-        Auth::logout(); // Logout user dari session
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return redirect('/')->with('success', 'Anda telah berhasil logout.');
+        return view('auth.signin'); 
     }
+
+    public function submitlogin(Request $request)
+    {
+        // Validate 
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|min:8',
+        ]);
+
+        // Attempt to log the user in
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            // Redirect to intended page or dashboard
+            return redirect()->intended('dashboard')->with('success', 'Login successful!');
+        }
+
+         // If authentication fails
+        return back()->withErrors(['email' => 'Invalid email or password'])->onlyInput('email');
+    }
+
 }

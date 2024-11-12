@@ -13,9 +13,9 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasUuids;
 
+    protected $primaryKey = 'user_id'; // Set primary key to user_id
+
     /**
-     * Kita override boot method
-     *
      * Mengisi primary key secara otomatis dengan UUID ketika membuat record
      */
     protected static function boot()
@@ -28,8 +28,6 @@ class User extends Authenticatable
         });
     }
     /**
-     * Kita override getIncrementing method
-     *
      * Menonaktifkan auto increment
      */
     public function getIncrementing()
@@ -37,11 +35,6 @@ class User extends Authenticatable
         return false;
     }
 
-    /**
-     * Kita override getKeyType method
-     *
-     * Memberi tahu laravel bahwa model ini menggunakan primary key bertipe string
-     */
     public function getKeyType()
     {
         return 'string';
@@ -52,12 +45,11 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'id',
-        'nama',
+        'user_id',
+        'name',
         'email',
-        'no_telp',
-        'kode_organisasi',
-        'jabatan',
+        'phone_number',
+        'organization_code',
         'role',
         'password',
     ];
@@ -85,16 +77,20 @@ class User extends Authenticatable
         ];
     }
 
-    public function pengajuan()
-    {
-        return $this->hasMany('App\Models\Pengajuan', 'user_id');
+    
+    public function notification() {
+        return $this->hasMany(Notification::class, 'user_id');
     }
 
-    public function organisasi() {
-        return $this->belongsTo(Organisasi::class, 'kode_organisasi', 'kode_organisasi');
+    public function submitter() {
+        return $this->hasOne(Submitter::class, 'user_id');
     }
-    
-    public function notifikasi() {
-        return $this->hasMany(Notification::class, 'user_id');
+
+    public function admin() {
+        return $this->hasOne(Admin::class, 'user_id');
+    }
+
+    public function reviewer() {
+        return $this->hasOne(Reviewer::class, 'user_id');
     }
 }

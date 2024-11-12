@@ -5,7 +5,7 @@
 @section('content')
 
 <div class="max-w-6xl mx-auto my-10 p-6 bg-white shadow-lg rounded-xl font-manrope">
-    <h1 class="text-3xl font-semibold mb-6 text-center">{{ $pengajuan->judul_pengajuan }}</h1>
+    <h1 class="text-3xl font-semibold mb-6 text-center">{{ $pengajuan->submission_title }}</h1>
 
     <div>
         <!-- Tabs -->
@@ -141,7 +141,7 @@
                 </ul>
             </div>
         @endif
-        <input type="text" class="hidden" name="kode_pengajuan" value="{{ $pengajuan->kode_pengajuan }}" id="">
+        <input type="text" class="hidden" name="submission_code" value="{{ $pengajuan->submission_code }}" id="">
         <div class="bg-white rounded-xl overflow-hidden shadow-md w-full h-900 p-4">
             <h2 class="text-2xl font-semibold mb-4">Review Pengajuan</h2>
             <p class="font-sans text-gray-400 text-xxs">Isi form review pengajuan dengan detail dan lengkap</p>
@@ -271,7 +271,7 @@ function closeConfirmModal() {
 
 // function validateForm() {
 //     // Get all form elements
-//     const kodePengajuan = document.getElementById('kode_pengajuan');
+//     const kodePengajuan = document.getElementById('submission_code');
 //     const deskripsiReview = document.getElementById('deskripsi_review');
 //     const status = document.getElementById('status');
     
@@ -281,7 +281,7 @@ function closeConfirmModal() {
 //     let isValid = true;
 //     const errors = [];
 
-//     // Validate kode_pengajuan
+//     // Validate submission_code
 //     if (!kodePengajuan.value || kodePengajuan.value === "") {
 //         isValid = false;
 //         errors.push("Silakan pilih judul pengajuan");
@@ -320,7 +320,7 @@ function addErrorStyle(element) {
 // Reset error styles
 function resetErrorStyles() {
     const elements = [
-        document.getElementById('kode_pengajuan'),
+        document.getElementById('submission_code'),
         document.getElementById('deskripsi_review'),
         document.getElementById('status')
     ];
@@ -340,7 +340,7 @@ function showConfirmModal() {
 // Add input event listeners to remove error styling when user starts typing/selecting
 document.addEventListener('DOMContentLoaded', function() {
     const elements = [
-        document.getElementById('kode_pengajuan'),
+        document.getElementById('submission_code'),
         document.getElementById('deskripsi_review'),
         document.getElementById('status')
     ];

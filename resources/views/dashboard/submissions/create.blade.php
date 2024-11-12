@@ -47,23 +47,23 @@
                 @endforeach
             </div>
         </div>
-       
+    
         <!-- Step 1: Deskripsi -->
         <div class="bg-white rounded-xl overflow-hidden shadow-md w-full h-900 p-4 step-content hidden" data-step="1">
             <h2 class="text-2xl font-semibold mb-4 my-5">Deskripsi Pengajuan</h2>
             <p class="font-sans text-gray-400 text-xxs my-0">Isi form deskripsi pengajuan sesuai dengan apa yang diinginkan secara detail</p>
             <hr class="border-gray-950 border-t-1 w-full mx-auto my-5">
             <div class="mb-4">
-                <label for="judul_pengajuan" class="block mb-2">Judul Pengajuan</label>
-                <input type="text" id="judul_pengajuan" name="judul_pengajuan" class="w-full border border-gray-300 rounded px-3 py-2">
+                <label for="submission_title" class="block mb-2">Judul Pengajuan</label>
+                <input type="text" id="submission_title" name="submission_title" class="w-full border border-gray-300 rounded px-3 py-2">
             </div>
             <div class="mb-4">
-                <label for="deskripsi_masalah" class="block mb-2">Deskripsi Masalah</label>
-                <textarea id="deskripsi_masalah" name="deskripsi_masalah" rows="4" class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
+                <label for="problem_description" class="block mb-2">Deskripsi Masalah</label>
+                <textarea id="problem_description" name="problem_description" rows="4" class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
             </div>
             <div class="mb-4">
-                <label for="tujuan_aplikasi" class="block mb-2">Tujuan Aplikasi</label>
-                <textarea id="tujuan_aplikasi" name="tujuan_aplikasi" rows="4" class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
+                <label for="application_purpose" class="block mb-2">Tujuan Aplikasi</label>
+                <textarea id="application_purpose" name="application_purpose" rows="4" class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
             </div>
         </div>
 
@@ -73,12 +73,12 @@
             <p class="font-sans text-gray-400 text-xxs my-0">Isi form kebutuhan aplikasi sesuai dengan apa yang diinginkan secara detail</p>
             <hr class="border-gray-950 border-t-1 w-full mx-auto my-5">
             <div class="mb-4">
-                <label for="proses_bisnis" class="block mb-2">Proses Bisnis</label>
-                <textarea id="proses_bisnis" name="proses_bisnis" rows="4" class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
+                <label for="business_process" class="block mb-2">Proses Bisnis</label>
+                <textarea id="business_process" name="business_process" rows="4" class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
             </div>
             <div class="mb-4">
-                <label for="aturan_bisnis" class="block mb-2">Aturan Bisnis</label>
-                <textarea id="aturan_bisnis" name="aturan_bisnis" rows="4" class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
+                <label for="business_rules" class="block mb-2">Aturan Bisnis</label>
+                <textarea id="business_rules" name="business_rules" rows="4" class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
             </div>
         </div>
 
@@ -88,8 +88,8 @@
             <p class="font-sans text-gray-400 text-xxs my-0">Isi form detail aplikasi sesuai dengan apa yang diinginkan secara detail</p>
             <hr class="border-gray-950 border-t-1 w-full mx-auto my-5">
             <div class="mb-4">
-                <label for="stakeholder" class="block mb-2">Stakeholder</label>
-                <textarea id="stakeholder" name="stakeholder" rows="4" class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
+                <label for="stakeholders" class="block mb-2">Stakeholders</label>
+                <textarea id="stakeholders" name="stakeholders" rows="4" class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
             </div>
             <div class="mb-4">
                 <label for="platform" class="block mb-2">Platform</label>
@@ -105,11 +105,11 @@
                 <label class="block mb-2">Jenis Proyek</label>
                 <div class="flex items-center space-x-4">
                     <label class="inline-flex items-center">
-                        <input type="radio" name="jenis_proyek" value="0" class="form-radio">
+                        <input type="radio" name="project_type" value="0" class="form-radio">
                         <span class="ml-2">Aplikasi Baru</span>
                     </label>
                     <label class="inline-flex items-center">
-                        <input type="radio" name="jenis_proyek" value="1" class="form-radio">
+                        <input type="radio" name="project_type" value="1" class="form-radio">
                         <span class="ml-2">Aplikasi Sudah Ada</span>
                     </label>
                 </div>
@@ -184,9 +184,9 @@
     let completedSteps = new Set();
 
         const requiredFieldsByStep = {
-            1: ['judul_pengajuan', 'deskripsi_masalah', 'tujuan_aplikasi'],
-            2: ['proses_bisnis', 'aturan_bisnis'],
-            3: ['stakeholder', 'platform'],
+            1: ['submission_title', 'problem_description', 'application_purpose'],
+            2: ['business_process', 'business_rules'],
+            3: ['stakeholders', 'platform'],
             4: [] // Step 4 is optional
         };
 
@@ -199,8 +199,8 @@
                 if (!field) return false;
 
                 // Handle radio buttons separately
-                if (fieldId === 'jenis_proyek') {
-                    const radioGroup = document.getElementsByName('jenis_proyek');
+                if (fieldId === 'project_type') {
+                    const radioGroup = document.getElementsByName('project_type');
                     return Array.from(radioGroup).some(radio => radio.checked);
                 }
 
@@ -213,7 +213,7 @@
 
             // Special handling for step 3's radio buttons
             if (step === 3) {
-                const jenisProyekRadios = document.getElementsByName('jenis_proyek');
+                const jenisProyekRadios = document.getElementsByName('project_type');
                 const isRadioSelected = Array.from(jenisProyekRadios).some(radio => radio.checked);
                 return allFilled && isRadioSelected;
             }
@@ -249,7 +249,7 @@
         }
 
         // Add event listeners for radio buttons
-        const radioButtons = document.getElementsByName('jenis_proyek');
+        const radioButtons = document.getElementsByName('project_type');
         radioButtons.forEach(radio => {
             radio.addEventListener('change', updateNextButtonState);
         });

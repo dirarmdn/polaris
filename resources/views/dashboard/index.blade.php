@@ -8,14 +8,8 @@
         <div class="w-full p-6 bg-full">
             <div class="text-center pt-16 flex flex-col">
                 <h1 class="text-4xl font-bold">Halo selamat datang <span class="text-accent-600">
-                        @if (auth()->user()->role == 1)
-                            Pengaju
-                        @elseif (auth()->user()->role == 2)
-                            Admin
-                        @else
-                            Reviewer
-                        @endif
-                    </span>!</h1>
+                        {{ auth()->user()->name }}
+                    </span></h1>
                 @if (auth()->user()->role == 1)
                     <p class="text-lg text-white-500 mt-2">Punya kebutuhan aplikasi lainnya?</p>
                     <a href="{{ route('submissions.create') }}" class="mt-6 mx-auto px-6 py-3 bg-accent-600 text-white rounded-lg hover:bg-accent-500">
@@ -28,13 +22,23 @@
         <!-- Content Section -->
         <div class="grid grid-cols-3 gap-6 mt-10 bg-white w-full py-10 px-36">
             <!-- Submissions List -->
-            <div class="col-span-2 bg-secondary-800 rounded-xl ml-30">
-                <h2 class="text-white text-lg font-semibold bg-primary-900 px-3 py-5 rounded-xl">Daftar Pengajuan @if(auth()->user()->role == 1) Anda @endif</h2>
+            <div class="col-span-2 bg-primary-50 rounded-xl ml-30">
+                <div class="flex justify-between items-center bg-primary-900 px-4 py-5 rounded-xl">
+                    <h2 class="text-white text-lg font-semibold">Daftar Pengajuan @if(auth()->user()->role == 1) Anda @endif</h2>
+                    <a href="{{ route('dashboard.submissions.index') }}"
+                        class="text-white text-sm flex justify-between items-center transform transition-transform duration-300 hover:scale-105 hover:text-light-blue-200">
+                        Lihat Selengkapnya
+                        <span
+                            class="material-symbols-outlined text-lg transform transition-transform duration-300 hover:translate-x-1 hover:scale-110">
+                            arrow_outward
+                        </span>
+                    </a>
+                </div>
                 <div class="mt-4 space-y-4 px-10 py-4 text-left overflow-y-scroll max-h-[400px] scrollbar-thin">
                     <!-- Submission Item -->
                     @forelse ($pengajuan as $p)
-                    <div class="bg-primary-700 py-4 px-6 rounded-xl">
-                        <h3 class="text-white text-lg font-bold">{{ $p->judul_pengajuan }}</h3>
+                    <div class="bg-white py-4 px-6 rounded-xl">
+                        <h3 class="text-black text-lg font-bold">{{ $p->submission_title }}</h3>
                         <p class="text-sm text-primary-200 mt-1">
                             {{ $p->deskripsi_masalah }}
                         </p>
