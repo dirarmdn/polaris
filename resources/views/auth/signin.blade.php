@@ -1,14 +1,15 @@
 @extends('layouts.clear')
 
+@section('title', 'POLARIS | Sign in')
+
 @section('content')
 <div class="flex items-center justify-center min-h-screen w-screen bg-cover bg-center" style="background-image: url('{{ asset('images/SignUp_BG.png') }}')">
     <div class="w-full max-w-md px-8 py-4 bg-white shadow-md rounded-xl">
         <a href="{{ route('home') }}" class="flex justify-center mb-6 mt-8">
             <img src="{{ asset('images/Logo.png') }}" alt="Logo" class="h-20">
         </a>
-        <form method="POST" action="{{ route('login.submit') }}">
-            @csrf 
-            
+        <form method="POST" action="{{ route('login.post') }}">
+            @csrf
             <!-- Email -->
             <div class="mb-4">
                 <input type="email" id="email" name="email" placeholder="Masukkan email terdaftar Anda" class="w-full max-w-md px-4 py-3 text-md border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-primary-300" value="{{ old('email') }}">
@@ -48,7 +49,7 @@
         @endif
 
         <!-- Sign Up -->
-        <p class="mt-6 mb-8 text-lg text-center text-dark-400">Tidak punya akun? <a href="{{ route('user.register') }}" class="text-dark-400 hover:underline font-bold">Daftar sekarang</a></p>
+        <p class="mt-6 mb-8 text-lg text-center text-dark-400">Tidak punya akun? <a href="{{ route('register') }}" class="text-dark-400 hover:underline font-bold">Daftar sekarang</a></p>
     </div>
 </div>
             <script>
@@ -64,6 +65,6 @@
             }
         });
 
-            </script>
+        </script>
 
 @endsection

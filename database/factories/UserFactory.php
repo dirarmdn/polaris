@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Organisasi;
+use App\Models\Organization;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -25,13 +25,11 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'id' => $this->faker->uuid,
-            'kode_organisasi' => Organisasi::factory()->create()->kode_organisasi,
-            'nama' => $this->faker->name(),
+            'user_id' => $this->faker->uuid,
+            'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
-            'no_telp' => $this->faker->phoneNumber(), 
+            'phone_number' => $this->faker->phoneNumber(), 
             'role' => $this->faker->numberBetween(1, 3), 
-            'jabatan' => $this->faker->jobTitle(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),

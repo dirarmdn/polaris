@@ -48,23 +48,23 @@
                 @endforeach
             </div>
         </div>
-       
+    
         <!-- Step 1: Deskripsi -->
         <div class="bg-white rounded-xl overflow-hidden shadow-md w-full h-900 p-4 step-content hidden" data-step="1">
             <h2 class="text-2xl font-semibold mb-4 my-5">Deskripsi Pengajuan</h2>
             <p class="font-sans text-gray-400 text-xxs my-0">Isi form deskripsi pengajuan sesuai dengan apa yang diinginkan secara detail</p>
             <hr class="border-gray-950 border-t-1 w-full mx-auto my-5">
             <div class="mb-4">
-                <label for="judul_pengajuan" class="block mb-2">Judul Pengajuan</label>
-                <input type="text" id="judul_pengajuan" name="judul_pengajuan" class="w-full border border-gray-300 rounded px-3 py-2">
+                <label for="submission_title" class="block mb-2">Judul Pengajuan</label>
+                <input type="text" id="submission_title" name="submission_title" class="w-full border border-gray-300 rounded px-3 py-2">
             </div>
             <div class="mb-4">
-                <label for="deskripsi_masalah" class="block mb-2">Deskripsi Masalah</label>
-                <textarea id="deskripsi_masalah" name="deskripsi_masalah" rows="4" class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
+                <label for="problem_description" class="block mb-2">Deskripsi Masalah</label>
+                <textarea id="problem_description" name="problem_description" rows="4" class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
             </div>
             <div class="mb-4">
-                <label for="tujuan_aplikasi" class="block mb-2">Tujuan Aplikasi</label>
-                <textarea id="tujuan_aplikasi" name="tujuan_aplikasi" rows="4" class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
+                <label for="application_purpose" class="block mb-2">Tujuan Aplikasi</label>
+                <textarea id="application_purpose" name="application_purpose" rows="4" class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
             </div>
         </div>
 
@@ -74,12 +74,12 @@
             <p class="font-sans text-gray-400 text-xxs my-0">Isi form kebutuhan aplikasi sesuai dengan apa yang diinginkan secara detail</p>
             <hr class="border-gray-950 border-t-1 w-full mx-auto my-5">
             <div class="mb-4">
-                <label for="proses_bisnis" class="block mb-2">Proses Bisnis</label>
-                <textarea id="proses_bisnis" name="proses_bisnis" rows="4" class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
+                <label for="business_process" class="block mb-2">Proses Bisnis</label>
+                <textarea id="business_process" name="business_process" rows="4" class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
             </div>
             <div class="mb-4">
-                <label for="aturan_bisnis" class="block mb-2">Aturan Bisnis</label>
-                <textarea id="aturan_bisnis" name="aturan_bisnis" rows="4" class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
+                <label for="business_rules" class="block mb-2">Aturan Bisnis</label>
+                <textarea id="business_rules" name="business_rules" rows="4" class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
             </div>
         </div>
 
@@ -89,8 +89,8 @@
             <p class="font-sans text-gray-400 text-xxs my-0">Isi form detail aplikasi sesuai dengan apa yang diinginkan secara detail</p>
             <hr class="border-gray-950 border-t-1 w-full mx-auto my-5">
             <div class="mb-4">
-                <label for="stakeholder" class="block mb-2">Stakeholder</label>
-                <textarea id="stakeholder" name="stakeholder" rows="4" class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
+                <label for="stakeholders" class="block mb-2">Stakeholders</label>
+                <textarea id="stakeholders" name="stakeholders" rows="4" class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
             </div>
             <div class="mb-4">
                 <label for="platform" class="block mb-2">Platform</label>
@@ -106,11 +106,11 @@
                 <label class="block mb-2">Jenis Proyek</label>
                 <div class="flex items-center space-x-4">
                     <label class="inline-flex items-center">
-                        <input type="radio" name="jenis_proyek" value="0" class="form-radio">
+                        <input type="radio" name="project_type" value="0" class="form-radio">
                         <span class="ml-2">Aplikasi Baru</span>
                     </label>
                     <label class="inline-flex items-center">
-                        <input type="radio" name="jenis_proyek" value="1" class="form-radio">
+                        <input type="radio" name="project_type" value="1" class="form-radio">
                         <span class="ml-2">Aplikasi Sudah Ada</span>
                     </label>
                 </div>
@@ -215,53 +215,46 @@
 document.addEventListener('DOMContentLoaded', function() {
     // State management
     let currentStep = 1;
-    const totalSteps = 4;
-    let referenceCount = 0;
+    let completedSteps = new Set();
 
-    // DOM Elements
-    const elements = {
-        form: document.getElementById('submissionForm'),
-        stepperSteps: document.querySelectorAll('.stepper-step'),
-        stepContents: document.querySelectorAll('.step-content'),
-        prevBtn: document.getElementById('prevBtn'),
-        nextBtn: document.getElementById('nextBtn'),
-        submitBtn: document.getElementById('submitBtn'),
-        stepperProgress: document.getElementById('stepperProgress'),
-        successPopup: document.getElementById('successPopup')
-    };
+        const requiredFieldsByStep = {
+            1: ['judul_pengajuan', 'deskripsi_masalah', 'tujuan_aplikasi'],
+            2: ['proses_bisnis', 'aturan_bisnis'],
+            3: ['stakeholder', 'platform'],
+            4: [] // Step 4 is optional
+        };
 
-    // Required fields configuration
-    const requiredFieldsByStep = {
-        1: ['judul_pengajuan', 'deskripsi_masalah', 'tujuan_aplikasi'],
-        2: ['proses_bisnis', 'aturan_bisnis'],
-        3: ['stakeholder', 'platform'],
-        4: [] // Optional step
-    };
+        function isStepComplete(step) {
+            const fields = requiredFieldsByStep[step];
+            if (!fields || fields.length === 0) return true;
 
-    // Utility Functions
-    const validateField = (fieldId) => {
-        const field = document.getElementById(fieldId);
-        if (!field) return false;
-        return field.tagName === 'SELECT' ? field.value !== '' : field.value.trim() !== '';
-    };
+            const allFilled = fields.every(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (!field) return false;
 
-    const validateRadioGroup = (name) => {
-        const radioButtons = document.getElementsByName(name);
-        return Array.from(radioButtons).some(radio => radio.checked);
-    };
+                // Handle radio buttons separately
+                if (fieldId === 'jenis_proyek') {
+                    const radioGroup = document.getElementsByName('jenis_proyek');
+                    return Array.from(radioGroup).some(radio => radio.checked);
+                }
 
-    const isStepComplete = (step) => {
-        const fields = requiredFieldsByStep[step];
-        
-        // Special handling for step 3
-        if (step === 3) {
-            const areFieldsFilled = fields.every(validateField);
-            const isRadioSelected = validateRadioGroup('jenis_proyek');
-            return areFieldsFilled && isRadioSelected;
+                if (field.tagName === 'SELECT') {
+                    return field.value !== '';
+                }
+
+                return field.value.trim() !== '';
+            });
+
+            // Special handling for step 3's radio buttons
+            if (step === 3) {
+                const jenisProyekRadios = document.getElementsByName('jenis_proyek');
+                const isRadioSelected = Array.from(jenisProyekRadios).some(radio => radio.checked);
+                return allFilled && isRadioSelected;
+            }
+
+            return allFilled;
         }
-        
-        return !fields || fields.length === 0 || fields.every(validateField);
-    };
+
 
     const canAccessStep = (targetStep) => {
         if (targetStep <= currentStep) return true;
@@ -271,37 +264,34 @@ document.addEventListener('DOMContentLoaded', function() {
         return true;
     };
 
-    // UI Update Functions
-    const updateStepperUI = (step) => {
-        elements.stepperSteps.forEach((s, index) => {
-            const circle = s.querySelector('.stepper-circle');
-            const label = s.querySelector('.stepper-label');
-            const isCompleted = index + 1 <= step;
+        function updateNextButtonState() {
+            const canProceed = isStepComplete(currentStep);
+            nextBtn.disabled = !canProceed;
+            
+            // Add visual feedback
+            if (canProceed) {
+                nextBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                nextBtn.classList.add('hover:bg-blue-600');
+            } else {
+                nextBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                nextBtn.classList.remove('hover:bg-blue-600');
+            }
+        }
 
-            circle.className = `stepper-circle w-12 h-12 rounded-full border-4 flex items-center justify-center text-xl absolute top-0 -translate-y-1/4 ${
-                isCompleted ? 'bg-accent-light-500 border-accent-light-500 text-white font-bold' : 'bg-white border-gray-300 text-gray-600 font-bold'
-            }`;
-
-            label.className = `stepper-label text-sm font-medium mb-2 transition-all duration-300 ease-in-out ${
-                isCompleted ? 'text-primary-50 font-semibold' : 'text-gray-600'
-            }`;
+        // Add event listeners for radio buttons
+        const radioButtons = document.getElementsByName('jenis_proyek');
+        radioButtons.forEach(radio => {
+            radio.addEventListener('change', updateNextButtonState);
         });
 
-        const progressPercentage = ((step - 1) / (totalSteps - 1)) * 100;
-        elements.stepperProgress.style.width = `${progressPercentage}%`;
-    };
+        function updateStep(step) {
+            if (step < 1 || step > stepperSteps.length) return;
 
-    const updateButtonVisibility = (step) => {
-        elements.prevBtn.classList.toggle('hidden', step === 1);
-        elements.nextBtn.classList.toggle('hidden', step === totalSteps);
-        elements.submitBtn.classList.toggle('hidden', step !== totalSteps);
-    };
-
-    const updateStep = (step) => {
-        if (step < 1 || step > totalSteps || !canAccessStep(step)) {
-            alert('Silakan lengkapi step sebelumnya terlebih dahulu.');
-            return;
-        }
+            // Check if we can access the requested step
+            if (!canAccessStep(step)) {
+                alert('Silakan lengkapi step sebelumnya terlebih dahulu.');
+                return;
+            }
 
         elements.stepContents.forEach((content, index) => {
             content.classList.toggle('hidden', index + 1 !== step);

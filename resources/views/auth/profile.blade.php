@@ -42,20 +42,22 @@
                         </div>
                     </div>
                 
-                    <div class="bg-white p-10 rounded-lg shadow-md">
+                    <form method="POST" action="{{ route('user.update', ['user' => $user]) }}" class="bg-white p-10 rounded-lg shadow-md">
+                        @csrf
+                        @method('PUT')
                         <div class="grid gap-4">
                             <p class="text-black-600 font-bold">Nama Lengkap</p>
-                            <input type="text" name="name" id="name" value="{{ old('name', $user->nama) }}" required class="rounded-lg border-2 border-gray-300 py-4">
+                            <input type="text" name="name" id="name" value="{{ old('name', $user->name) }}" required class="rounded-lg border-2 border-gray-300 py-4">
                             <p class="text-black-600 font-bold">Email</p>
                             <input type="text" name="email" id="email" value="{{ old('email', $user->email) }}" required class="rounded-lg border-2 border-gray-300 py-4">
-                            <p class="text-black-600 font-bold">Jabatan</p>
-                            <input type="text" name="jabatan" id="jabatan" value="{{ old('jabatan', $user->jabatan) }}" required class="rounded-lg border-2 border-gray-300 py-4">
-                            <p class="text-black-600 font-bold">Organisasi</p>
-                            <input type="text" name="nama" id="nama" value="{{ old('email', $user->organisasi->nama) }}" required class="rounded-lg border-2 border-gray-300 py-4" disabled>
+                            {{-- <p class="text-black-600 font-bold">Jabatan</p>
+                            <input type="text" name="jabatan" id="jabatan" value="{{ old('jabatan', $user->jabatan) }}" required class="rounded-lg border-2 border-gray-300 py-4"> --}}
+                            {{-- <p class="text-black-600 font-bold">Organisasi</p>
+                            <input type="text" name="name" id="name" value="{{ old('email', $user->organization->organization_name) }}" required class="rounded-lg border-2 border-gray-300 py-4" disabled> --}}
                             <p class="text-black-600 font-bold">Nomor Telepon</p>
-                            <input type="text" name="no_telp" id="no_telp" value="{{ old('no_telp', $user->no_telp) }}" required class="rounded-lg border-2 border-gray-300 py-4">
+                            <input type="text" name="phone_number" id="phone_number" value="{{ old('phone_number', $user->phone_number) }}" required class="rounded-lg border-2 border-gray-300 py-4">
                         </div>
-                    </div>
+                    </form>
                         <button class="bg-primary-700 text-white font-semibold ml-auto mt-5 px-4 py-2 rounded-lg hover:bg-primary-600 mb-2">
                             Simpan Perubahan
                         </button>
@@ -86,15 +88,15 @@
                     <div class="bg-white p-10 rounded-lg shadow-md">
                         <div class="grid gap-4">
                             <p class="text-black-600 font-bold">Nama</p>
-                            <input type="text" name="name" id="name" value="{{ old('name', $user->nama) }}" required class="rounded-lg border-2 border-gray-300 py-4">
+                            <input type="text" name="organization_name" id="organization_name" value="{{ old('organization_name', $user->submitter->organization->organization_name) }}" required class="rounded-lg border-2 border-gray-300 py-4">
                             <p class="text-black-600 font-bold">Deskripsi Perusahaan</p>
-                            <input type="text" name="email" id="email" value="{{ old('email', $user->email) }}" required class="rounded-lg border-2 border-gray-300 py-4">
+                            <input type="text" name="company_description" id="company_description" value="{{ old('company_description', $user->submitter->organization->company_description) }}" required class="rounded-lg border-2 border-gray-300 py-4">
                             <p class="text-black-600 font-bold">Bidang Usaha</p>
-                            <input type="text" name="jabatan" id="jabatan" value="{{ old('jabatan', $user->jabatan) }}" required class="rounded-lg border-2 border-gray-300 py-4">
+                            <input type="text" name="jabatan" id="jabatan" value="{{ old('jabatan', $user->submitter->organization->business_field) }}" required class="rounded-lg border-2 border-gray-300 py-4">
                             <p class="text-black-600 font-bold">Alamat</p>
-                            <input type="text" name="nama" id="nama" value="{{ old('email', $user->organisasi->nama) }}" required class="rounded-lg border-2 border-gray-300 py-4" disabled>
+                            <input type="text" name="address" id="address" value="{{ old('address', $user->submitter->organization->address) }}" required class="rounded-lg border-2 border-gray-300 py-4" disabled>
                             <p class="text-black-600 font-bold">Website Resmi</p>
-                            <input type="text" name="no_telp" id="no_telp" value="{{ old('no_telp', $user->no_telp) }}" required class="rounded-lg border-2 border-gray-300 py-4">
+                            <input type="text" name="phone_number" id="website" value="{{ old('website', $user->submitter->organization->website ) }}" required class="rounded-lg border-2 border-gray-300 py-4">
                         </div>
                     </div>
                         <button class="bg-primary-700 text-white font-semibold ml-auto mt-5 px-4 py-2 rounded-lg hover:bg-primary-600 mb-2">

@@ -30,38 +30,38 @@ class PengajuanTest extends TestCase
     public function test_search_returns_filtered_pengajuan()
     {
         // Arrange: Membuat pengajuan untuk dicari
-        $pengajuan = Pengajuan::factory()->create(['judul_pengajuan' => 'Test Judul']);
-        $pengajuan2 = Pengajuan::factory()->create(['judul_pengajuan' => 'Another Judul']);
+        $pengajuan = Pengajuan::factory()->create(['submission_title' => 'Test Judul']);
+        $pengajuan2 = Pengajuan::factory()->create(['submission_title' => 'Another Judul']);
 
         // Act: Mengakses route search
         $response = $this->get(route('submissions.search', ['search' => 'Test']));
 
         // Assert: Memastikan hasil pencarian sesuai
         $response->assertStatus(200);
-        $response->assertSee($pengajuan->judul_pengajuan);
-        $response->assertDontSee($pengajuan2->judul_pengajuan);
+        $response->assertSee($pengajuan->submission_title);
+        $response->assertDontSee($pengajuan2->submission_title);
     }
     public function test_store_creates_new_pengajuan()
     {
         // Buat organisasi terlebih dahulu
-        $organisasi = \App\Models\Organisasi::factory()->create();
+        $organization = \App\Models\Organization::factory()->create();
     
         // Buat pengaju yang terhubung ke organisasi yang dibuat di atas
         $pengaju = \App\Models\Pengaju::factory()->create([
-            'kode_organisasi' => $organisasi->kode_organisasi,
+            'organization_code' => $organization->organization_code,
         ]);
     
         $data = [
-            'kode_pengajuan' => 'PKG123',
+            'submission_code' => 'PKG123',
             'id_pengaju' => $pengaju->id_pengaju, // Menghubungkan ke pengaju yang dibuat di atas
             'isVerified' => 1,
             'nama_pengaju' => $pengaju->nama_pengaju,
             'email_pengaju' => $pengaju->email_pengaju,
             'no_telp' => $pengaju->no_telp,
             'jabatan' => $pengaju->jabatan,
-            'kode_organisasi' => $pengaju->kode_organisasi,
+            'organization_code' => $pengaju->organization_code,
             'jenis_proyek' => 'Proyek Baru',
-            'judul_pengajuan' => 'Pengajuan Baru',
+            'submission_title' => 'Pengajuan Baru',
             'deskripsi_masalah' => 'Masalah yang dijelaskan.',
             'tujuan_aplikasi' => 'Tujuan aplikasi.',
             'proses_bisnis' => 'Proses bisnis.',
@@ -78,7 +78,7 @@ class PengajuanTest extends TestCase
         // Assert: Memastikan pengajuan baru berhasil disimpan
         $response->assertRedirect(route('submissions.index'));
         $this->assertDatabaseHas('pengajuans', [
-            'kode_pengajuan' => 'PKG123',
+            'submission_code' => 'PKG123',
             'id_pengaju' => $pengaju->id_pengaju,
         ]);
     }    

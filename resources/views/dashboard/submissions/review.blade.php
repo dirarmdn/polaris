@@ -3,6 +3,82 @@
 @section('title', 'Review Pengajuan')
 
 @section('content')
+
+<div class="max-w-6xl mx-auto my-10 p-6 bg-white shadow-lg rounded-xl font-manrope">
+    <h1 class="text-3xl font-semibold mb-6 text-center">{{ $pengajuan->judul_pengajuan }}</h1>
+
+    <div>
+        <!-- Tabs -->
+        <div class="border-b border-gray-200 relative">
+            <ul class="flex justify-center space-x-10 text-center text-gray-500 relative text-xl" id="tabs">
+                <li class="cursor-pointer pb-2 transition-all duration-300 hover:text-primary-900" data-target="deskripsi">DESKRIPSI</li>
+                <li class="cursor-pointer pb-2 transition-all duration-300 hover:text-primary-900" data-target="kebutuhan">KEBUTUHAN APLIKASI</li>
+                <li class="cursor-pointer pb-2 transition-all duration-300 hover:text-primary-900" data-target="detail">DETAIL APLIKASI</li>
+                <li class="cursor-pointer pb-2 transition-all duration-300 hover:text-primary-900" data-target="referensi">REFERENSI</li>
+            </ul>
+            <!-- Blue underline animation -->
+            <div id="underline" class="absolute bottom-0 left-0 h-0.5 bg-primary-900 transition-all duration-300"></div>
+        </div>
+
+        <!-- Tab Content -->
+        <div id="tab-contents" class="mt-10">
+            <!-- Deskripsi Tab Content -->
+            <div id="deskripsi" class="tab-content transition-opacity duration-300 text-left">
+                <div class="bg-gray-100 p-6 shadow-lg rounded-lg">
+                    <h2 class="text-xl font-bold mb-6">Deskripsi Masalah</h2>
+                    <p class="text-lg text-gray-600">{{ $pengajuan->deskripsi_masalah }}</p>
+                    <h2 class="text-xl font-bold mb-6">Tujuan Aplikasi</h2>
+                    <p class="text-lg text-gray-600">{{ $pengajuan->tujuan_aplikasi }}</p>
+                </div>
+            </div>
+
+            <!-- Kebutuhan Aplikasi Tab Content -->
+            <div id="kebutuhan" class="tab-content hidden transition-opacity duration-300 text-left">
+                <div class="bg-gray-100 p-6 shadow-lg rounded-lg">
+                    <h2 class="text-xl font-bold mb-6">Kebutuhan Aplikasi</h2>
+                    <h3 class="text-lg font-semibold mb-2">Proses Bisnis:</h3>
+                    <p class="text-lg text-gray-600">{{ $pengajuan->proses_bisnis }}</p>
+
+                    <h3 class="text-lg font-semibold mt-4 mb-2">Aturan Bisnis:</h3>
+                    <p class="text-lg text-gray-600">{{ $pengajuan->aturan_bisnis }}</p>
+                </div>
+            </div>
+
+            <!-- Detail Aplikasi Tab Content -->
+            <div id="detail" class="tab-content hidden transition-opacity duration-300 text-left">
+                <div class="bg-gray-100 p-6 shadow-lg rounded-lg">
+                    <h2 class="text-xl font-bold mb-6">Detail Aplikasi</h2>
+
+                    <h3 class="text-lg font-semibold mt-4 mb-2">Stakeholder:</h3>
+                    <p class="text-lg text-gray-600">{{ $pengajuan->stakeholder }}</p>
+
+                    <h3 class="text-lg font-semibold mt-4 mb-2">Jenis Proyek:</h3>
+                    <p class="text-lg text-gray-600">
+                        {{ $pengajuan->jenis_proyek ? 'Proyek yang sudah ada' : 'Proyek Baru' }}
+                    </p>
+                    
+
+                    <h3 class="text-lg font-semibold mt-4 mb-2">Platform:</h3>
+                    <p class="text-lg text-gray-600">{{ $pengajuan->platform }}</p>
+                </div>
+            </div>
+
+            <!-- Referensi Tab Content -->
+            <div id="referensi" class="tab-content hidden transition-opacity duration-300 text-left">
+                <div class="bg-gray-100 p-6 shadow-lg rounded-lg">
+                    <h2 class="text-xl font-bold mb-6">Referensi</h2>
+                    @foreach ($pengajuan->referensi as $ref)
+                        <p class="text-lg text-gray-600">{{ $ref->keterangan }}</p>
+                        @if($ref->tipe == 'image') 
+                            <img src="{{ $ref->path }}" alt="Referensi Image"> 
+                        @endif
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Alert Container - Hidden by default -->
 <div id="alertMessage" class="fixed top-4 right-4 z-50 transform transition-transform duration-300 translate-x-full">
     <!-- Success Message -->
@@ -64,7 +140,7 @@
                 </ul>
             </div>
         @endif
-
+        <input type="text" class="hidden" name="kode_pengajuan" value="{{ $pengajuan->kode_pengajuan }}" id="">
         <div class="bg-white rounded-xl overflow-hidden shadow-md w-full h-900 p-4">
             <h2 class="text-2xl font-semibold mb-4">Review Pengajuan</h2>
             <p class="font-sans text-gray-400 text-xxs">Isi form review pengajuan dengan detail dan lengkap</p>
@@ -225,11 +301,11 @@ function submitForm() {
     showAlert('error', "{{ session('error') }}");
 @endif
 
-function validateForm() {
-    // Get all form elements
-    const kodePengajuan = document.getElementById('kode_pengajuan');
-    const deskripsiReview = document.getElementById('deskripsi_review');
-    const status = document.getElementById('status');
+// function validateForm() {
+//     // Get all form elements
+//     const kodePengajuan = document.getElementById('kode_pengajuan');
+//     const deskripsiReview = document.getElementById('deskripsi_review');
+//     const status = document.getElementById('status');
     
     // Reset any existing error styles
     resetErrorStyles();
@@ -237,12 +313,12 @@ function validateForm() {
     let isValid = true;
     const errors = [];
 
-    // Validate kode_pengajuan
-    if (!kodePengajuan.value || kodePengajuan.value === "") {
-        isValid = false;
-        errors.push("Silakan pilih judul pengajuan");
-        addErrorStyle(kodePengajuan);
-    }
+//     // Validate kode_pengajuan
+//     if (!kodePengajuan.value || kodePengajuan.value === "") {
+//         isValid = false;
+//         errors.push("Silakan pilih judul pengajuan");
+//         addErrorStyle(kodePengajuan);
+//     }
 
     // Validate deskripsi_review
     if (!deskripsiReview.value.trim()) {
@@ -273,10 +349,41 @@ function addErrorStyle(element) {
     element.classList.add('bg-red-50');
 }
 
-// Remove error styling on input
-document.querySelectorAll('select, textarea').forEach(element => {
-    element.addEventListener('input', function() {
-        this.classList.remove('border-red-500');
+// Reset error styles
+function resetErrorStyles() {
+    const elements = [
+        document.getElementById('kode_pengajuan'),
+        document.getElementById('deskripsi_review'),
+        document.getElementById('status')
+    ];
+
+    elements.forEach(element => {
+        element.classList.remove('border-red-500', 'bg-red-50');
+    });
+}
+
+// Update the showConfirmModal function to include validation
+function showConfirmModal() {
+    if (validateForm()) {
+        document.getElementById('confirmModal').classList.remove('hidden');
+    }
+}
+
+// Add input event listeners to remove error styling when user starts typing/selecting
+document.addEventListener('DOMContentLoaded', function() {
+    const elements = [
+        document.getElementById('kode_pengajuan'),
+        document.getElementById('deskripsi_review'),
+        document.getElementById('status')
+    ];
+
+    elements.forEach(element => {
+        element.addEventListener('input', function() {
+            this.classList.remove('border-red-500', 'bg-red-50');
+        });
+        element.addEventListener('change', function() {
+            this.classList.remove('border-red-500', 'bg-red-50');
+        });
     });
 });
 </script>

@@ -11,12 +11,12 @@
 
             <div id="userDropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
                 <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
-                <div>{{ Auth::user()->nama }}</div>
+                <div>{{ Auth::user()->name }}</div>
                 <div class="font-medium truncate">{{ Auth::user()->email }}</div>
                 </div>
                 <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="avatarButton">
                 <li>
-                    <a href="{{ route('user.profile') }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Profile</a>
+                    <a href="{{ route('user.show', ['user' => auth()->user()]) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Profile</a>
                 </li>
                 <li>
                     <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>
@@ -35,7 +35,7 @@
             <a href="{{ route('login') }}"
                 class="inline-block text-sm px-6 py-2.5 leading-none border mr-1 md:mr-3 rounded-lg font-bold bg-gray-200 text-dark-800 border-transparent hover:bg-gray-300 lg:mt-0">
                 Sign in</a>
-            <a href="{{ route('user.register') }}"
+            <a href="{{ route('register') }}"
                 class="inline-block text-sm px-6 py-2.5 leading-none border rounded-lg font-bold bg-accent-600 text-white border-transparent hover:bg-accent-700 lg:mt-0">
                 Sign up</a>
             @endguest

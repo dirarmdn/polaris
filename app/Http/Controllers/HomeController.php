@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Submission;
 use Carbon\Carbon;
-use App\Models\Pengajuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -11,8 +11,8 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $count_pengajuan = Pengajuan::count();
-        $newest_pengajuan = Pengajuan::latest('created_at')->first();
+        $count_pengajuan = Submission::count();
+        $newest_pengajuan = Submission::latest('created_at')->first();
 
         Carbon::setLocale('id');
 
@@ -36,15 +36,15 @@ class HomeController extends Controller
         $user = auth()->user();
 
         if ($user->role == 1) {
-            $pengajuan = Pengajuan::with('user') // Mengambil relasi user
+            $pengajuan = Submission::with('submitter') 
                 ->when($user->role === 1, function ($query) use ($user) {
-                    return $query->where('user_id', $user->id);
+                    return $query->where('submitter_id', $user->submitter->submitter_id);
                 })->get();
         } else {
-            $pengajuan = Pengajuan::latest()->get();
+            $pengajuan = Submission::latest()->get();
         }
-        $jumlah_terverifikasi = Pengajuan::where('status', 'terverifikasi')->count();
-        $jumlah_belum = Pengajuan::where('status', 'belum_direview')->count();
+        $jumlah_terverifikasi = Submission::where('status', 'terverifikasi')->count();
+        $jumlah_belum = Submission::where('status', 'belum_direview')->count();
         return view('dashboard.index', compact(['pengajuan', 'jumlah_terverifikasi', 'jumlah_belum', 'user']));
     }
 }

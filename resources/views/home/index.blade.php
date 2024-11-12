@@ -75,15 +75,20 @@
             <div data-aos="fade-left"
                 class="h-64 md:h-96 md:w-56 rounded-2xl flex flex-col justify-between bg-secondary-900 p-5">
                 <div class="">
-                    <h1 class="text-white">{{ $newest_pengajuan->judul_pengajuan }}</h1>
+                    @if ($newest_pengajuan)
+                    <h1 class="text-white">{{ $newest_pengajuan->submission_title }}</h1>
                     <h3 class="text-white mt-2 items-center flex"><span class="material-symbols-outlined">
                             schedule
                         </span><span class="text-xs ml-1 font-normal">{{ $time_ago }}</span></h3>
+                    @else
+                    <h1 class="text-white">Ajukan Aplikasi Sekarang!</h1>
+                    @endif
                 </div>
 
                 <div>
                     <hr class="h-[0.2px] border-t-0 bg-white dark:bg-white/10" />
-                    <a href="{{ route('submissions.show', ['kode_pengajuan' => $newest_pengajuan->kode_pengajuan]) }}"
+                    @if ($newest_pengajuan)
+                    <a href="{{ route('submissions.show', ['submission_code' => $newest_pengajuan->submission_code]) }}"
                         class="text-white text-sm flex justify-between mt-2 transform transition-transform duration-300 hover:scale-105 hover:text-light-blue-200">
                         Pelajari lebih lanjut
                         <span
@@ -91,6 +96,7 @@
                             arrow_outward
                         </span>
                     </a>
+                    @endif
                 </div>
             </div>
         </div>
