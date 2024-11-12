@@ -118,43 +118,77 @@
         </div>
 
         <!-- Step 4: Referensi dan Upload File -->
-        <div class="bg-white rounded-xl overflow-hidden shadow-md w-full h-900 p-4 step-content hidden" data-step="4">
+        <div class="bg-white rounded-xl overflow-hidden shadow-md w-full p-4 step-content" data-step="4">
             <h2 class="text-2xl font-semibold mb-4 my-5">Referensi dan Upload File</h2>
-            <p class="font-sans text-gray-400 text-xxs my-0">Isi form referensi (opsional) yang relevan dengan aplikasi yang diinginkan</p>
-            <hr class="border-gray-950 border-t-1 w-full mx-auto my-5">
-            <div id="ref-input">
-                <div class="ref-block mb-5 border-[1px] border-gray-200 p-5 rounded-xl">
-                    <label for="referensi_link" class="block mb-2">Tipe Referensi</label>
-                    <select id="tipe" name="referensi[0][tipe]" class="w-full border border-gray-300 rounded px-3 py-2 mb-4">
-                        <option value="">Select Tipe</option>
-                        <option value="link">Link</option>
-                        <option value="file">File</option>
-                    </select>
-                
-                    <div class="link-input mb-4 hidden">
-                        <label for="referensi_link" class="block mb-2">Referensi Link</label>
-                        <input type="url" id="referensi_link" name="referensi[0][link_path]" class="w-full border border-gray-300 rounded px-3 py-2" placeholder="https://example.com">
-                    </div>
-                
-                    <div class="file-input mb-4 hidden">
-                        <label for="referensi_file" class="block mb-2 font-semibold">Attach File (Optional)</label>
-                        <div id="file-drop-area" class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-gray-400 transition-colors duration-300">
-                        <input type="file" id="referensi_file" name="referensi[0][file_path]" class="
-                        " multiple>
-                            <p class="text-gray-500">Drag & drop a file to attach it, or</p>
-                            <p class="text-gray-500">browse for a file...</p>
-                        </div>
-                    </div>
+            <p class="font-sans text-gray-400 text-sm my-0">Isi form referensi (opsional) yang relevan dengan aplikasi yang diinginkan</p>
+            <hr class="border-gray-200 border-t-1 w-full mx-auto my-5">
 
-                    <div class="text-input mb-4 hidden">
-                        <label for="keterangan_referensi" class="block mb-2">Keterangaan</label>
-                        <input type="text" id="keterangan_referensi" name="referensi[0][keterangan]" class="w-full border border-gray-300 rounded px-3 py-2">
-                    </div>
-
-                </div>                
+            <!-- Button Group -->
+            <div class="flex gap-4 mb-6">
+                <button type="button" onclick="addReference('file')" 
+                    class="flex-1 bg-blue-50 hover:bg-blue-100 text-blue-600 font-semibold py-3 px-4 rounded-lg border border-blue-200 transition-colors duration-200">
+                    + Tambah File
+                </button>
+                <button type="button" onclick="addReference('link')"
+                    class="flex-1 bg-green-50 hover:bg-green-100 text-green-600 font-semibold py-3 px-4 rounded-lg border border-green-200 transition-colors duration-200">
+                    + Tambah Link
+                </button>
             </div>
-            <button id="addmore" type="button" class="bg-primary-900 text-white px-4 py-2 rounded mt-4 float-right">Tambah Referensi Baru</button>
+
+            <!-- Reference Container -->
+            <div id="reference-container" class="space-y-4">
+                <!-- Reference items will be added here dynamically -->
+            </div>
         </div>
+
+        <!-- Templates for Dynamic Reference Items -->
+        <template id="file-template">
+            <div class="reference-item border border-gray-200 rounded-xl p-5 relative bg-gray-100">
+                <button type="button" onclick="removeReference(this)" 
+                    class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+                <div>
+                    <label class="block mb-2 font-semibold">Upload File</label>
+                    <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-gray-400 transition-colors duration-300">
+                        <input type="file" name="referensi[{index}][file_path]" class="hidden" onchange="updateFileName(this)">
+                        <p class="text-gray-500">Drag & drop file atau klik untuk memilih file</p>
+                        <p class="file-name text-sm text-gray-400 mt-2"></p>
+                    </div>
+                    <div class="mt-4">
+                        <label class="block mb-2">Keterangan</label>
+                        <input type="text" name="referensi[{index}][keterangan]" 
+                            class="w-full border border-gray-300 rounded px-3 py-2" 
+                            placeholder="Masukkan keterangan file">
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <template id="link-template">
+            <div class="reference-item border border-gray-200 rounded-xl p-5 relative bg-gray-100">
+                <button type="button" onclick="removeReference(this)" 
+                    class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+                <div>
+                    <label class="block mb-2 font-semibold">Link Referensi</label>
+                    <input type="url" name="referensi[{index}][link_path]" 
+                        class="w-full border border-gray-300 rounded px-3 py-2 mb-4" 
+                        placeholder="https://example.com">
+                    <div>
+                        <label class="block mb-2">Keterangan</label>
+                        <input type="text" name="referensi[{index}][keterangan]" 
+                            class="w-full border border-gray-300 rounded px-3 py-2" 
+                            placeholder="Masukkan keterangan link">
+                    </div>
+                </div>
+            </div>
+        </template>
 
         <div class="flex justify-between mt-8">
             <button type="button" id="prevBtn" class="bg-gray-300 text-gray-700 px-4 py-2 rounded hidden">Previous</button>
@@ -178,576 +212,224 @@
 
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('submissionForm');
-    const stepperSteps = document.querySelectorAll('.stepper-step');
-    const stepperCircles = document.querySelectorAll('.stepper-circle');
-    const stepperLabels = document.querySelectorAll('.stepper-label');
-    const stepContents = document.querySelectorAll('.step-content');
-    const dropArea = document.getElementById('file-drop-area');
-    const fileInput = document.getElementById('referensi_file');
-    const fileList = document.createElement('ul');
-    dropArea.appendChild(fileList);
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const submitBtn = document.getElementById('submitBtn');
-    const stepperProgress = document.getElementById('stepperProgress');
-    let currentStep = 1;
-    let completedSteps = new Set();
-
-        const requiredFieldsByStep = {
-            1: ['judul_pengajuan', 'deskripsi_masalah', 'tujuan_aplikasi'],
-            2: ['proses_bisnis', 'aturan_bisnis'],
-            3: ['stakeholder', 'platform'],
-            4: [] // Step 4 is optional
-        };
-
-        function isStepComplete(step) {
-            const fields = requiredFieldsByStep[step];
-            if (!fields || fields.length === 0) return true;
-
-            const allFilled = fields.every(fieldId => {
-                const field = document.getElementById(fieldId);
-                if (!field) return false;
-
-                // Handle radio buttons separately
-                if (fieldId === 'jenis_proyek') {
-                    const radioGroup = document.getElementsByName('jenis_proyek');
-                    return Array.from(radioGroup).some(radio => radio.checked);
-                }
-
-                if (field.tagName === 'SELECT') {
-                    return field.value !== '';
-                }
-
-                return field.value.trim() !== '';
-            });
-
-            // Special handling for step 3's radio buttons
-            if (step === 3) {
-                const jenisProyekRadios = document.getElementsByName('jenis_proyek');
-                const isRadioSelected = Array.from(jenisProyekRadios).some(radio => radio.checked);
-                return allFilled && isRadioSelected;
-            }
-
-            return allFilled;
-        }
-
-
-        function canAccessStep(targetStep) {
-            // Can always go back
-            if (targetStep <= currentStep) return true;
-            
-            // Check if all previous steps are complete
-            for (let step = 1; step < targetStep; step++) {
-                if (!isStepComplete(step)) return false;
-            }
-            
-            return true;
-        }
-
-        function updateNextButtonState() {
-            const canProceed = isStepComplete(currentStep);
-            nextBtn.disabled = !canProceed;
-            
-            // Add visual feedback
-            if (canProceed) {
-                nextBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-                nextBtn.classList.add('hover:bg-blue-600');
-            } else {
-                nextBtn.classList.add('opacity-50', 'cursor-not-allowed');
-                nextBtn.classList.remove('hover:bg-blue-600');
-            }
-        }
-
-        // Add event listeners for radio buttons
-        const radioButtons = document.getElementsByName('jenis_proyek');
-        radioButtons.forEach(radio => {
-            radio.addEventListener('change', updateNextButtonState);
-        });
-
-        function updateStep(step) {
-            if (step < 1 || step > stepperSteps.length) return;
-
-            // Check if we can access the requested step
-            if (!canAccessStep(step)) {
-                alert('Silakan lengkapi step sebelumnya terlebih dahulu.');
-                return;
-            }
-
-            stepperSteps.forEach((s, index) => {
-                const circle = s.querySelector('.stepper-circle');
-                const label = s.querySelector('.stepper-label');
-                
-                if (index + 1 <= step) {
-                    // Current and completed steps
-                    circle.classList.remove('bg-white', 'border-gray-300', 'text-gray-600');
-                    circle.classList.add('bg-accent-light-500', 'border-accent-light-500', 'text-white');
-                    label.classList.remove('text-gray-600');
-                    label.classList.add('text-blue-600', 'font-semibold');
-                } else {
-                    // Future steps
-                    circle.classList.add('bg-white', 'border-gray-300', 'text-gray-600');
-                    circle.classList.remove('bg-accent-light-500', 'border-accent-light-500', 'text-white');
-                    label.classList.add('text-gray-600');
-                    label.classList.remove('text-blue-600', 'font-semibold');
-                }
-            });
-
-            // Show/hide step contents
-            stepContents.forEach((content, index) => {
-                content.classList.toggle('hidden', index + 1 !== step);
-            });
-
-            // Update progress bar
-            const progressPercentage = ((step - 1) / (stepperSteps.length - 1)) * 100;
-            stepperProgress.style.width = `${progressPercentage}%`;
-
-            // Update button visibility
-            prevBtn.classList.toggle('hidden', step === 1);
-            nextBtn.classList.toggle('hidden', step === 4);
-            submitBtn.classList.toggle('hidden', step !== 4);
-
-            currentStep = step;
-            updateNextButtonState();
-        }
-
-        // Add input listeners to all required fields
-        Object.values(requiredFieldsByStep).flat().forEach(fieldId => {
-            const field = document.getElementById(fieldId);
-            if (field) {
-                const updateHandler = () => {
-                    if (field.type === 'radio') {
-                        const radioGroup = document.getElementsByName(field.name);
-                        radioGroup.forEach(radio => {
-                            radio.addEventListener('change', updateNextButtonState);
-                        });
-                    } else {
-                        field.addEventListener('input', updateNextButtonState);
-                    }
-                };
-                updateHandler();
-            }
-        });
-
-        // Stepper click handlers
-        stepperSteps.forEach((step, index) => {
-            step.addEventListener('click', () => {
-                const targetStep = index + 1;
-                if (canAccessStep(targetStep)) {
-                    updateStep(targetStep);
-                }
-            });
-        });
-
-        // Navigation button handlers
-        prevBtn.addEventListener('click', () => {
-            if (currentStep > 1) updateStep(currentStep - 1);
-        });
-
-        nextBtn.addEventListener('click', () => {
-            console.log('Next button clicked');
-            if (isStepComplete(currentStep)) {
-                updateStep(currentStep + 1);
-            } else {
-                alert('Silakan isi semua field yang diperlukan sebelum melanjutkan.');
-            }
-        });
-
-        
-        // Form submission handler
-        form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        console.log('Form submitted');
-
-        // Check all required fields
-        for (let step = 1; step <= 3; step++) {
-            if (!isStepComplete(step)) {
-                alert('Silakan lengkapi semua field yang diperlukan di semua step.');
-                return;
-            }
-        }
-
-        // Get the form data
-        const formData = new FormData(this);
-
-        // Show success popup
-        const successPopup = document.getElementById('successPopup');
-        successPopup.classList.remove('hidden');
-        successPopup.classList.add('animate-fade-in');
-
-        // Submit the form using fetch
-        fetch(this.action, {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-            }
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            // Show success message
-            successPopup.classList.remove('hidden');
-            
-            // Hide popup after 3 seconds
-            setTimeout(() => {
-                successPopup.classList.add('hidden');
-                // Redirect or reset form after showing message
-                window.location.href = '/submissions'; // Sesuaikan dengan route yang diinginkan
-            }, 3000);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Terjadi kesalahan. Silakan coba lagi.');
-        });
-    });
-
-
-        // Initialize form
-        updateStep(1);
-
-        form.addEventListener('submit', function(e) {
-        this.submit();  // Sementara hapus preventDefault
-        });
-
-
-        // Initialize the form
-        updateStep(currentStep);
-        updateStepperClickability();
-
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            dropArea.addEventListener(eventName, preventDefaults, false);
-        });
-
-        function preventDefaults(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-
-        ['dragenter', 'dragover'].forEach(eventName => {
-            dropArea.addEventListener(eventName, highlight, false);
-        });
-
-        ['dragleave', 'drop'].forEach(eventName => {
-            dropArea.addEventListener(eventName, unhighlight, false);
-        });
-
-        function highlight() {
-            dropArea.classList.add('border-blue-500', 'bg-blue-50');
-        }
-
-        function unhighlight() {
-            dropArea.classList.remove('border-blue-500', 'bg-blue-50');
-        }
-
-        dropArea.addEventListener('drop', handleDrop, false);
-        dropArea.addEventListener('click', () => fileInput.click());
-
-        function handleDrop(e) {
-            const dt = e.dataTransfer;
-            const files = dt.files;
-            addFiles(files);
-        }
-
-        fileInput.addEventListener('change', () => addFiles(fileInput.files));
-
-        function addFiles(files) {
-            const dt = new DataTransfer();
-
-            Array.from(files).forEach(file => {
-                const fileItem = document.createElement('li');
-                fileItem.className = 'flex items-center justify-between bg-gray-100 p-2 rounded';
-                fileItem.innerHTML = `
-                    <span class="text-sm">${file.name}</span>
-                    <button type="button" class="text-red-500 hover:text-red-700">Remove</button>
-                `;
-                fileList.appendChild(fileItem);
-                dt.items.add(file);
-
-                fileItem.querySelector('button').addEventListener('click', () => {
-                    fileItem.remove();
-                    dt.items.remove(Array.from(dt.files).indexOf(file));
-                    fileInput.files = dt.files;
-                });
-            });
-
-            fileInput.files = dt.files;
-        }
-    });
-</script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        let refCount = 0;
-
-        // Function to initialize drag and drop functionality for a container
-        function initializeDragAndDrop(container) {
-            const dropArea = container.querySelector('.file-input');
-            const fileInput = dropArea.querySelector('input[type="file"]');
-            const fileList = document.createElement('ul');
-            fileList.className = 'mt-4 space-y-2';
-            dropArea.appendChild(fileList);
-
-            function preventDefaults(e) {
-                e.preventDefault();
-                e.stopPropagation();
-            }
-
-            function highlight(e) {
-                dropArea.classList.add('border-blue-500', 'bg-blue-50');
-            }
-
-            function unhighlight(e) {
-            dropArea.classList.remove('border-blue-500', 'bg-blue-50');
-            }
-
-            function handleDrop(e) {
-                unhighlight(e);
-                const dt = e.dataTransfer;
-                const files = dt.files;
-                handleFiles(files);
-            }
-
-            function handleFiles(files) {
-                const dt = new DataTransfer();
-                
-                // Hapus pesan "Drag & drop..." saat ada file
-                const defaultText = dropArea.querySelector('p');
-                if (defaultText) {
-                    defaultText.style.display = 'none';
-                }
-
-                Array.from(files).forEach(file => {
-                    const fileItem = document.createElement('li');
-                    fileItem.className = 'flex items-center justify-between bg-gray-100 p-2 rounded mt-2';
-                    fileItem.innerHTML = `
-                        <span class="text-sm truncate max-w-xs">${file.name}</span>
-                        <button type="button" class="text-red-500 hover:text-red-700 ml-2">×</button>
-                    `;
-                    fileList.appendChild(fileItem);
-                    dt.items.add(file);
-
-                    // Handle remove button
-                    fileItem.querySelector('button').addEventListener('click', () => {
-                        fileItem.remove();
-                        dt.items.remove(Array.from(dt.files).indexOf(file));
-                        fileInput.files = dt.files;
-                        
-                        // Show default text if no files remain
-                        if (fileList.children.length === 0 && defaultText) {
-                            defaultText.style.display = 'block';
-                        }
-                    });
-                });
-
-                fileInput.files = dt.files;
-            }
-
-            // Event listeners for drag & drop
-            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-                dropArea.addEventListener(eventName, preventDefaults, false);
-            });
-
-            ['dragenter', 'dragover'].forEach(eventName => {
-                dropArea.addEventListener(eventName, highlight, false);
-            });
-
-            ['dragleave', 'drop'].forEach(eventName => {
-                dropArea.addEventListener(eventName, unhighlight, false);
-            });
-
-            dropArea.addEventListener('drop', handleDrop, false);
-            
-            // Click to upload
-            dropArea.addEventListener('click', () => fileInput.click());
-            
-            // Handle file input change
-            fileInput.addEventListener('change', (e) => {
-                handleFiles(e.target.files);
-            });
-
-            // Return cleanup function
-            return () => {
-                ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-                    dropArea.removeEventListener(eventName, preventDefaults);
-                });
-                dropArea.removeEventListener('drop', handleDrop);
-                dropArea.removeEventListener('click', () => fileInput.click());
-                fileInput.removeEventListener('change', handleFiles);
-            };
-        }
-
-        // Initialize drag and drop for initial file input
-        initializeDragAndDrop(document);
-
-        // Handle dynamically added file inputs
-        document.getElementById('addmore')?.addEventListener('click', function() {
-            // Wait for the new elements to be added to DOM
-            setTimeout(() => {
-                const newRefBlock = document.querySelector('.ref-block:last-child');
-                if (newRefBlock) {
-                    initializeDragAndDrop(newRefBlock);
-                }
-            }, 100);
-        });
-
-        function showSuccessNotification() {
-            const notification = document.createElement('div');
-            notification.className = 'fixed top-4 right-4 z-50 transform transition-transform duration-300 ease-in-out translate-x-0';
-            notification.innerHTML = `
-                <div class="bg-green-50 border border-green-200 text-green-800 rounded-lg p-4 shadow-lg flex items-center">
-                    <svg class="h-5 w-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    <span>Data berhasil disimpan!</span>
-                </div>
-            `;
-
-            document.body.appendChild(notification);
-
-            // Remove the notification after 3 seconds
-            setTimeout(() => {
-                notification.classList.add('translate-x-full');
-                setTimeout(() => {
-                    document.body.removeChild(notification);
-                }, 300);
-            }, 3000);
-        }
-
-        // Update your form submission handler
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            // Check if all required fields are filled
-            for (let step = 1; step <= 3; step++) {
-                if (!isStepComplete(step)) {
-                    alert('Silakan lengkapi semua field yang diperlukan di semua step.');
-                    return;
-                }
-            }
-
-            // Create FormData object
-            const formData = new FormData(this);
-
-            // Submit the form using fetch
-            fetch(this.action, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    showSuccessNotification();
-                    // Optional: Reset form or redirect
-                    setTimeout(() => {
-                        window.location.href = '/your-redirect-url';
-                    }, 3000);
-                } else {
-                    // Handle errors
-                    alert('Terjadi kesalahan. Silakan coba lagi.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Terjadi kesalahan. Silakan coba lagi.');
-            });
-        });
-    });
-</script>
-
-<script>
 document.addEventListener('DOMContentLoaded', function() {
-    let refCount = 0;
+    // State management
+    let currentStep = 1;
+    const totalSteps = 4;
+    let referenceCount = 0;
 
-    // Function to toggle input visibility
-    function toggleInputs(select) {
-        const container = select.closest('.ref-block');
-        const selectedType = select.value;
-        const linkInput = container.querySelector('.link-input');
-        const fileInput = container.querySelector('.file-input');
-        const textInput = container.querySelector('.text-input');
+    // DOM Elements
+    const elements = {
+        form: document.getElementById('submissionForm'),
+        stepperSteps: document.querySelectorAll('.stepper-step'),
+        stepContents: document.querySelectorAll('.step-content'),
+        prevBtn: document.getElementById('prevBtn'),
+        nextBtn: document.getElementById('nextBtn'),
+        submitBtn: document.getElementById('submitBtn'),
+        stepperProgress: document.getElementById('stepperProgress'),
+        successPopup: document.getElementById('successPopup')
+    };
 
-        // Hide all inputs first
-        linkInput?.classList.add('hidden');
-        fileInput?.classList.add('hidden');
-        textInput?.classList.add('hidden');
+    // Required fields configuration
+    const requiredFieldsByStep = {
+        1: ['judul_pengajuan', 'deskripsi_masalah', 'tujuan_aplikasi'],
+        2: ['proses_bisnis', 'aturan_bisnis'],
+        3: ['stakeholder', 'platform'],
+        4: [] // Optional step
+    };
 
-        // Show relevant inputs based on selection
-        if (selectedType === 'link') {
-            linkInput?.classList.remove('hidden');
-            textInput?.classList.remove('hidden');
-        } else if (selectedType === 'file') {
-            fileInput?.classList.remove('hidden');
-            textInput?.classList.remove('hidden');
-        }
-    }
+    // Utility Functions
+    const validateField = (fieldId) => {
+        const field = document.getElementById(fieldId);
+        if (!field) return false;
+        return field.tagName === 'SELECT' ? field.value !== '' : field.value.trim() !== '';
+    };
 
-    // Initialize the first reference block
-    const firstSelect = document.querySelector('select[name="referensi[0][tipe]"]');
-    if (firstSelect) {
-        firstSelect.addEventListener('change', (e) => toggleInputs(e.target));
-    }
+    const validateRadioGroup = (name) => {
+        const radioButtons = document.getElementsByName(name);
+        return Array.from(radioButtons).some(radio => radio.checked);
+    };
 
-    // Add More References Handler
-    document.getElementById('addmore')?.addEventListener('click', function() {
-        refCount++;
+    const isStepComplete = (step) => {
+        const fields = requiredFieldsByStep[step];
         
-        const newRefBlock = document.createElement('div');
-        newRefBlock.className = 'ref-block mb-5 border-[1px] border-gray-200 p-5 rounded-xl';
-        newRefBlock.innerHTML = `
-            <label for="referensi_tipe_${refCount}" class="block mb-2">Tipe Referensi</label>
-            <select id="referensi_tipe_${refCount}" name="referensi[${refCount}][tipe]" class="w-full border border-gray-300 rounded px-3 py-2 mb-4">
-                <option value="">Select Tipe</option>
-                <option value="link">Link</option>
-                <option value="file">File</option>
-            </select>
-            
-            <div class="link-input mb-4 hidden">
-                <label for="referensi_link_${refCount}" class="block mb-2">Referensi Link</label>
-                <input type="url" id="referensi_link_${refCount}" name="referensi[${refCount}][link_path]" class="w-full border border-gray-300 rounded px-3 py-2" placeholder="https://example.com">
-            </div>
-            
-            <div class="file-input mb-4 hidden">
-                <label for="referensi_file_${refCount}" class="block mb-2 font-semibold">Attach File (Optional)</label>
-                <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-gray-400 transition-colors duration-300">
-                    <input type="file" id="referensi_file_${refCount}" name="referensi[${refCount}][file_path]" class="hidden" accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png">
-                    <p class="text-gray-500">Drag & drop a file to attach it, or</p>
-                    <p class="text-gray-500">browse for a file...</p>
-                </div>
-            </div>
+        // Special handling for step 3
+        if (step === 3) {
+            const areFieldsFilled = fields.every(validateField);
+            const isRadioSelected = validateRadioGroup('jenis_proyek');
+            return areFieldsFilled && isRadioSelected;
+        }
+        
+        return !fields || fields.length === 0 || fields.every(validateField);
+    };
 
-            <div class="text-input mb-4 hidden">
-                <label for="keterangan_referensi_${refCount}" class="block mb-2">Keterangan</label>
-                <input type="text" id="keterangan_referensi_${refCount}" name="referensi[${refCount}][keterangan]" class="w-full border border-gray-300 rounded px-3 py-2">
-            </div>
-        `);
+    const canAccessStep = (targetStep) => {
+        if (targetStep <= currentStep) return true;
+        for (let step = 1; step < targetStep; step++) {
+            if (!isStepComplete(step)) return false;
+        }
+        return true;
+    };
 
-        // Event listener for the newly added select
-        $(`#referensi_tipe_${refCount}`).change(function() {
-            const selectedValue = $(this).val();
-            const refBlock = $(this).closest('.ref-block');
+    // UI Update Functions
+    const updateStepperUI = (step) => {
+        elements.stepperSteps.forEach((s, index) => {
+            const circle = s.querySelector('.stepper-circle');
+            const label = s.querySelector('.stepper-label');
+            const isCompleted = index + 1 <= step;
 
-            // Hide all inputs initially
-            refBlock.find('.link-input, .file-input, .keterangan-input').addClass('hidden');
+            circle.className = `stepper-circle w-12 h-12 rounded-full border-4 flex items-center justify-center text-xl absolute top-0 -translate-y-1/4 ${
+                isCompleted ? 'bg-accent-light-500 border-accent-light-500 text-white font-bold' : 'bg-white border-gray-300 text-gray-600 font-bold'
+            }`;
 
-            if (selectedValue === 'link') {
-                refBlock.find('.link-input').removeClass('hidden');
-                refBlock.find('.keterangan-input').removeClass('hidden');
-            } else if (selectedValue === 'file') {
-                refBlock.find('.file-input').removeClass('hidden');
-                refBlock.find('.text-input').removeClass('hidden');
+            label.className = `stepper-label text-sm font-medium mb-2 transition-all duration-300 ease-in-out ${
+                isCompleted ? 'text-primary-50 font-semibold' : 'text-gray-600'
+            }`;
+        });
+
+        const progressPercentage = ((step - 1) / (totalSteps - 1)) * 100;
+        elements.stepperProgress.style.width = `${progressPercentage}%`;
+    };
+
+    const updateButtonVisibility = (step) => {
+        elements.prevBtn.classList.toggle('hidden', step === 1);
+        elements.nextBtn.classList.toggle('hidden', step === totalSteps);
+        elements.submitBtn.classList.toggle('hidden', step !== totalSteps);
+    };
+
+    const updateStep = (step) => {
+        if (step < 1 || step > totalSteps || !canAccessStep(step)) {
+            alert('Silakan lengkapi step sebelumnya terlebih dahulu.');
+            return;
+        }
+
+        elements.stepContents.forEach((content, index) => {
+            content.classList.toggle('hidden', index + 1 !== step);
+        });
+
+        updateStepperUI(step);
+        updateButtonVisibility(step);
+        currentStep = step;
+        updateNextButtonState();
+    };
+
+    const updateNextButtonState = () => {
+        const canProceed = isStepComplete(currentStep);
+        elements.nextBtn.disabled = !canProceed;
+        elements.nextBtn.classList.toggle('opacity-50', !canProceed);
+        elements.nextBtn.classList.toggle('cursor-not-allowed', !canProceed);
+        elements.nextBtn.classList.toggle('hover:bg-blue-600', canProceed);
+    };
+
+    // Reference Management Functions
+    window.addReference = (type) => {
+        const container = document.getElementById('reference-container');
+        const template = document.getElementById(`${type}-template`);
+        const clone = template.content.cloneNode(true);
+
+        clone.querySelectorAll('[name*="{index}"]').forEach(element => {
+            element.name = element.name.replace('{index}', referenceCount);
+        });
+
+        if (type === 'file') {
+            setupFileUpload(clone);
+        }
+
+        container.appendChild(clone);
+        referenceCount++;
+    };
+
+    window.removeReference = (button) => {
+        button.closest('.reference-item').remove();
+    };
+
+    window.updateFileName = (input) => {
+        const fileNameElement = input.closest('.border-dashed').querySelector('.file-name');
+        fileNameElement.textContent = input.files[0]?.name ? `Selected file: ${input.files[0].name}` : '';
+    };
+
+    // Event Listeners
+    elements.form.addEventListener('submit', handleFormSubmit);
+    elements.prevBtn.addEventListener('click', () => updateStep(currentStep - 1));
+    elements.nextBtn.addEventListener('click', () => {
+        if (isStepComplete(currentStep)) {
+            updateStep(currentStep + 1);
+        } else {
+            alert('Silakan isi semua field yang diperlukan sebelum melanjutkan.');
+        }
+    });
+
+    elements.stepperSteps.forEach((step, index) => {
+        step.addEventListener('click', () => {
+            const targetStep = index + 1;
+            if (canAccessStep(targetStep)) {
+                updateStep(targetStep);
             }
         });
     });
+
+    // Add input listeners for required fields
+    Object.values(requiredFieldsByStep).flat().forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field) {
+            field.addEventListener('input', updateNextButtonState);
+            field.addEventListener('change', updateNextButtonState);
+        }
+    });
+
+    // Add listeners for radio buttons separately
+    const radioButtons = document.getElementsByName('jenis_proyek');
+    radioButtons.forEach(radio => {
+        radio.addEventListener('change', updateNextButtonState);
+    });
+
+    // Initialize form
+    updateStep(1);
 });
+
+function setupFileUpload(element) {
+    const dropArea = element.querySelector('.border-dashed');
+    const fileInput = element.querySelector('input[type="file"]');
+
+    dropArea.addEventListener('click', () => fileInput.click());
+    
+    dropArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropArea.classList.add('border-blue-400');
+    });
+
+    dropArea.addEventListener('dragleave', () => {
+        dropArea.classList.remove('border-blue-400');
+    });
+
+    dropArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropArea.classList.remove('border-blue-400');
+        fileInput.files = e.dataTransfer.files;
+        updateFileName(fileInput);
+    });
+}
+
+async function handleFormSubmit(e) {
+    e.preventDefault();
+
+    for (let step = 1; step <= 3; step++) {
+        if (!isStepComplete(step)) {
+            alert('Silakan lengkapi semua field yang diperlukan di semua step.');
+            return;
+        }
+    }
+}
+
+function showSuccessNotification() {
+    const successPopup = document.getElementById('successPopup');
+    successPopup.classList.remove('hidden');
+    successPopup.classList.add('animate-fade-in');
+
+    setTimeout(() => {
+        successPopup.classList.add('hidden');
+    }, 3000);
+}
 </script>
 
 <style>
