@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StorePengajuanRequest extends FormRequest
+class StoreSubmissionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -17,16 +17,16 @@ class StorePengajuanRequest extends FormRequest
     public function rules()
     {
         return [
-            'judul_pengajuan' => 'required|string|max:255',
-            'deskripsi_masalah' => 'required|string',
-            'tujuan_aplikasi' => 'required|string',
-            'proses_bisnis' => 'required|string',
-            'aturan_bisnis' => 'required|string',
-            'stakeholder' => 'required|string',
+            'submission_title' => 'required|string|max:255',
+            'problem_description' => 'required|string',
+            'application_purpose' => 'required|string',
+            'business_process' => 'required|string',
+            'business_rules' => 'required|string',
+            'stakeholders' => 'required|string',
             'platform' => 'required|in:web,mobile,desktop,multi-platform',
-            'jenis_proyek' => 'required|in:0,1',
+            'project_type' => 'required|in:0,1',
             'referensi' => 'nullable|array',
-            'referensi.*.tipe' => 'required|in:link,file',
+            'referensi.*.tipe' => 'nullable|in:link,file',
             'referensi.*.link_path' => 'nullable',
             'referensi.*.file_path' => 'nullable|file',
             'referensi.*.keterangan' => 'nullable|string|max:255',
@@ -36,9 +36,9 @@ class StorePengajuanRequest extends FormRequest
     protected function prepareForValidation()
     {
         // Convert radio button value to integer
-        if ($this->has('jenis_proyek')) {
+        if ($this->has('project_type')) {
             $this->merge([
-                'jenis_proyek' => (int) $this->jenis_proyek
+                'project_type' => (int) $this->project_type
             ]);
         }
     }
