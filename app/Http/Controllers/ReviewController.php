@@ -6,7 +6,6 @@ use App\Models\Submission;
 use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\StoreHasilReviewRequest;
 use App\Http\Requests\UpdateHasilReviewRequest;
 
@@ -67,8 +66,6 @@ class ReviewController extends Controller
             Review::create([
                 'submission_code' => $request->submission_code,
                 'deskripsi_review' => $request->deskripsi_review,
-                'user_id' => $user->id,
-                'isVerified' => $request->status,
             ]);
 
             // Update status di tabel pengajuan
@@ -76,11 +73,14 @@ class ReviewController extends Controller
             
             // Update isVerified berdasarkan status
             switch($request->status) {
-                case 1:
-                    $pengajuan->status = 'terverifikasi';
+                case 'terverifikasi':
+                    $pengajuan->isVerified = true;
                     break;
-                case 0:
-                    $pengajuan->status = 'ditolak';
+                case 'ditolak':
+                    $pengajuan->isVerified = false;
+                    break;
+                case 'belum_diverifikasi':
+                    $pengajuan->isVerified = null;
                     break;
             }
             
@@ -88,14 +88,17 @@ class ReviewController extends Controller
             
             DB::commit();
 
-            return redirect()->route('dashboard.submissions.index')->with(
-                'success',
-                'Berhasil menyimpan review');
+            return response()->json([
+                'success' => true,
+                'message' => 'Review berhasil disimpan dan status pengajuan diperbarui!'
+            ]);
                 
         } catch (\Exception $e) {
-            return redirect()->route('dashboard.submissions.index')->with(
-                'error',
-                'Gagal menyimpan review');
+            DB::rollback();
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
         }
     }
 

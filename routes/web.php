@@ -54,5 +54,4 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/logout', [UserController::class, 'signOut'])->name('logout');
 
 });
-    Route::get('/admins', [AdminController::class, 'index'])->name('admins.index');
 

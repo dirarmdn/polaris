@@ -5,7 +5,7 @@
 @section('content')
 
 <div class="max-w-6xl mx-auto my-10 p-6 bg-white shadow-lg rounded-xl font-manrope">
-    <h1 class="text-3xl font-semibold mb-6 text-center">{{ $pengajuan->submission_title }}</h1>
+    <h1 class="text-3xl font-semibold mb-6 text-center">{{ $pengajuan->judul_pengajuan }}</h1>
 
     <div>
         <!-- Tabs -->
@@ -80,7 +80,7 @@
 </div>
 
 <!-- Alert Container - Hidden by default -->
-{{-- <div id="alertMessage" class="fixed top-4 right-4 z-50 transform transition-transform duration-300 translate-x-full">
+<div id="alertMessage" class="fixed top-4 right-4 z-50 transform transition-transform duration-300 translate-x-full">
     <!-- Success Message -->
     <div id="successAlert" class="hidden bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative w-80" role="alert">
         <strong class="font-bold">Berhasil!</strong>
@@ -93,7 +93,6 @@
         </button>
     </div>
     
-    <!-- Error Message -->
     <div id="errorAlert" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative w-80" role="alert">
         <strong class="font-bold">Error!</strong>
         <span id="errorText" class="block sm:inline"></span>
@@ -125,12 +124,12 @@
             </button>
         </div>
     </div>
-</div> --}}
+</div>
 
 <div class="container mx-auto px-4 py-8">
     <h1 class="text-3xl font-bold mb-8">Form Review Pengajuan</h1>
 
-    <form id="submissionForm" action="{{ route('dashboard.submissions.review.store') }}" method="POST" enctype="multipart/form-data" class="max-w-4xl mx-auto">
+    <form id="submissionForm" method="POST" action="{{ route('dashboard.submissions.review.store') }}" class="max-w-4xl mx-auto">
         @csrf
         @if($errors->any())
             <div class="bg-red-500 text-white p-4 mb-4">
@@ -141,7 +140,7 @@
                 </ul>
             </div>
         @endif
-        <input type="text" class="hidden" name="submission_code" value="{{ $pengajuan->submission_code }}" id="">
+        <input type="text" class="hidden" name="kode_pengajuan" value="{{ $pengajuan->kode_pengajuan }}" id="">
         <div class="bg-white rounded-xl overflow-hidden shadow-md w-full h-900 p-4">
             <h2 class="text-2xl font-semibold mb-4">Review Pengajuan</h2>
             <p class="font-sans text-gray-400 text-xxs">Isi form review pengajuan dengan detail dan lengkap</p>
@@ -156,9 +155,9 @@
                 <label for="status" class="block mb-2">Status</label>
                 <select id="status" name="status" class="w-full border border-gray-300 rounded px-3 py-2" required>
                     <option value="">Pilih Status</option>
-                    <option value="0">Ditolak</option>
-                    <option value="1">Terverifikasi</option>
-                    {{-- <option value="belum_diverifikasi">Belum Diverifikasi</option> --}}
+                    <option value="ditolak">Ditolak</option>
+                    <option value="terverifikasi">Terverifikasi</option>
+                    <option value="belum_diverifikasi">Belum Diverifikasi</option>
                 </select>
             </div>
         </div>
@@ -171,8 +170,41 @@
     </form>
 </div>
 
+@push('scripts')
 <script>
-// Show alert function
+// document.addEventListener('DOMContentLoaded', function() {
+//     const form = document.getElementById('submissionForm');
+    
+//     form.addEventListener('submit', function(e) {
+//         e.preventDefault();
+        
+//         // Get form data
+//         const formData = new FormData(form);
+        
+//         // Send AJAX request
+//         fetch(form.action, {
+//             method: 'POST',
+//             body: formData,
+//             headers: {
+//                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
+//             }
+//         })
+//         .then(response => response.json())
+//         .then(data => {
+//             if (data.success) {
+//                 showAlert('success', data.message);
+//                 form.reset();
+//             } else {
+//                 const errorMessages = data.errors
+//                     ? Object.values(data.errors).flat().join(', ')
+//                     : data.message || 'Terjadi kesalahan';
+//                 showAlert('error', errorMessages);
+//             }
+//         })
+//     });
+// });
+
+// Alert functions
 function showAlert(type, message) {
     const alertContainer = document.getElementById('alertMessage');
     const successAlert = document.getElementById('successAlert');
@@ -180,10 +212,11 @@ function showAlert(type, message) {
     const successText = document.getElementById('successText');
     const errorText = document.getElementById('errorText');
 
-    // Reset
+    // Hide both alerts
     successAlert.classList.add('hidden');
     errorAlert.classList.add('hidden');
 
+    // Show appropriate alert
     if (type === 'success') {
         successText.textContent = message;
         successAlert.classList.remove('hidden');
@@ -195,15 +228,14 @@ function showAlert(type, message) {
     // Show container
     alertContainer.classList.remove('translate-x-full');
 
-    // Auto hide success message after 3 seconds
+    // Auto hide success message
     if (type === 'success') {
         setTimeout(() => {
-            closeAlert('successAlert');
+            closeAlert(type + 'Alert');
         }, 3000);
     }
 }
 
-// Close alert function
 function closeAlert(alertId) {
     const alert = document.getElementById(alertId);
     const container = document.getElementById('alertMessage');
@@ -229,36 +261,36 @@ function closeConfirmModal() {
     document.getElementById('confirmModal').classList.add('hidden');
 }
 
-// // Submit form
-// function submitForm() {
-//     closeConfirmModal();
-//     toggleLoading(true);
+// Submit form
+function submitForm() {
+    closeConfirmModal();
+    toggleLoading(true);
     
-//     const form = document.getElementById('submissionForm');
+    const form = document.getElementById('submissionForm');
     
-//     // Submit form using fetch
-//     fetch(form.action, {
-//         method: 'POST',
-//         body: new FormData(form),
-//         headers: {
-//             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-//         }
-//     })
-//     .then(response => response.json())
-//     .then(data => {
-//         toggleLoading(false);
-//         if (data.success) {
-//             showAlert('success', data.message);
-//             form.reset();
-//         } else {
-//             showAlert('error', data.message || 'Terjadi kesalahan');
-//         }
-//     })
-//     .catch(error => {
-//         toggleLoading(false);
-//         showAlert('error', 'Terjadi kesalahan saat menyimpan data');
-//     });
-// }
+    // Submit form using fetch
+    fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        toggleLoading(false);
+        if (data.success) {
+            showAlert('success', data.message);
+            form.reset();
+        } else {
+            showAlert('error', data.message || 'Terjadi kesalahan');
+        }
+    })
+    .catch(error => {
+        toggleLoading(false);
+        showAlert('error', 'Terjadi kesalahan saat menyimpan data');
+    });
+}
 
 // Show alerts from session if any
 @if(session('success'))
@@ -271,45 +303,45 @@ function closeConfirmModal() {
 
 // function validateForm() {
 //     // Get all form elements
-//     const kodePengajuan = document.getElementById('submission_code');
+//     const kodePengajuan = document.getElementById('kode_pengajuan');
 //     const deskripsiReview = document.getElementById('deskripsi_review');
 //     const status = document.getElementById('status');
     
-//     // Reset any existing error styles
-//     resetErrorStyles();
+    // Reset any existing error styles
+    resetErrorStyles();
     
-//     let isValid = true;
-//     const errors = [];
+    let isValid = true;
+    const errors = [];
 
-//     // Validate submission_code
+//     // Validate kode_pengajuan
 //     if (!kodePengajuan.value || kodePengajuan.value === "") {
 //         isValid = false;
 //         errors.push("Silakan pilih judul pengajuan");
 //         addErrorStyle(kodePengajuan);
 //     }
 
-//     // Validate deskripsi_review
-//     if (!deskripsiReview.value.trim()) {
-//         isValid = false;
-//         errors.push("Review pengajuan tidak boleh kosong");
-//         addErrorStyle(deskripsiReview);
-//     }
+    // Validate deskripsi_review
+    if (!deskripsiReview.value.trim()) {
+        isValid = false;
+        errors.push("Review pengajuan tidak boleh kosong");
+        addErrorStyle(deskripsiReview);
+    }
 
-//     // Validate status
-//     if (!status.value || status.value === "") {
-//         isValid = false;
-//         errors.push("Silakan pilih status");
-//         addErrorStyle(status);
-//     }
+    // Validate status
+    if (!status.value || status.value === "") {
+        isValid = false;
+        errors.push("Silakan pilih status");
+        addErrorStyle(status);
+    }
 
-//     // Show error message if validation fails
-//     if (!isValid) {
-//         showAlert('error', errors.join('\n'));
-//         return false;
-//     }
+    // Show error message if validation fails
+    if (!isValid) {
+        showAlert('error', errors.join('\n'));
+        return false;
+    }
 
-//     return true;
-// }
+    return true;
+}
 
 // Add error style to invalid fields
 function addErrorStyle(element) {
@@ -320,7 +352,7 @@ function addErrorStyle(element) {
 // Reset error styles
 function resetErrorStyles() {
     const elements = [
-        document.getElementById('submission_code'),
+        document.getElementById('kode_pengajuan'),
         document.getElementById('deskripsi_review'),
         document.getElementById('status')
     ];
@@ -340,7 +372,7 @@ function showConfirmModal() {
 // Add input event listeners to remove error styling when user starts typing/selecting
 document.addEventListener('DOMContentLoaded', function() {
     const elements = [
-        document.getElementById('submission_code'),
+        document.getElementById('kode_pengajuan'),
         document.getElementById('deskripsi_review'),
         document.getElementById('status')
     ];
@@ -394,10 +426,7 @@ document.addEventListener('DOMContentLoaded', function() {
 .border-red-500 {
     border-color: #ef4444;
 }
-
-.bg-red-50 {
-    background-color: #fef2f2;
-}
 </style>
+@endpush
 
 @endsection
