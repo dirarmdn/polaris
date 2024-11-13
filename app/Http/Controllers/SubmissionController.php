@@ -2,15 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Organization;
 use App\Models\Submission;
-use App\Models\Referensi;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Mail\VerificationEmail;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreSubmissionRequest;
 use App\Http\Requests\UpdatePengajuanRequest;
 
@@ -22,37 +17,60 @@ class SubmissionController extends Controller
     public function index(Request $request)
     {
         $submission = Submission::where('status', 'terverifikasi')->paginate(6);
+        $organization = Organization::get();
 
         if ($request->ajax()) {
             return view('components.list_view', compact('submission'));
         }
 
-        return view('submissions.index', compact('submission'));
+        return view('submissions.index', compact('submission', 'organization'));
     }
 
     public function search(Request $request)
     {
+        dd($request);
         $query = $request->input('search');
         $sort_by = $request->input('sort_by', 'submission_title');
         $sort_direction = $request->input('sort_direction', 'desc');
-
+        $platform_filter = $request->input('platform', []);
+        $existing_app = $request->boolean('existing_app');
+        $organization = $request->input('organization');
+        $perPage = $request->input('perPage');
+    
         $submission = Submission::query()
             ->when($query, function ($q) use ($query) {
                 return $q->where('submission_title', 'like', "%{$query}%");
             })
+            ->when($platform_filter, function ($q) use ($platform_filter) {
+                return $q->whereIn('platform', $platform_filter);
+            })
+            ->when(!is_null($existing_app), function ($q) use ($existing_app) {
+                return $existing_app
+                    ? $q->where('project_type', true) // Hanya aplikasi yang sudah ada
+                    : $q->where('project_type', false); // Hanya aplikasi baru
+            })
+            ->when($organization, function ($q) use ($organization) {
+                if ($organization) {
+                    return $q->whereHas('submitter.organization', function ($query) use ($organization) {
+                        $query->where('organization_code', $organization);
+                    });
+                }
+                return $q;
+            })            
             ->where('status', 'terverifikasi')
             ->orderBy($sort_by, $sort_direction)
-            ->paginate(10);
-
+            ->paginate($perPage);
+    
         if ($request->ajax()) {
             return response()->json([
                 'html' => view('components.list_view', ['submission' => $submission])->render(),
                 'count' => $submission->total(),
             ]);
         }
-
+    
         return view('submissions.index', compact('submission'));
     }
+    
 
     /**
      * Show the form for creating a new resource.
