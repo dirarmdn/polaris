@@ -29,7 +29,7 @@
 
             <!-- Jabatan -->
             <div class="mb-4">
-                <input type="text" id="position" name="position" placeholder="Jabatan dalam Organisasi" class="w-full px-6 py-3 text-sm border rounded-lg focus:outline-none focus:ring focus:ring-primary-300" value="{{ old('jabatan') }}">
+                <input type="text" id="position" name="position" placeholder="Jabatan dalam Organisasi" class="w-full px-6 py-3 text-sm border rounded-lg focus:outline-none focus:ring focus:ring-primary-300" value="{{ old('position') }}">
                 @error('position')
                     <span class="text-xs text-red-600">{{ $message }}</span>
                 @enderror
