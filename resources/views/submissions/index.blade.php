@@ -423,7 +423,7 @@
             const $pengajuanCount = $('#pengajuan-count');
             const $searchInput = $('#search');
             const $searchButton = $('#search-button');
-            const perPageDropdown = $('#perPageDropdown');
+            const $perPageDropdown = $('#perPageDropdown');
             let filterExisting = null;
             const initialHtml = $searchResults.html();
             const initialCount = $pengajuanCount.text();
@@ -456,7 +456,7 @@
             const performSearchOrSort = (sortBy = null, sortDirection = null) => {
                 const query = $searchInput.val().trim();
                 let platform = [];
-                const perPage = $perPageDropdown.val();
+                const perPage = $perPageDropdown.val(); 
 
                 // Ambil nilai checkbox platform yang dicentang
                 $('input[name="platform[]"]:checked').each(function() {
@@ -494,7 +494,7 @@
                         $pengajuanCount.text(data.count);
                         if (sortBy && sortDirection) {
                             window.history.pushState("", "",
-                                `?search=${query}&sort_by=${sortBy}&existing_app=${filterExisting}&platform=${platform.join(',')}&organization=${selectedOrganization}`
+                                `?search=${query}&sort_by=${sortBy}&existing_app=${filterExisting}&platform=${platform.join(',')}&organization=${selectedOrganization}&perPage=${perPage}`
                             );
                         }
                     },

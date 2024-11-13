@@ -16,19 +16,20 @@ class SubmissionController extends Controller
      */
     public function index(Request $request)
     {
-        $submission = Submission::where('status', 'terverifikasi')->paginate(6);
+        $perPage = $request->input('perPage', 5);
+        $submission = Submission::where('status', 'terverifikasi')->paginate($perPage);
         $organization = Organization::get();
-
+    
         if ($request->ajax()) {
             return view('components.list_view', compact('submission'));
         }
-
+    
         return view('submissions.index', compact('submission', 'organization'));
     }
+    
 
     public function search(Request $request)
     {
-        dd($request);
         $query = $request->input('search');
         $sort_by = $request->input('sort_by', 'submission_title');
         $sort_direction = $request->input('sort_direction', 'desc');
@@ -36,6 +37,8 @@ class SubmissionController extends Controller
         $existing_app = $request->boolean('existing_app');
         $organization = $request->input('organization');
         $perPage = $request->input('perPage');
+
+        // dd($perPage);
     
         $submission = Submission::query()
             ->when($query, function ($q) use ($query) {
@@ -212,6 +215,7 @@ class SubmissionController extends Controller
         if (!$submission) {
             return redirect()->route('submissions.index')->with('error', 'Pengajuan tidak ditemukan!');
         }
+
 
         return view('dashboard.submissions.show', compact('submission'));
     }
