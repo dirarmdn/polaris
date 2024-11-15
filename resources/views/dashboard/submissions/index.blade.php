@@ -63,14 +63,14 @@
                 @forelse($data_pengajuans as $pengajuan)
                     <tr class="bg-white border-b hover:bg-gray-50">
                         <td class="px-6 py-4">{{ $pengajuan->submission_title }}</td>
-                        <td class="px-6 py-4">{{ $pengajuan->user->name ?? 'Tidak diketahui' }}</td>
+                        <td class="px-6 py-4">{{ $pengajuan->submitter->user->name ?? 'Tidak diketahui' }}</td>
                         <td class="px-6 py-4">
                             {{ $pengajuan->created_at ? $pengajuan->created_at->format('Y-m-d H:i:s') : 'Tanggal tidak tersedia' }}
                         </td>
                         <td class="px-6 py-4 text-center">
-                            @if ($pengajuan->isVerified)
+                            @if ($pengajuan->status == 'terverifikasi')
                                 <span
-                                    class="inline-block px-3 py-1 text-sm font-semibold text-white bg-green-500 rounded-full">Diverifikasi</span>
+                                    class="inline-block min-w-40 px-3 py-1 text-sm font-semibold text-white bg-green-500 rounded-full">Diverifikasi</span>
                             @elseif ($pengajuan->status == 'belum_direview')
                                 <span
                                     class="inline-block min-w-40 px-3 py-1 text-sm font-semibold text-white bg-gray-400 rounded-full">Belum

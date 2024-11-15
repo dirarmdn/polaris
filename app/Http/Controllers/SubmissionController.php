@@ -7,7 +7,7 @@ use App\Models\Submission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreSubmissionRequest;
-use App\Http\Requests\UpdatePengajuanRequest;
+use App\Http\Requests\UpdateSubmissionRequest;
 
 class SubmissionController extends Controller
 {
@@ -158,7 +158,7 @@ class SubmissionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePengajuanRequest $request, Submission $submission)
+    public function update(UpdateSubmissionRequest $request, Submission $submission)
     {
         $submission->update($request->validated()); // Perbarui data pengajuan
         return redirect()->route('submissions.index')->with('success', 'Pengajuan berhasil diperbarui!');
@@ -184,23 +184,31 @@ class SubmissionController extends Controller
 
         // Query untuk mengambil data dengan pencarian dan paginasi
         if ($user->role == 1) {
-            $data_pengajuans = Submission::with('submitter') // Mengambil relasi user
+            $data_pengajuans = Submission::with('submitter')
                 ->when($user->role === 1, function ($query) use ($user) {
-                    // Jika role adalah pengaju, filter berdasarkan user_id
                     return $query->where('submitter_id', $user->submitter->submitter_id);
                 })
                 ->when($submission_title, function ($query) use ($submission_title) {
                     return $query->where('submission_title', 'LIKE', '%' . $submission_title . '%');
                 })
                 ->paginate(10);
+        } else if ($user->role == 2) {
+            $data_pengajuans = Submission::with('submitter')
+                ->where('status', '!=', 'diarsipkan')
+                ->when($submission_title, function ($query) use ($submission_title) {
+                    return $query->where('submission_title', 'LIKE', '%' . $submission_title . '%');
+                })
+                ->paginate(10);
         } else {
-            $data_pengajuans = Submission::with('user') // Mengambil relasi user
+            $data_pengajuans = Submission::with('submitter')
+                ->where('status', 'belum_direview')
+                ->where('nip_reviewer', $user->reviewer->nip_reviewer)
                 ->when($submission_title, function ($query) use ($submission_title) {
                     return $query->where('submission_title', 'LIKE', '%' . $submission_title . '%');
                 })
                 ->paginate(10);
         }
-        // Kirimkan data ke view dengan hasil pencarian
+
         return view('dashboard.submissions.index', [
             'data_pengajuans' => $data_pengajuans,
             'submission_title' => $submission_title,
@@ -210,7 +218,7 @@ class SubmissionController extends Controller
     // Menampilkan detail pengajuan tertentu
     public function showSubmission(string $submission_code)
     {
-        $submission = Submission::with('referensi')->where('submission_code', $submission_code)->first();
+        $submission = Submission::with('reference')->where('submission_code', $submission_code)->first();
 
         if (!$submission) {
             return redirect()->route('submissions.index')->with('error', 'Pengajuan tidak ditemukan!');

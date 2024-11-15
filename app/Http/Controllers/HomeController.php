@@ -40,9 +40,12 @@ class HomeController extends Controller
                 ->when($user->role === 1, function ($query) use ($user) {
                     return $query->where('submitter_id', $user->submitter->submitter_id);
                 })->get();
+        } else if ($user->role == 1) {
+            $pengajuan = Submission::latest()->where('status', 'belum_direview')->where('nip_reviewer', $user->nip_reviewer)->get();
         } else {
-            $pengajuan = Submission::latest()->get();
+            $pengajuan = Submission::latest()->where('status', '!=', 'diarsipkan')->get();
         }
+
         $jumlah_terverifikasi = Submission::where('status', 'terverifikasi')->count();
         $jumlah_belum = Submission::where('status', 'belum_direview')->count();
         return view('dashboard.index', compact(['pengajuan', 'jumlah_terverifikasi', 'jumlah_belum', 'user']));

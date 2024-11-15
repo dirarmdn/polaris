@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -39,7 +40,6 @@ class UserController extends Controller
     {
         //
         $user = Auth::user()->load('submitter');
-        // dd($user);
         return view('auth.profile', compact('user'));
     }
 
@@ -54,9 +54,29 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
+    public function update(UpdateUserRequest $request, $id)
     {
         //
+        $request->validated();
+    
+        $user = User::findOrFail($id);
+        $user->fill($request->all());
+    
+        if($request->hasFile('avatar')) {
+            $path = $request->avatar->store('user', 'public');
+            $user->avatar = $path;
+        }
+    
+        $user->save();
+
+        if ($user->submitter) {
+            $user->submitter->update([
+                'position_in_organization' => $request->input('position_in_organization'),
+            ]);
+        }
+    
+        return redirect()->back()
+            ->with('success', 'Selamat, profil Anda berhasil diperbaharui!');
     }
 
     /**

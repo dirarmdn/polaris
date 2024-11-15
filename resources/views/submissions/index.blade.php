@@ -6,6 +6,7 @@
     <div class="w-full justify-center">
         <div class="bg-white">
             <div>
+                {{-- buat mobile --}}
                 <div class="relative z-40 lg:hidden" role="dialog" aria-modal="true">
                     <div class="fixed inset-0 bg-black bg-opacity-25" aria-hidden="true"></div>
                     <div class="fixed inset-0 z-40 flex">
@@ -27,17 +28,14 @@
                             <form class="mt-4 border-t border-gray-200">
                                 <h3 class="sr-only">Categories</h3>
                                 <ul role="list" class="px-2 py-3 font-medium text-gray-900">
+                                    <li class="font-medium text-black">Tipe Proyek</li>
                                     <li>
-                                        <a href="#" class="block px-2 py-3">Web</a>
+                                        <button type="button" id="filter-existing" class="block px-2 py-3">Aplikasi yang
+                                            sudah ada</button>
                                     </li>
                                     <li>
-                                        <a href="#" class="block px-2 py-3">Multi-platform</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="block px-2 py-3">Mobile</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="block px-2 py-3">Desktop</a>
+                                        <button type="button" id="filter-new" class="block px-2 py-3">Aplikasi
+                                            baru</button>
                                     </li>
                                 </ul>
 
@@ -46,8 +44,8 @@
                                         <!-- Expand/collapse section button -->
                                         <button type="button"
                                             class="flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500"
-                                            aria-controls="filter-section-mobile-0" aria-expanded="false">
-                                            <span class="font-medium text-gray-900">Color</span>
+                                            aria-controls="filter-section-mobile-0" aria-expanded="true">
+                                            <span class="font-medium text-gray-900">Platform</span>
                                             <span class="ml-6 flex items-center">
                                                 <!-- Expand icon, show/hide based on section open state. -->
                                                 <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"
@@ -73,121 +71,52 @@
                                                     type="checkbox"
                                                     class="h-4 w-4 rounded border-gray-300 text-accent-light-400 focus:ring-accent-light-500">
                                                 <label for="filter-platform-web"
-                                                    class="ml-3 min-w-0 flex-1 text-gray-500">White</label>
+                                                    class="ml-3 min-w-0 flex-1 text-gray-500">Web</label>
                                             </div>
                                             <div class="flex items-center">
                                                 <input id="filter-platform-multi" name="platform[]" value="multi-platform"
                                                     type="checkbox"
                                                     class="h-4 w-4 rounded border-gray-300 text-accent-light-400 focus:ring-accent-light-500">
                                                 <label for="filter-platform-multi"
-                                                    class="ml-3 min-w-0 flex-1 text-gray-500">multi-platform</label>
+                                                    class="ml-3 min-w-0 flex-1 text-gray-500">Multi-Platform</label>
                                             </div>
                                             <div class="flex items-center">
                                                 <input id="filter-platform-mobile" name="platform[]" value="mobile"
                                                     type="checkbox"
                                                     class="h-4 w-4 rounded border-gray-300 text-accent-light-400 focus:ring-accent-light-500">
-                                                <label for="filter-platform-multi"
-                                                    class="ml-3 min-w-0 flex-1 text-gray-500">Blue</label>
+                                                <label for="filter-platform-mobile"
+                                                    class="ml-3 min-w-0 flex-1 text-gray-500">Mobile</label>
                                             </div>
                                             <div class="flex items-center">
                                                 <input id="filter-platform-desktop" name="platform[]" value="desktop"
                                                     type="checkbox"
                                                     class="h-4 w-4 rounded border-gray-300 text-accent-light-400 focus:ring-accent-light-500">
-                                                <label for="filter-platform-multi"
+                                                <label for="filter-platform-desktop"
                                                     class="ml-3 min-w-0 flex-1 text-gray-500">Desktop</label>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="border-t border-gray-200 px-4 py-6">
-                                    <h3 class="-mx-2 -my-3 flow-root">
-                                        <!-- Expand/collapse section button -->
-                                        <button type="button"
-                                            class="flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500"
-                                            aria-controls="filter-section-mobile-1" aria-expanded="false">
-                                            <span class="font-medium text-gray-900">Category</span>
-                                            <span class="ml-6 flex items-center">
-                                                <!-- Expand icon, show/hide based on section open state. -->
-                                                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"
-                                                    aria-hidden="true" data-slot="icon">
-                                                    <path
-                                                        d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" />
-                                                </svg>
-                                                <!-- Collapse icon, show/hide based on section open state. -->
-                                                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"
-                                                    aria-hidden="true" data-slot="icon">
-                                                    <path fill-rule="evenodd"
-                                                        d="M4 10a.75.75 0 0 1 .75-.75h10.5a.75.75 0 0 1 0 1.5H4.75A.75.75 0 0 1 4 10Z"
-                                                        clip-rule="evenodd" />
-                                                </svg>
-                                            </span>
-                                        </button>
-                                    </h3>
                                     <!-- Filter section, show/hide based on section state. -->
-                                    <div class="pt-6" id="filter-section-mobile-1">
-                                        <div class="space-y-6">
-                                            <div class="flex items-center">
-                                                <input id="filter-mobile-category-0" name="category[]"
-                                                    value="new-arrivals" type="checkbox"
-                                                    class="h-4 w-4 rounded border-gray-300 text-accent-light-400 focus:ring-accent-light-500">
-                                                <label for="filter-mobile-category-0"
-                                                    class="ml-3 min-w-0 flex-1 text-gray-500">New Arrivals</label>
+                                    <div class="pt-6" id="filter-section-mob-1">
+                                        <section class="section wrapper wrapper-section">
+                                            <div class="container wrapper-column">
+                                                <div class="form-group">
+                                                    <span class="form-arrow"><i class="bx bx-chevron-down"></i></span>
+                                                    <select name="organization" id="organization"
+                                                        class="select_org_mob  rounded-xl text-sm">
+                                                        <option disabled>Pilih Organisasi</option>
+                                                        <option value="">Semua Organisasi</option>
+                                                        @foreach ($organization as $o)
+                                                            <option value="{{ $o->organization_code }}">
+                                                                {{ $o->organization_name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
                                             </div>
-                                            <div class="flex items-center">
-                                                <input id="filter-mobile-category-1" name="category[]" value="sale"
-                                                    type="checkbox"
-                                                    class="h-4 w-4 rounded border-gray-300 text-accent-light-400 focus:ring-accent-light-500">
-                                                <label for="filter-mobile-category-1"
-                                                    class="ml-3 min-w-0 flex-1 text-gray-500">Sale</label>
-                                            </div>
-                                            <div class="flex items-center">
-                                                <input id="filter-mobile-category-2" name="category[]" value="travel"
-                                                    type="checkbox"
-                                                    class="h-4 w-4 rounded border-gray-300 text-accent-light-400 focus:ring-accent-light-500">
-                                                <label for="filter-mobile-category-2"
-                                                    class="ml-3 min-w-0 flex-1 text-gray-500">Travel</label>
-                                            </div>
-                                            <div class="flex items-center">
-                                                <input id="filter-mobile-category-3" name="category[]"
-                                                    value="organization" type="checkbox"
-                                                    class="h-4 w-4 rounded border-gray-300 text-accent-light-400 focus:ring-accent-light-500">
-                                                <label for="filter-mobile-category-3"
-                                                    class="ml-3 min-w-0 flex-1 text-gray-500">Organization</label>
-                                            </div>
-                                            <div class="flex items-center">
-                                                <input id="filter-mobile-category-4" name="category[]"
-                                                    value="accessories" type="checkbox"
-                                                    class="h-4 w-4 rounded border-gray-300 text-accent-light-400 focus:ring-accent-light-500">
-                                                <label for="filter-mobile-category-4"
-                                                    class="ml-3 min-w-0 flex-1 text-gray-500">Accessories</label>
-                                            </div>
-                                        </div>
+                                        </section>
                                     </div>
-                                </div>
-                                <div class="border-t border-gray-200 px-4 py-6">
-                                    <h3 class="-mx-2 -my-3 flow-root">
-                                        <!-- Expand/collapse section button -->
-                                        <button type="button"
-                                            class="flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500"
-                                            aria-controls="filter-section-mobile-2" aria-expanded="false">
-                                            <span class="font-medium text-gray-900">Size</span>
-                                            <span class="ml-6 flex items-center">
-                                                <!-- Expand icon, show/hide based on section open state. -->
-                                                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"
-                                                    aria-hidden="true" data-slot="icon">
-                                                    <path
-                                                        d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" />
-                                                </svg>
-                                                <!-- Collapse icon, show/hide based on section open state. -->
-                                                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"
-                                                    aria-hidden="true" data-slot="icon">
-                                                    <path fill-rule="evenodd"
-                                                        d="M4 10a.75.75 0 0 1 .75-.75h10.5a.75.75 0 0 1 0 1.5H4.75A.75.75 0 0 1 4 10Z"
-                                                        clip-rule="evenodd" />
-                                                </svg>
-                                            </span>
-                                        </button>
-                                    </h3>
                                 </div>
                             </form>
                         </div>
@@ -419,6 +348,8 @@
     <script type="module">
         $(document).ready(function() {
             $(".select_org").select2();
+            $(".select_org_mob").select2();
+
             const $searchResults = $('#search-results');
             const $pengajuanCount = $('#pengajuan-count');
             const $searchInput = $('#search');
@@ -428,24 +359,35 @@
             const initialHtml = $searchResults.html();
             const initialCount = $pengajuanCount.text();
             const toggleButton = document.querySelector('button[aria-controls="filter-section-0"]');
+            const toggleButtonMob = document.querySelector('button[aria-controls="filter-section-mobile-0"]');
             const filterSection = document.getElementById('filter-section-0');
+            const filterSectionMob = document.getElementById('filter-section-mobile-0');
             const icons = toggleButton.querySelectorAll('svg[data-slot="icon"]');
             let selectedOrganization = null;
 
             toggleButton.addEventListener('click', () => {
-                // Toggle the aria-expanded attribute
                 const isExpanded = toggleButton.getAttribute('aria-expanded') === 'true';
                 toggleButton.setAttribute('aria-expanded', !isExpanded);
 
-                // Show/hide the filter section
                 filterSection.style.display = isExpanded ? 'none' : 'block';
 
-                // Toggle icons
+                icons.forEach(icon => icon.classList.toggle('hidden'));
+            });
+
+            toggleButtonMob.addEventListener('click', () => {
+                const isExpandedMob = toggleButtonMob.getAttribute('aria-expanded') === 'true';
+                toggleButtonMob.setAttribute('aria-expanded', !isExpandedMob);
+
+                filterSectionMob.style.display = isExpandedMob ? 'none' : 'block';
+
                 icons.forEach(icon => icon.classList.toggle('hidden'));
             });
 
             // Initialize as expanded (visible)
             filterSection.style.display = 'block';
+            icons[0].classList.add('hidden'); // Hide expand icon initially
+
+            filterSectionMob.style.display = 'block';
             icons[0].classList.add('hidden'); // Hide expand icon initially
 
             const resetSearch = () => {
@@ -456,7 +398,7 @@
             const performSearchOrSort = (sortBy = null, sortDirection = null) => {
                 const query = $searchInput.val().trim();
                 let platform = [];
-                const perPage = $perPageDropdown.val(); 
+                const perPage = $perPageDropdown.val();
 
                 // Ambil nilai checkbox platform yang dicentang
                 $('input[name="platform[]"]:checked').each(function() {
@@ -520,9 +462,9 @@
                     performSearchOrSort(sortBy, sortDirection);
                 });
 
-                $perPageDropdown.on('change', () => {
-            performSearchOrSort();
-        });
+            $perPageDropdown.on('change', () => {
+                performSearchOrSort();
+            });
 
             // Event handler untuk tombol filter
             $('#filter-existing').on('click', () => {

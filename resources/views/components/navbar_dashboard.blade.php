@@ -2,7 +2,7 @@
     <div class="flex items-center justify-between mx-auto p-4">
         <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse items-center">
             
-            <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-start" class="w-10 h-10 rounded-lg cursor-pointer object-cover" src="{{ asset('images/Avatar.svg') }}" alt="User dropdown">
+            <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-start" class="w-10 h-10 rounded-lg cursor-pointer object-cover" src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : asset('images/Avatar.svg') }}" alt="User dropdown">
 
             <div id="userDropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
                 <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
@@ -53,11 +53,13 @@
                         class="{{ Route::is('dashboard.submissions.index') ? 'block py-2 px-3 md:p-0 border-b-2 border-accent-light-500 font-bold' : 'block py-2 px-3 md:p-0 text-gray-900' }} hover:bg-gray-100 md:hover:bg-transparent md:hover:text-secondary-900 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">
                         Pengajuan</a>
                 </li>
+                @if (auth()->user()->role != 1)   
                 <li>
                     <a href="{{ route('organization.index') }}"
                         class="{{ Route::is('organization.index') ? 'block py-2 px-3 md:p-0 border-b-2 border-accent-light-500 font-bold' : 'block py-2 px-3 md:p-0 text-gray-900' }} hover:bg-gray-100 md:hover:bg-transparent md:hover:text-secondary-900 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">
                         Mitra</a>
                 </li>
+                @endif
                 @if (auth()->user()->role == 2)                    
                 <li>
                     <a href="{{ route('admin') }}"

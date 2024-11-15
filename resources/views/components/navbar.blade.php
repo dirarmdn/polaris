@@ -7,7 +7,7 @@
             @auth
             <a href="{{ route('dashboard') }}" class="inline-block text-sm px-6 py-2.5 leading-none border rounded-lg hover:bg-gray-200 mr-5 font-medium border-transparent lg:mt-0">
             Dashboard</a>
-            <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-start" class="w-10 h-10 rounded-lg cursor-pointer object-cover" src="{{ asset('images/Avatar.svg') }}" alt="User dropdown">
+            <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-start" class="w-10 h-10 rounded-lg cursor-pointer object-cover" src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : asset('images/Avatar.svg') }}" alt="User dropdown">
 
             <div id="userDropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
                 <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">

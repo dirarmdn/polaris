@@ -49,11 +49,11 @@
                     <tbody>
                         @foreach ($admins as $admin)
                             <tr>
-                                <td class="px-6 py-4">{{ $admin->nama }}</td>
+                                <td class="px-6 py-4">{{ $admin->name }}</td>
                                 <td class="px-6 py-4">{{ $admin->email }}</td>
                                 <td class="px-6 py-4 text-center">{{ $admin->role == 2 ? 'Admin' : 'Reviewer' }}</td>
                                 <td class="px-6 py-4 text-center items-center flex justify-center">
-                                    <a href="{{ route('admin.admins.show', ['id' => $admin->id]) }}"
+                                    <a href="{{ route('admin.admins.show', ['id' => $admin->user_id]) }}"
                                         class="flex items-center text-black-600 mx-auto">
                                         <span
                                             class="inline-flex items-center px-4 py-1 text-sm font-semibold text-white bg-blue-500 rounded-full">

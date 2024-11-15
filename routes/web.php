@@ -35,9 +35,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/detail/{id}', [AdminController::class, 'show'])->name('admin.admins.show');
         Route::get('/{id}/edit', [AdminController::class, 'edit'])->name('admin.edit');
         Route::put('/{id}', [AdminController::class, 'update'])->name('admin.update');
-        // Route::get('/review', action: [ReviewController::class,'review'])->name('dashboard.submissions.review');
         Route::get('/review/create/{submission_code}', [ReviewController::class, 'create'])->name('dashboard.submissions.review.create');
-        Route::post('/review/store', [ReviewController::class, 'store'])->name('dashboard.submissions.review.store');
+        Route::put('/review/update/{submission_code}', [ReviewController::class, 'update'])->name('dashboard.submissions.review.update');
         Route::resource('/organization', OrganizationController::class);
     });
 
@@ -51,6 +50,7 @@ Route::group(['middleware' => 'auth'], function () {
     });
     
     Route::resource('/user', UserController::class);
+    Route::resource('/organization', OrganizationController::class);
     Route::post('/logout', [UserController::class, 'signOut'])->name('logout');
 
 });
