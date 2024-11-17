@@ -6,17 +6,23 @@ use App\Models\Submission;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
     public function index()
     {
         $count_pengajuan = Submission::count();
-        $newest_pengajuan = Submission::latest('created_at')->first();
+        $newest_pengajuan = DB::table('submissions')
+            ->select('submission_code', 'submission_title', 'created_at')
+            ->orderBy('created_at', 'desc')
+            ->first();
 
         Carbon::setLocale('id');
 
-        $time_ago = $newest_pengajuan ? $newest_pengajuan->created_at->diffForHumans() : null;
+        $time_ago = $newest_pengajuan 
+        ? Carbon::parse($newest_pengajuan->created_at)->diffForHumans() 
+        : null;
 
         return view('home.index', compact('count_pengajuan', 'newest_pengajuan', 'time_ago'));
     }

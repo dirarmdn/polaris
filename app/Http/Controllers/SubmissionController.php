@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Organization;
 use App\Models\Submission;
+use App\Models\Organization;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreSubmissionRequest;
 use App\Http\Requests\UpdateSubmissionRequest;
@@ -200,8 +201,7 @@ class SubmissionController extends Controller
                 })
                 ->paginate(10);
         } else {
-            $data_pengajuans = Submission::with('submitter')
-                ->where('status', 'belum_direview')
+            $data_pengajuans = DB::table('submissions_need_review')
                 ->where('nip_reviewer', $user->reviewer->nip_reviewer)
                 ->when($submission_title, function ($query) use ($submission_title) {
                     return $query->where('submission_title', 'LIKE', '%' . $submission_title . '%');

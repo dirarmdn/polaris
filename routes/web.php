@@ -27,31 +27,19 @@ Route::get('/search', [SubmissionController::class, 'search'])->name('submission
 
 Route::group(['middleware' => 'auth'], function () {
 
-    Route::prefix('admin')
-    ->group(function () {
-        Route::get('/index', [AdminController::class, 'index'])->name('admin');
-        Route::get('/create', [AdminController::class, 'create'])->name('admin.create');
-        Route::post('/store', [AdminController::class, 'store'])->name('admin.store');
-        Route::get('/detail/{id}', [AdminController::class, 'show'])->name('admin.admins.show');
-        Route::get('/{id}/edit', [AdminController::class, 'edit'])->name('admin.edit');
-        Route::put('/{id}', [AdminController::class, 'update'])->name('admin.update');
-        Route::get('/review/create/{submission_code}', [ReviewController::class, 'create'])->name('dashboard.submissions.review.create');
-        Route::put('/review/update/{submission_code}', [ReviewController::class, 'update'])->name('dashboard.submissions.review.update');
-        Route::resource('/organization', OrganizationController::class);
-    });
-
     Route::prefix('dashboard')
     ->group(function () {
         Route::get('/', [HomeController::class, 'dashboard'])->name('dashboard');
         Route::get('/pengajuan', [SubmissionController::class, 'showAllSubmissions'])->name('dashboard.submissions.index');
         Route::get('/pengajuan/detail/{submission_code}', [SubmissionController::class, 'showSubmission'])->name('dashboard.submissions.show');
         Route::get('/pengajuan/create', [SubmissionController::class, 'create'])->name('submissions.create');
-        Route::post('/pengajuan/store', [SubmissionController::class, 'store'])->name('submissions.store');    
+        Route::post('/pengajuan/store', [SubmissionController::class, 'store'])->name('submissions.store');
+        Route::resource('/admin', AdminController::class)->middleware('role:admin');
+        Route::resource('/review', ReviewController::class)->middleware('role:reviewer');
+        Route::resource('/organization', OrganizationController::class);
     });
     
     Route::resource('/user', UserController::class);
     Route::resource('/organization', OrganizationController::class);
     Route::post('/logout', [UserController::class, 'signOut'])->name('logout');
-
 });
-    Route::get('/admins', [AdminController::class, 'index'])->name('admins.index');
