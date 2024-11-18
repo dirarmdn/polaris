@@ -167,7 +167,7 @@
                                         </svg>
                                     </button>
                                 </div>
-                                <div class="absolute right-0 z-10 mt-2 w-44 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                <div class="absolute right-0 z-10 mt-2 w-44 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none hidden"
                                     role="menu" id="dropdownHover" aria-orientation="vertical"
                                     aria-labelledby="menu-button" tabindex="-1">
                                     <div class="py-1" role="none" aria-labelledby="dropdownHoverButton">
@@ -187,8 +187,8 @@
                             </div>
 
                             <div class="relative inline-block text-left ml-4">
-                                <label for="perPageDropdown">Items per page:</label>
-                                <select id="perPageDropdown" class="rounded bg-white p-2 ml-2">
+                                <label class="text-sm" for="perPageDropdown">Tampilkan:</label>
+                                <select id="perPageDropdown" class="rounded bg-white border-0 text-sm p-2">
                                     <option value="5">5</option>
                                     <option value="10">10</option>
                                     <option value="50">50</option>
