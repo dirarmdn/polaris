@@ -3,38 +3,13 @@
 @section('title', 'Daftar Pengajuan')
 
 @section('content')
-    <div class="flex justify-center">
+    <div class="w-full justify-center">
         <div class="bg-white">
             <div>
-                <!--
-            Mobile filter dialog
-      
-            Off-canvas filters for mobile, show/hide based on off-canvas filters state.
-          -->
+                {{-- buat mobile --}}
                 <div class="relative z-40 lg:hidden" role="dialog" aria-modal="true">
-                    <!--
-              Off-canvas menu backdrop, show/hide based on off-canvas menu state.
-      
-              Entering: "transition-opacity ease-linear duration-300"
-                From: "opacity-0"
-                To: "opacity-100"
-              Leaving: "transition-opacity ease-linear duration-300"
-                From: "opacity-100"
-                To: "opacity-0"
-            -->
                     <div class="fixed inset-0 bg-black bg-opacity-25" aria-hidden="true"></div>
-
                     <div class="fixed inset-0 z-40 flex">
-                        <!--
-                Off-canvas menu, show/hide based on off-canvas menu state.
-      
-                Entering: "transition ease-in-out duration-300 transform"
-                  From: "translate-x-full"
-                  To: "translate-x-0"
-                Leaving: "transition ease-in-out duration-300 transform"
-                  From: "translate-x-0"
-                  To: "translate-x-full"
-              -->
                         <div
                             class="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl">
                             <div class="flex items-center justify-between px-4">
@@ -53,20 +28,14 @@
                             <form class="mt-4 border-t border-gray-200">
                                 <h3 class="sr-only">Categories</h3>
                                 <ul role="list" class="px-2 py-3 font-medium text-gray-900">
+                                    <li class="font-medium text-black">Tipe Proyek</li>
                                     <li>
-                                        <a href="#" class="block px-2 py-3">Totes</a>
+                                        <button type="button" id="filter-existing" class="block px-2 py-3">Aplikasi yang
+                                            sudah ada</button>
                                     </li>
                                     <li>
-                                        <a href="#" class="block px-2 py-3">Backpacks</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="block px-2 py-3">Travel Bags</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="block px-2 py-3">Hip Bags</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="block px-2 py-3">Laptop Sleeves</a>
+                                        <button type="button" id="filter-new" class="block px-2 py-3">Aplikasi
+                                            baru</button>
                                     </li>
                                 </ul>
 
@@ -75,8 +44,8 @@
                                         <!-- Expand/collapse section button -->
                                         <button type="button"
                                             class="flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500"
-                                            aria-controls="filter-section-mobile-0" aria-expanded="false">
-                                            <span class="font-medium text-gray-900">Color</span>
+                                            aria-controls="filter-section-mobile-0" aria-expanded="true">
+                                            <span class="font-medium text-gray-900">Platform</span>
                                             <span class="ml-6 flex items-center">
                                                 <!-- Expand icon, show/hide based on section open state. -->
                                                 <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"
@@ -98,185 +67,55 @@
                                     <div class="pt-6" id="filter-section-mobile-0">
                                         <div class="space-y-6">
                                             <div class="flex items-center">
-                                                <input id="filter-mobile-color-0" name="color[]" value="white"
+                                                <input id="filter-platform-web" name="platform[]" value="web"
                                                     type="checkbox"
-                                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                                                <label for="filter-mobile-color-0"
-                                                    class="ml-3 min-w-0 flex-1 text-gray-500">White</label>
+                                                    class="h-4 w-4 rounded border-gray-300 text-accent-light-400 focus:ring-accent-light-500">
+                                                <label for="filter-platform-web"
+                                                    class="ml-3 min-w-0 flex-1 text-gray-500">Web</label>
                                             </div>
                                             <div class="flex items-center">
-                                                <input id="filter-mobile-color-1" name="color[]" value="beige"
+                                                <input id="filter-platform-multi" name="platform[]" value="multi-platform"
                                                     type="checkbox"
-                                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                                                <label for="filter-mobile-color-1"
-                                                    class="ml-3 min-w-0 flex-1 text-gray-500">Beige</label>
+                                                    class="h-4 w-4 rounded border-gray-300 text-accent-light-400 focus:ring-accent-light-500">
+                                                <label for="filter-platform-multi"
+                                                    class="ml-3 min-w-0 flex-1 text-gray-500">Multi-Platform</label>
                                             </div>
                                             <div class="flex items-center">
-                                                <input id="filter-mobile-color-2" name="color[]" value="blue"
-                                                    type="checkbox" checked
-                                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                                                <label for="filter-mobile-color-2"
-                                                    class="ml-3 min-w-0 flex-1 text-gray-500">Blue</label>
+                                                <input id="filter-platform-mobile" name="platform[]" value="mobile"
+                                                    type="checkbox"
+                                                    class="h-4 w-4 rounded border-gray-300 text-accent-light-400 focus:ring-accent-light-500">
+                                                <label for="filter-platform-mobile"
+                                                    class="ml-3 min-w-0 flex-1 text-gray-500">Mobile</label>
                                             </div>
                                             <div class="flex items-center">
-                                                <input id="filter-mobile-color-3" name="color[]" value="brown"
+                                                <input id="filter-platform-desktop" name="platform[]" value="desktop"
                                                     type="checkbox"
-                                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                                                <label for="filter-mobile-color-3"
-                                                    class="ml-3 min-w-0 flex-1 text-gray-500">Brown</label>
-                                            </div>
-                                            <div class="flex items-center">
-                                                <input id="filter-mobile-color-4" name="color[]" value="green"
-                                                    type="checkbox"
-                                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                                                <label for="filter-mobile-color-4"
-                                                    class="ml-3 min-w-0 flex-1 text-gray-500">Green</label>
-                                            </div>
-                                            <div class="flex items-center">
-                                                <input id="filter-mobile-color-5" name="color[]" value="purple"
-                                                    type="checkbox"
-                                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                                                <label for="filter-mobile-color-5"
-                                                    class="ml-3 min-w-0 flex-1 text-gray-500">Purple</label>
+                                                    class="h-4 w-4 rounded border-gray-300 text-accent-light-400 focus:ring-accent-light-500">
+                                                <label for="filter-platform-desktop"
+                                                    class="ml-3 min-w-0 flex-1 text-gray-500">Desktop</label>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="border-t border-gray-200 px-4 py-6">
-                                    <h3 class="-mx-2 -my-3 flow-root">
-                                        <!-- Expand/collapse section button -->
-                                        <button type="button"
-                                            class="flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500"
-                                            aria-controls="filter-section-mobile-1" aria-expanded="false">
-                                            <span class="font-medium text-gray-900">Category</span>
-                                            <span class="ml-6 flex items-center">
-                                                <!-- Expand icon, show/hide based on section open state. -->
-                                                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"
-                                                    aria-hidden="true" data-slot="icon">
-                                                    <path
-                                                        d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" />
-                                                </svg>
-                                                <!-- Collapse icon, show/hide based on section open state. -->
-                                                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"
-                                                    aria-hidden="true" data-slot="icon">
-                                                    <path fill-rule="evenodd"
-                                                        d="M4 10a.75.75 0 0 1 .75-.75h10.5a.75.75 0 0 1 0 1.5H4.75A.75.75 0 0 1 4 10Z"
-                                                        clip-rule="evenodd" />
-                                                </svg>
-                                            </span>
-                                        </button>
-                                    </h3>
                                     <!-- Filter section, show/hide based on section state. -->
-                                    <div class="pt-6" id="filter-section-mobile-1">
-                                        <div class="space-y-6">
-                                            <div class="flex items-center">
-                                                <input id="filter-mobile-category-0" name="category[]"
-                                                    value="new-arrivals" type="checkbox"
-                                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                                                <label for="filter-mobile-category-0"
-                                                    class="ml-3 min-w-0 flex-1 text-gray-500">New Arrivals</label>
+                                    <div class="pt-6" id="filter-section-mob-1">
+                                        <section class="section wrapper wrapper-section">
+                                            <div class="container wrapper-column">
+                                                <div class="form-group">
+                                                    <span class="form-arrow"><i class="bx bx-chevron-down"></i></span>
+                                                    <select name="organization" id="organization"
+                                                        class="select_org_mob  rounded-xl text-sm">
+                                                        <option disabled>Pilih Organisasi</option>
+                                                        <option value="">Semua Organisasi</option>
+                                                        @foreach ($organization as $o)
+                                                            <option value="{{ $o->organization_code }}">
+                                                                {{ $o->organization_name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
                                             </div>
-                                            <div class="flex items-center">
-                                                <input id="filter-mobile-category-1" name="category[]" value="sale"
-                                                    type="checkbox"
-                                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                                                <label for="filter-mobile-category-1"
-                                                    class="ml-3 min-w-0 flex-1 text-gray-500">Sale</label>
-                                            </div>
-                                            <div class="flex items-center">
-                                                <input id="filter-mobile-category-2" name="category[]" value="travel"
-                                                    type="checkbox" checked
-                                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                                                <label for="filter-mobile-category-2"
-                                                    class="ml-3 min-w-0 flex-1 text-gray-500">Travel</label>
-                                            </div>
-                                            <div class="flex items-center">
-                                                <input id="filter-mobile-category-3" name="category[]"
-                                                    value="organization" type="checkbox"
-                                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                                                <label for="filter-mobile-category-3"
-                                                    class="ml-3 min-w-0 flex-1 text-gray-500">Organization</label>
-                                            </div>
-                                            <div class="flex items-center">
-                                                <input id="filter-mobile-category-4" name="category[]"
-                                                    value="accessories" type="checkbox"
-                                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                                                <label for="filter-mobile-category-4"
-                                                    class="ml-3 min-w-0 flex-1 text-gray-500">Accessories</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="border-t border-gray-200 px-4 py-6">
-                                    <h3 class="-mx-2 -my-3 flow-root">
-                                        <!-- Expand/collapse section button -->
-                                        <button type="button"
-                                            class="flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500"
-                                            aria-controls="filter-section-mobile-2" aria-expanded="false">
-                                            <span class="font-medium text-gray-900">Size</span>
-                                            <span class="ml-6 flex items-center">
-                                                <!-- Expand icon, show/hide based on section open state. -->
-                                                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"
-                                                    aria-hidden="true" data-slot="icon">
-                                                    <path
-                                                        d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" />
-                                                </svg>
-                                                <!-- Collapse icon, show/hide based on section open state. -->
-                                                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"
-                                                    aria-hidden="true" data-slot="icon">
-                                                    <path fill-rule="evenodd"
-                                                        d="M4 10a.75.75 0 0 1 .75-.75h10.5a.75.75 0 0 1 0 1.5H4.75A.75.75 0 0 1 4 10Z"
-                                                        clip-rule="evenodd" />
-                                                </svg>
-                                            </span>
-                                        </button>
-                                    </h3>
-                                    <!-- Filter section, show/hide based on section state. -->
-                                    <div class="pt-6" id="filter-section-mobile-2">
-                                        <div class="space-y-6">
-                                            <div class="flex items-center">
-                                                <input id="filter-mobile-size-0" name="size[]" value="2l"
-                                                    type="checkbox"
-                                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                                                <label for="filter-mobile-size-0"
-                                                    class="ml-3 min-w-0 flex-1 text-gray-500">2L</label>
-                                            </div>
-                                            <div class="flex items-center">
-                                                <input id="filter-mobile-size-1" name="size[]" value="6l"
-                                                    type="checkbox"
-                                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                                                <label for="filter-mobile-size-1"
-                                                    class="ml-3 min-w-0 flex-1 text-gray-500">6L</label>
-                                            </div>
-                                            <div class="flex items-center">
-                                                <input id="filter-mobile-size-2" name="size[]" value="12l"
-                                                    type="checkbox"
-                                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                                                <label for="filter-mobile-size-2"
-                                                    class="ml-3 min-w-0 flex-1 text-gray-500">12L</label>
-                                            </div>
-                                            <div class="flex items-center">
-                                                <input id="filter-mobile-size-3" name="size[]" value="18l"
-                                                    type="checkbox"
-                                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                                                <label for="filter-mobile-size-3"
-                                                    class="ml-3 min-w-0 flex-1 text-gray-500">18L</label>
-                                            </div>
-                                            <div class="flex items-center">
-                                                <input id="filter-mobile-size-4" name="size[]" value="20l"
-                                                    type="checkbox"
-                                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                                                <label for="filter-mobile-size-4"
-                                                    class="ml-3 min-w-0 flex-1 text-gray-500">20L</label>
-                                            </div>
-                                            <div class="flex items-center">
-                                                <input id="filter-mobile-size-5" name="size[]" value="40l"
-                                                    type="checkbox" checked
-                                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                                                <label for="filter-mobile-size-5"
-                                                    class="ml-3 min-w-0 flex-1 text-gray-500">40L</label>
-                                            </div>
-                                        </div>
+                                        </section>
                                     </div>
                                 </div>
                             </form>
@@ -284,13 +123,13 @@
                     </div>
                 </div>
 
-                <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-7">
                     <div class="text-center mb-5 w-2xl">
                         <h1 data-aos="fade-up" class="font-semibold text-2xl">Butuh Aplikasi?</h1>
                         <h2 data-aos="fade-up" data-aos-duration="300" class="text-xl">Ajukan Kebutuhan Anda terkait
                             aplikasi di organisasi Anda di sini</h2>
                     </div>
-                    <div class="w-full mx-auto">
+                    <div class=" max-w-2xl mx-auto">
                         <label for="search"
                             class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Cari</label>
                         <div class="relative w-full">
@@ -315,7 +154,8 @@
                         <div class="flex items-center">
                             <div class="relative inline-block text-left">
                                 <div>
-                                    <button type="button" id="sort-button" data-dropdown-toggle="dropdownHover" data-dropdown-trigger="hover"
+                                    <button type="button" id="sort-button" data-dropdown-toggle="dropdownHover"
+                                        data-dropdown-trigger="hover"
                                         class="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900"
                                         aria-expanded="false" aria-haspopup="true">
                                         Sort
@@ -327,18 +167,32 @@
                                         </svg>
                                     </button>
                                 </div>
-                                <div class="absolute right-0 z-10 mt-2 w-44 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none"
-                                    role="menu" id="dropdownHover" aria-orientation="vertical" aria-labelledby="menu-button"
-                                    tabindex="-1">
+                                <div class="absolute right-0 z-10 mt-2 w-44 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none hidden"
+                                    role="menu" id="dropdownHover" aria-orientation="vertical"
+                                    aria-labelledby="menu-button" tabindex="-1">
                                     <div class="py-1" role="none" aria-labelledby="dropdownHoverButton">
-                                        <button id="sort-by-submission_title-asc" href="#" class="block text-left px-4 py-2 text-xs font-medium text-gray-500 hover:text-gray-900"
-                                            role="menuitem" tabindex="-1" id="menu-item-0">Judul Pengajuan (A-Z)</button>
-                                        <button id="sort-by-submission_title-desc" href="#" class="block text-left px-4 py-2 text-xs font-medium text-gray-500 hover:text-gray-900"
-                                            role="menuitem" tabindex="-1" id="menu-item-0">Judul Pengajuan (Z-A)</button>
-                                        <button id="sort-by-created_at-desc" href="#" class="block px-4 py-2 text-xs text-gray-500 hover:text-gray-900" role="menuitem"
-                                            tabindex="-1" id="menu-item-1">Terbaru</button>
+                                        <button id="sort-by-submission_title-asc" href="#"
+                                            class="block text-left px-4 py-2 text-xs font-medium text-gray-500 hover:text-gray-900"
+                                            role="menuitem" tabindex="-1" id="menu-item-0">Judul Pengajuan
+                                            (A-Z)</button>
+                                        <button id="sort-by-submission_title-desc" href="#"
+                                            class="block text-left px-4 py-2 text-xs font-medium text-gray-500 hover:text-gray-900"
+                                            role="menuitem" tabindex="-1" id="menu-item-1">Judul Pengajuan
+                                            (Z-A)</button>
+                                        <button id="sort-by-created_at-desc" href="#"
+                                            class="block px-4 py-2 text-xs text-gray-500 hover:text-gray-900"
+                                            role="menuitem" tabindex="-1" id="menu-item-2">Terbaru</button>
                                     </div>
                                 </div>
+                            </div>
+
+                            <div class="relative inline-block text-left ml-4">
+                                <label class="text-sm" for="perPageDropdown">Tampilkan:</label>
+                                <select id="perPageDropdown" class="rounded bg-white border-0 text-sm p-2">
+                                    <option value="5">5</option>
+                                    <option value="10">10</option>
+                                    <option value="50">50</option>
+                                </select>
                             </div>
 
                             <button type="button" class="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7">
@@ -364,28 +218,19 @@
                     </div>
 
                     <section aria-labelledby="products-heading" class="pb-24 pt-6">
-                        <h2 id="products-heading" class="sr-only">Products</h2>
+                        <h2 id="products-heading" class="sr-only">Tipe Proyek</h2>
 
                         <div class="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
                             <!-- Filters -->
                             <form class="hidden lg:block">
                                 <h3 class="sr-only">Categories</h3>
-                                <ul role="list"
-                                    class="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900">
+                                <ul role="list" class="space-y-4 border-b border-gray-200 pb-6 text-sm text-gray-900">
+                                    <li class="font-medium text-black">Tipe Proyek</li>
                                     <li>
-                                        <a href="#">Totes</a>
+                                        <button type="button" id="filter-existing">Aplikasi yang sudah ada</button>
                                     </li>
                                     <li>
-                                        <a href="#">Backpacks</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Travel Bags</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Hip Bags</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Laptop Sleeves</a>
+                                        <button type="button" id="filter-new">Aplikasi baru</button>
                                     </li>
                                 </ul>
 
@@ -394,8 +239,8 @@
                                         <!-- Expand/collapse section button -->
                                         <button type="button"
                                             class="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500"
-                                            aria-controls="filter-section-0" aria-expanded="false">
-                                            <span class="font-medium text-gray-900">Color</span>
+                                            aria-controls="filter-section-0" aria-expanded="true">
+                                            <span class="font-medium text-gray-900">Platform</span>
                                             <span class="ml-6 flex items-center">
                                                 <!-- Expand icon, show/hide based on section open state. -->
                                                 <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"
@@ -417,171 +262,64 @@
                                     <div class="pt-6" id="filter-section-0">
                                         <div class="space-y-4">
                                             <div class="flex items-center">
-                                                <input id="filter-color-0" name="color[]" value="white" type="checkbox"
-                                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                                                <label for="filter-color-0"
-                                                    class="ml-3 text-sm text-gray-600">White</label>
+                                                <input id="filter-platform-web" name="platform[]" value="web"
+                                                    type="checkbox"
+                                                    class="h-4 w-4 rounded border-gray-300 text-accent-light-400 focus:ring-accent-light-500">
+                                                <label for="filter-platform-web"
+                                                    class="ml-3 text-sm text-gray-600">Web</label>
                                             </div>
                                             <div class="flex items-center">
-                                                <input id="filter-color-1" name="color[]" value="beige" type="checkbox"
-                                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                                                <label for="filter-color-1"
-                                                    class="ml-3 text-sm text-gray-600">Beige</label>
+                                                <input id="filter-platform-multi" name="platform[]"
+                                                    value="multi-platform" type="checkbox"
+                                                    class="h-4 w-4 rounded border-gray-300 text-accent-light-400 focus:ring-accent-light-500">
+                                                <label for="filter-platform-multi"
+                                                    class="ml-3 text-sm text-gray-600">Multi-Platform</label>
                                             </div>
                                             <div class="flex items-center">
-                                                <input id="filter-color-2" name="color[]" value="blue" type="checkbox"
-                                                    checked
-                                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                                                <label for="filter-color-2"
-                                                    class="ml-3 text-sm text-gray-600">Blue</label>
+                                                <input id="filter-platform-mobile" name="platform[]" value="mobile"
+                                                    type="checkbox"
+                                                    class="h-4 w-4 rounded border-gray-300 text-accent-light-400 focus:ring-accent-light-500">
+                                                <label for="filter-platform-mobile"
+                                                    class="ml-3 text-sm text-gray-600">Mobile</label>
                                             </div>
                                             <div class="flex items-center">
-                                                <input id="filter-color-3" name="color[]" value="brown" type="checkbox"
-                                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                                                <label for="filter-color-3"
-                                                    class="ml-3 text-sm text-gray-600">Brown</label>
-                                            </div>
-                                            <div class="flex items-center">
-                                                <input id="filter-color-4" name="color[]" value="green" type="checkbox"
-                                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                                                <label for="filter-color-4"
-                                                    class="ml-3 text-sm text-gray-600">Green</label>
-                                            </div>
-                                            <div class="flex items-center">
-                                                <input id="filter-color-5" name="color[]" value="purple" type="checkbox"
-                                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                                                <label for="filter-color-5"
-                                                    class="ml-3 text-sm text-gray-600">Purple</label>
+                                                <input id="filter-platform-desktop" name="platform[]" value="desktop"
+                                                    type="checkbox"
+                                                    class="h-4 w-4 rounded border-gray-300 text-accent-light-400 focus:ring-accent-light-500">
+                                                <label for="filter-platform-mobile"
+                                                    class="ml-3 text-sm text-gray-600">Desktop</label>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="border-b border-gray-200 py-6">
                                     <h3 class="-my-3 flow-root">
-                                        <!-- Expand/collapse section button -->
-                                        <button type="button"
-                                            class="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500"
+                                        <div class="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500"
                                             aria-controls="filter-section-1" aria-expanded="false">
-                                            <span class="font-medium text-gray-900">Category</span>
-                                            <span class="ml-6 flex items-center">
-                                                <!-- Expand icon, show/hide based on section open state. -->
-                                                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"
-                                                    aria-hidden="true" data-slot="icon">
-                                                    <path
-                                                        d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" />
-                                                </svg>
-                                                <!-- Collapse icon, show/hide based on section open state. -->
-                                                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"
-                                                    aria-hidden="true" data-slot="icon">
-                                                    <path fill-rule="evenodd"
-                                                        d="M4 10a.75.75 0 0 1 .75-.75h10.5a.75.75 0 0 1 0 1.5H4.75A.75.75 0 0 1 4 10Z"
-                                                        clip-rule="evenodd" />
-                                                </svg>
-                                            </span>
-                                        </button>
+                                            <span class="font-medium text-gray-900">Organisasi</span>
+                                        </div>
                                     </h3>
                                     <!-- Filter section, show/hide based on section state. -->
                                     <div class="pt-6" id="filter-section-1">
-                                        <div class="space-y-4">
-                                            <div class="flex items-center">
-                                                <input id="filter-category-0" name="category[]" value="new-arrivals"
-                                                    type="checkbox"
-                                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                                                <label for="filter-category-0" class="ml-3 text-sm text-gray-600">New
-                                                    Arrivals</label>
+                                        <section class="section wrapper wrapper-section">
+                                            <div class="container wrapper-column">
+                                                <div class="form-group">
+                                                    <span class="form-arrow"><i class="bx bx-chevron-down"></i></span>
+                                                    <select name="organization" id="organization"
+                                                        class="select_org  rounded-xl text-xs">
+                                                        <option disabled>Pilih Organisasi</option>
+                                                        <option value="">Semua Organisasi</option>
+                                                        @foreach ($organization as $o)
+                                                            <option value="{{ $o->organization_code }}">
+                                                                {{ $o->organization_name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
                                             </div>
-                                            <div class="flex items-center">
-                                                <input id="filter-category-1" name="category[]" value="sale"
-                                                    type="checkbox"
-                                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                                                <label for="filter-category-1"
-                                                    class="ml-3 text-sm text-gray-600">Sale</label>
-                                            </div>
-                                            <div class="flex items-center">
-                                                <input id="filter-category-2" name="category[]" value="travel"
-                                                    type="checkbox" checked
-                                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                                                <label for="filter-category-2"
-                                                    class="ml-3 text-sm text-gray-600">Travel</label>
-                                            </div>
-                                            <div class="flex items-center">
-                                                <input id="filter-category-3" name="category[]" value="organization"
-                                                    type="checkbox"
-                                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                                                <label for="filter-category-3"
-                                                    class="ml-3 text-sm text-gray-600">Organization</label>
-                                            </div>
-                                            <div class="flex items-center">
-                                                <input id="filter-category-4" name="category[]" value="accessories"
-                                                    type="checkbox"
-                                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                                                <label for="filter-category-4"
-                                                    class="ml-3 text-sm text-gray-600">Accessories</label>
-                                            </div>
-                                        </div>
+                                        </section>
                                     </div>
                                 </div>
-                                <div class="border-b border-gray-200 py-6">
-                                    <h3 class="-my-3 flow-root">
-                                        <!-- Expand/collapse section button -->
-                                        <button type="button"
-                                            class="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500"
-                                            aria-controls="filter-section-2" aria-expanded="false">
-                                            <span class="font-medium text-gray-900">Size</span>
-                                            <span class="ml-6 flex items-center">
-                                                <!-- Expand icon, show/hide based on section open state. -->
-                                                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"
-                                                    aria-hidden="true" data-slot="icon">
-                                                    <path
-                                                        d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" />
-                                                </svg>
-                                                <!-- Collapse icon, show/hide based on section open state. -->
-                                                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"
-                                                    aria-hidden="true" data-slot="icon">
-                                                    <path fill-rule="evenodd"
-                                                        d="M4 10a.75.75 0 0 1 .75-.75h10.5a.75.75 0 0 1 0 1.5H4.75A.75.75 0 0 1 4 10Z"
-                                                        clip-rule="evenodd" />
-                                                </svg>
-                                            </span>
-                                        </button>
-                                    </h3>
-                                    <!-- Filter section, show/hide based on section state. -->
-                                    <div class="pt-6" id="filter-section-2">
-                                        <div class="space-y-4">
-                                            <div class="flex items-center">
-                                                <input id="filter-size-0" name="size[]" value="2l" type="checkbox"
-                                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                                                <label for="filter-size-0" class="ml-3 text-sm text-gray-600">2L</label>
-                                            </div>
-                                            <div class="flex items-center">
-                                                <input id="filter-size-1" name="size[]" value="6l" type="checkbox"
-                                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                                                <label for="filter-size-1" class="ml-3 text-sm text-gray-600">6L</label>
-                                            </div>
-                                            <div class="flex items-center">
-                                                <input id="filter-size-2" name="size[]" value="12l" type="checkbox"
-                                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                                                <label for="filter-size-2" class="ml-3 text-sm text-gray-600">12L</label>
-                                            </div>
-                                            <div class="flex items-center">
-                                                <input id="filter-size-3" name="size[]" value="18l" type="checkbox"
-                                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                                                <label for="filter-size-3" class="ml-3 text-sm text-gray-600">18L</label>
-                                            </div>
-                                            <div class="flex items-center">
-                                                <input id="filter-size-4" name="size[]" value="20l" type="checkbox"
-                                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                                                <label for="filter-size-4" class="ml-3 text-sm text-gray-600">20L</label>
-                                            </div>
-                                            <div class="flex items-center">
-                                                <input id="filter-size-5" name="size[]" value="40l" type="checkbox"
-                                                    checked
-                                                    class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                                                <label for="filter-size-5" class="ml-3 text-sm text-gray-600">40L</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+
                             </form>
 
                             <!-- Product grid -->
@@ -596,7 +334,8 @@
                                         @include('components.list_view', ['pengajuan' => $submission])
                                     @endif
                                 </div>
-                                <div class="mb-10" data-aos="fade-up" data-aos-duration="700">
+                                <div class="mb-10 flex justify-center items-center mx-auto mt-10" data-aos="fade-up"
+                                    data-aos-duration="700">
                                     {!! $submission->appends(['sort_by' => request('sort_by')])->links('vendor.pagination.custom') !!}
                                 </div>
                             </div>
@@ -606,81 +345,140 @@
             </div>
         </div>
     </div>
-
     <script type="module">
         $(document).ready(function() {
+            $(".select_org").select2();
+            $(".select_org_mob").select2();
+
             const $searchResults = $('#search-results');
             const $pengajuanCount = $('#pengajuan-count');
             const $searchInput = $('#search');
             const $searchButton = $('#search-button');
+            const $perPageDropdown = $('#perPageDropdown');
+            let filterExisting = null;
             const initialHtml = $searchResults.html();
             const initialCount = $pengajuanCount.text();
+            const toggleButton = document.querySelector('button[aria-controls="filter-section-0"]');
+            const toggleButtonMob = document.querySelector('button[aria-controls="filter-section-mobile-0"]');
+            const filterSection = document.getElementById('filter-section-0');
+            const filterSectionMob = document.getElementById('filter-section-mobile-0');
+            const icons = toggleButton.querySelectorAll('svg[data-slot="icon"]');
+            let selectedOrganization = null;
 
-            const performSearch = () => {
-                const query = $searchInput.val().trim();
+            toggleButton.addEventListener('click', () => {
+                const isExpanded = toggleButton.getAttribute('aria-expanded') === 'true';
+                toggleButton.setAttribute('aria-expanded', !isExpanded);
 
-                if (!query) {
-                    resetSearch();
-                    return;
-                }
+                filterSection.style.display = isExpanded ? 'none' : 'block';
 
-                $.ajax({
-                    url: "{{ route('submissions.search') }}",
-                    type: "GET",
-                    data: {
-                        'search': query
-                    },
-                    success: (data) => {
-                        $searchResults.html(data.html);
-                        $pengajuanCount.text(data.count);
-                    },
-                    error: (jqXHR, textStatus, errorThrown) => console.error("AJAX error: ", textStatus,
-                        errorThrown)
-                });
-            };
+                icons.forEach(icon => icon.classList.toggle('hidden'));
+            });
+
+            toggleButtonMob.addEventListener('click', () => {
+                const isExpandedMob = toggleButtonMob.getAttribute('aria-expanded') === 'true';
+                toggleButtonMob.setAttribute('aria-expanded', !isExpandedMob);
+
+                filterSectionMob.style.display = isExpandedMob ? 'none' : 'block';
+
+                icons.forEach(icon => icon.classList.toggle('hidden'));
+            });
+
+            // Initialize as expanded (visible)
+            filterSection.style.display = 'block';
+            icons[0].classList.add('hidden'); // Hide expand icon initially
+
+            filterSectionMob.style.display = 'block';
+            icons[0].classList.add('hidden'); // Hide expand icon initially
 
             const resetSearch = () => {
                 $searchResults.html(initialHtml);
                 $pengajuanCount.text(initialCount);
             };
 
-            $searchButton.on('click', performSearch);
-            $searchInput.on('input', () => {
-                if (!$searchInput.val().trim()) resetSearch();
-            });
-            $searchInput.on('keypress', (e) => {
-                if (e.which == 13) performSearch();
-            });
+            const performSearchOrSort = (sortBy = null, sortDirection = null) => {
+                const query = $searchInput.val().trim();
+                let platform = [];
+                const perPage = $perPageDropdown.val();
 
-            // Sorting buttons
-            $('#sort-by-submission_title-asc, #sort-by-submission_title-desc, #sort-by-created_at-desc').on('click', (e) => {
-                const sortBy = e.currentTarget.id.split('-')[2];
-                const sortDirection = e.currentTarget.id.split('-')[3];
-                performSort(sortBy, sortDirection);
-            });
+                // Ambil nilai checkbox platform yang dicentang
+                $('input[name="platform[]"]:checked').each(function() {
+                    platform.push($(this).val());
+                });
 
-            const performSort = (sortBy, sortDirection) => {
-                const search = $searchInput.val().trim();
+                if (!query && !sortBy && filterExisting === null && platform.length === 0 && !
+                    selectedOrganization) {
+                    resetSearch();
+                    return;
+                }
+
+                const requestData = {
+                    'search': query,
+                    'platform': platform,
+                    'per_page': perPage
+                };
+                if (sortBy && sortDirection) {
+                    requestData.sort_by = sortBy;
+                    requestData.sort_direction = sortDirection;
+                }
+                if (filterExisting !== null) {
+                    requestData.existing_app = filterExisting; // Tambahkan filter sebagai boolean
+                }
+                if (selectedOrganization) {
+                    requestData.organization = selectedOrganization;
+                }
 
                 $.ajax({
                     url: "{{ route('submissions.search') }}",
                     type: "GET",
-                    data: {
-                        'search': search,
-                        'sort_by': sortBy,
-                        'sort_direction': sortDirection
-                    },
+                    data: requestData,
                     success: (data) => {
                         $searchResults.html(data.html);
                         $pengajuanCount.text(data.count);
-
-                        window.history.pushState("", "", `?search=${search}&sort_by=${sortBy}`);
+                        if (sortBy && sortDirection) {
+                            window.history.pushState("", "",
+                                `?search=${query}&sort_by=${sortBy}&existing_app=${filterExisting}&platform=${platform.join(',')}&organization=${selectedOrganization}&perPage=${perPage}`
+                            );
+                        }
                     },
-                    error: (jqXHR, textStatus, errorThrown) => console.error("AJAX error: ", textStatus,
-                        errorThrown)
+                    error: (jqXHR, textStatus, errorThrown) => {
+                        console.error("AJAX error: ", textStatus, errorThrown);
+                    }
                 });
             };
 
+            $searchButton.on('click', () => performSearchOrSort());
+            $searchInput.on('input', () => {
+                if (!$searchInput.val().trim()) resetSearch();
+            });
+            $searchInput.on('keypress', (e) => {
+                if (e.which == 13) performSearchOrSort();
+            });
+
+            $('input[name="platform[]"]').on('change', () => performSearchOrSort());
+
+            $('#sort-by-submission_title-asc, #sort-by-submission_title-desc, #sort-by-created_at-desc').on('click',
+                (e) => {
+                    const [sortBy, sortDirection] = e.currentTarget.id.split('-').slice(2);
+                    performSearchOrSort(sortBy, sortDirection);
+                });
+
+            $perPageDropdown.on('change', () => {
+                performSearchOrSort();
+            });
+
+            // Event handler untuk tombol filter
+            $('#filter-existing').on('click', () => {
+                filterExisting = true;
+                performSearchOrSort();
+            });
+            $('#filter-new').on('click', () => {
+                filterExisting = false;
+                performSearchOrSort();
+            });
+            $('#organization').on('change', function() {
+                selectedOrganization = $(this).val(); // Set nilai organisasi yang dipilih
+                performSearchOrSort();
+            });
         });
     </script>
 @endsection

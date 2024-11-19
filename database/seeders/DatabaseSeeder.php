@@ -4,15 +4,10 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Models\Admin;
-use App\Models\Review;
 use App\Models\Reviewer;
-use App\Models\Pengajuan;
 use App\Models\Reference;
-use App\Models\Referensi;
 use App\Models\Submitter;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Submission;
-use App\Models\HasilReview;
 use App\Models\Organization;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -21,7 +16,7 @@ class DatabaseSeeder extends Seeder
 {
     /**
      * Seed the application's database.
-     */
+     */ 
     public function run(): void
     {
         Organization::create([
@@ -71,6 +66,4 @@ class DatabaseSeeder extends Seeder
         // // Review::factory(5)->create();
         Reviewer::factory(10)->create();
     }
-
-
 }

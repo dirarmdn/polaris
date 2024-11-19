@@ -21,7 +21,7 @@
                     Tambah Admin
                 </a>
                 <!-- Form Pencarian -->
-                <form action="{{ route('admins.index') }}" method="GET" class="relative">
+                <form action="{{ route('admin.index') }}" method="GET" class="relative">
                     <input type="text" name="nama" id="table-search"
                         class="block w-80 p-2 pr-11 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:ring-secondary-600 focus:border-primary-900"
                         placeholder="Search Here" value="{{ request('nama') }}">
@@ -49,11 +49,11 @@
                     <tbody>
                         @foreach ($admins as $admin)
                             <tr>
-                                <td class="px-6 py-4">{{ $admin->nama }}</td>
+                                <td class="px-6 py-4">{{ $admin->name }}</td>
                                 <td class="px-6 py-4">{{ $admin->email }}</td>
                                 <td class="px-6 py-4 text-center">{{ $admin->role == 2 ? 'Admin' : 'Reviewer' }}</td>
                                 <td class="px-6 py-4 text-center items-center flex justify-center">
-                                    <a href="{{ route('admin.admins.show', ['id' => $admin->id]) }}"
+                                    <a href="{{ route('admin.show', ['admin' => $admin]) }}"
                                         class="flex items-center text-black-600 mx-auto">
                                         <span
                                             class="inline-flex items-center px-4 py-1 text-sm font-semibold text-white bg-blue-500 rounded-full">

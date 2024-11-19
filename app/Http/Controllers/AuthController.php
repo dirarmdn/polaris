@@ -95,7 +95,6 @@ class AuthController extends Controller
 
         // Attempt to log the user in
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            // Redirect to intended page or dashboard
             return redirect()->intended('dashboard')->with('success', 'Login successful!');
         }
 

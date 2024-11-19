@@ -67,9 +67,23 @@ class OrganizationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateOrganizationRequest $request, Organization $organization)
+    public function update(UpdateOrganizationRequest $request, $id)
     {
         //
+        $request->validated();
+    
+        $organization = Organization::findOrFail($id);
+        $organization->fill($request->all());
+    
+        if($request->hasFile('logo')) {
+            $path = $request->logo->store('organization', 'public');
+            $organization->logo = $path;
+        }
+    
+        $organization->save();
+    
+        return redirect()->back()
+            ->with('success', 'Selamat, profil Anda berhasil diperbaharui!');
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Ramsey\Uuid\Uuid; 
+//use Iluminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Str;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -34,11 +35,11 @@ class User extends Authenticatable
     {
         return false;
     }
-
+    
     public function getKeyType()
     {
         return 'string';
-    }
+    }    
     /**
      * The attributes that are mass assignable.
      *
@@ -49,9 +50,10 @@ class User extends Authenticatable
         'name',
         'email',
         'phone_number',
-        'organization_code',
+        'kode_organisasi',
         'role',
         'password',
+        'avatar'
     ];
 
     /**

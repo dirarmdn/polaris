@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="mx-auto container px-20">
-    <h1 class="text-3xl font-bold header-title mb-5">
+    <h1 class="text-2xl font-bold header-title mb-5">
         Data
         <span class="text-accent-light-500">Mitra</span>
     </h1>

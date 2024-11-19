@@ -8,6 +8,7 @@
     <link rel="icon" href="{{ asset('images/Logo-mini.png') }}" type="image/x-icon"/>
     @vite('resources/css/app.css')
     @stack('styles')
+    @include('sweetalert::alert')
 </head>
 <body>
     <header>

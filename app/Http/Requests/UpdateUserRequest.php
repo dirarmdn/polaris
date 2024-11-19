@@ -4,14 +4,14 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdatePengajuRequest extends FormRequest
+class UpdateUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,6 +23,10 @@ class UpdatePengajuRequest extends FormRequest
     {
         return [
             //
+            'name' => 'sometimes|required|string|max:150',
+            'no_telp' => 'nullable|string',
+            'avatar' => 'nullable|image|max:2048',
+            'position_in_organization' => 'nullable|string|max:255',
         ];
     }
 }

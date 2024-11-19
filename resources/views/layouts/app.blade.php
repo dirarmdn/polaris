@@ -9,6 +9,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @vite('resources/js/app.js')
     @vite('resources/css/app.css')
+    @include('sweetalert::alert')
 </head>
 <body>
     <header>
