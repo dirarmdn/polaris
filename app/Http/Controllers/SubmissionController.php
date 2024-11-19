@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Organization;
 use App\Models\Submission;
+use App\Models\Reference;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreSubmissionRequest;
@@ -26,7 +27,29 @@ class SubmissionController extends Controller
     
         return view('submissions.index', compact('submission', 'organization'));
     }
-    
+
+    public function print(Request $request)
+    {
+        // Ambil input pencarian dari form
+        $submission_title = $request->input('submission_title');
+
+        // Ambil user yang sedang login
+        $user = auth()->user();
+
+        // Query untuk mengambil semua data dengan pencarian tanpa pagination
+        $data_pengajuans = Submission::with('submitter') // Mengambil relasi user
+            ->when($submission_title, function ($query) use ($submission_title) {
+                // Filter berdasarkan judul pengajuan jika ada pencarian
+                return $query->where('submission_title', 'LIKE', '%' . $submission_title . '%');
+            })
+            ->get(); // Mengambil semua data tanpa pagination
+
+        // Kirimkan data ke view dengan hasil pencarian
+        return view('dashboard.submissions.print-submission', [
+            'data_pengajuans' => $data_pengajuans,
+            'submission_title' => $submission_title,
+        ]);
+    } 
 
     public function search(Request $request)
     {
@@ -90,6 +113,9 @@ class SubmissionController extends Controller
     public function store(StoreSubmissionRequest $request)
     {
         $data = $request->validated();
+
+        // Debug: Tampilkan data referensi yang diterima
+        \Log::info('Referensi data:', $request->input('referensi'));
 
         // Add additional data
         $data['submitter_id'] = Auth::user()->submitter->submitter_id;

@@ -47,7 +47,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/pengajuan', [SubmissionController::class, 'showAllSubmissions'])->name('dashboard.submissions.index');
         Route::get('/pengajuan/detail/{submission_code}', [SubmissionController::class, 'showSubmission'])->name('dashboard.submissions.show');
         Route::get('/pengajuan/create', [SubmissionController::class, 'create'])->name('submissions.create');
-        Route::post('/pengajuan/store', [SubmissionController::class, 'store'])->name('submissions.store');    
+        Route::post('/pengajuan/store', [SubmissionController::class, 'store'])->name('submissions.store');
+        Route::get('/pengajuan/print', [SubmissionController::class, 'print'])->name('dashboard.submissions.print');    
     });
     
     Route::resource('/user', UserController::class);
