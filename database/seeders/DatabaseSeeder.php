@@ -15,6 +15,7 @@ use App\Models\Submission;
 use App\Models\HasilReview;
 use App\Models\Organization;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -33,12 +34,43 @@ class DatabaseSeeder extends Seeder
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
+
+        $admin = User::create([
+            'name' => 'Mamang Admin',
+            'email' => 'mamang@polaris.com',
+            'phone_number' => '0987654321',
+            'role' => 2,
+            'password' => Hash::make('password123!')
+        ]);
+
+        $reviewer = User::create([
+            'name' => 'Asep bin Budi',
+            'email' => 'asepbinbudi@polaris.com',
+            'phone_number' => '0987654321',
+            'role' => 3,
+            'password' => Hash::make('password123!')
+        ]);
+        
+        Admin::create([
+            'nip' => '1234567890',
+            'user_id' => $admin->user_id
+        ]);
+
+        Reviewer::create([
+            'nip_reviewer' => '1234567890',
+            'user_id' => $reviewer->user_id,
+            'isActive' => true,
+            'review_total' => 0
+        ]);
+
         Organization::factory(10)->create();
         User::factory(10)->create();
         Submitter::factory(10)->create();
         Submission::factory(30)->create();
         Reference::factory(5)->create();
-        // Review::factory(5)->create();
+        // // Review::factory(5)->create();
         Reviewer::factory(10)->create();
     }
+
+
 }
