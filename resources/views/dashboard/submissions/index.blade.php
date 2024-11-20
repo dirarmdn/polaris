@@ -52,8 +52,13 @@
             <thead class="text-lg text-nowrap text-black-900 bg-gray-50 border-b">
                 <tr>
                     <th scope="col" class="px-6 py-4 font-semibold">Judul Aplikasi</th>
-                    <th scope="col" class="px-5 py-4 font-semibold">Pengaju</th>
-                    <th scope="col" class="px-5 py-4 font-semibold">Asal Organisasi</th>
+                    @if (auth()->user()->role != 1)
+                        <th scope="col" class="px-5 py-4 font-semibold">Pengaju</th>
+                        <th scope="col" class="px-5 py-4 font-semibold">Asal Organisasi</th>
+                    @else
+                        <th scope="col" class="px-5 py-4 font-semibold">Hasil Review</th>
+                        <th scope="col" class="px-5 py-4 font-semibold">Tanggal Review</th>
+                    @endif
                     <th scope="col" class="px-6 py-4 font-semibold">Tanggal Pengajuan</th>
                     <th scope="col" class="px-6 py-4 text-center font-semibold">Status</th>
                     <th scope="col" class="px-6 py-4 text-center font-semibold">Aksi</th>
@@ -64,10 +69,27 @@
                 @forelse($data_pengajuans as $pengajuan)
                     <tr class="bg-white border-b hover:bg-gray-50">
                         <td class="px-6 py-4">{{ $pengajuan->submission_title }}</td>
-                        <td class="px-6 py-4">{{ $pengajuan->submitter->user->name ?? 'Tidak diketahui' }}</td>
-                        <td class="px-6 py-4">{{ $pengajuan->submitter->organization->organization_name ?? 'Tidak diketahui' }}</td>
+                        @if (auth()->user()->role != 1)
+                            <td class="px-6 py-4">
+                                {{ auth()->user()->role == 3
+                                    ? $pengajuan->submitter_name ?? 'Tidak diketahui'
+                                    : $pengajuan->submitter->user->name ?? 'Tidak diketahui' }}
+                            </td>
+                            <td class="px-6 py-4">
+                                {{ auth()->user()->role == 3
+                                    ? $pengajuan->organization_name ?? 'Tidak diketahui'
+                                    : $pengajuan->submitter->organization->organization_name ?? 'Tidak diketahui' }}
+                            </td>
+                        @else
                         <td class="px-6 py-4">
-                            {{ $pengajuan->created_at ? $pengajuan->created_at->format('Y-m-d H:i:s') : 'Tanggal tidak tersedia' }}
+                        {{ $pengajuan->review_description ?? 'Belum di-review' }}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ $pengajuan->review_date ?? 'Belum di-review' }}
+                            </td>
+                        @endif
+                        <td class="px-6 py-4">
+                            {{ $pengajuan->created_at ? $pengajuan->created_at : 'Tanggal tidak tersedia' }}
                         </td>
                         <td class="px-6 py-4 text-center">
                             @if ($pengajuan->status == 'terverifikasi')
@@ -82,14 +104,14 @@
                                     class="inline-block min-w-40 px-3 py-1 text-sm font-semibold text-white bg-red-500 rounded-full">
                                     Ditolak</span>
                             @elseif ($pengajuan->status == 'diarsipkan')
-                                    <span
-                                        class="inline-block min-w-40 px-3 py-1 text-sm font-semibold text-white bg-gray-300 rounded-full">
-                                        Diarsipkan</span>
+                                <span
+                                    class="inline-block min-w-40 px-3 py-1 text-sm font-semibold text-white bg-gray-300 rounded-full">
+                                    Diarsipkan</span>
                             @endif
                         </td>
                         @if (auth()->user()->role == 3)
                             <td class="px-6 py-4">
-                                <a href="{{ route('dashboard.submissions.review.create', ['submission_code' => $pengajuan->submission_code]) }}"
+                                <a href="{{ route('review.edit', ['review' => $pengajuan->submission_code]) }}"
                                     class="flex items-center text-black-600 mx-auto">
                                     <span
                                         class="inline-flex items-center px-4 py-1 text-sm font-semibold text-white bg-blue-500 rounded-full">
@@ -101,11 +123,26 @@
                                 </a>
                             </td>
                         @else
-                            <td class="px-6 py-4">
+                            <td class="px-6 py-4 flex items-center justify-center gap-2">
                                 <a href="{{ route('submissions.show', ['submission_code' => $pengajuan->submission_code]) }}"
-                                    class="flex items-center text-nowrap text-black-600">
-                                    <span class="material-symbols-outlined mr-1 text-lg">visibility</span> Lihat Detail
+                                    class="flex items-center text-nowrap text-black-600 text-secondary-800">
+                                    <span class="material-symbols-outlined mr-1 text-lg">visibility</span>
                                 </a>
+                                @if ($pengajuan->status != 'terverifikasi')
+                                    <a href="{{ route('submissions.edit', ['submission_code' => $pengajuan->submission_code]) }}"
+                                        class="flex items-center text-nowrap text-black-600 text-accent-light-500">
+                                        <span class="material-symbols-outlined mr-1 text-lg">edit</span>
+                                    </a>
+                                    <form method="POST"
+                                        action="{{ route('submission.destroy', ['submission_code' => $pengajuan->submission_code]) }}"
+                                        class="flex items-center text-nowrap text-black-600 text-red-500">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit">
+                                            <span class="material-symbols-outlined mr-1 text-lg">delete</span>
+                                        </button>
+                                    </form>
+                                @endif
                             </td>
                         @endif
                     </tr>

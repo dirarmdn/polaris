@@ -14,7 +14,7 @@
                             class="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl">
                             <div class="flex items-center justify-between px-4">
                                 <h2 class="text-lg font-medium text-gray-900">Filters</h2>
-                                <button type="button"
+                                <button type="button" id="closeMenu"
                                     class="-mr-2 flex h-10 w-10 items-center justify-center rounded-md bg-white p-2 text-gray-400">
                                     <span class="sr-only">Close menu</span>
                                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -25,16 +25,16 @@
                             </div>
 
                             <!-- Filters -->
-                            <form class="mt-4 border-t border-gray-200">
+                            <div class="mt-4 border-t border-gray-200">
                                 <h3 class="sr-only">Categories</h3>
                                 <ul role="list" class="px-2 py-3 font-medium text-gray-900">
                                     <li class="font-medium text-black">Tipe Proyek</li>
                                     <li>
-                                        <button type="button" id="filter-existing" class="block px-2 py-3">Aplikasi yang
+                                        <button type="button" id="filter-existing-mob" class="block px-2 py-3">Aplikasi yang
                                             sudah ada</button>
                                     </li>
                                     <li>
-                                        <button type="button" id="filter-new" class="block px-2 py-3">Aplikasi
+                                        <button type="button" id="filter-new-mob" class="block px-2 py-3">Aplikasi
                                             baru</button>
                                     </li>
                                 </ul>
@@ -49,13 +49,13 @@
                                             <span class="ml-6 flex items-center">
                                                 <!-- Expand icon, show/hide based on section open state. -->
                                                 <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"
-                                                    aria-hidden="true" data-slot="icon">
+                                                    aria-hidden="true" data-slot="icon-mob">
                                                     <path
                                                         d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" />
                                                 </svg>
                                                 <!-- Collapse icon, show/hide based on section open state. -->
                                                 <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"
-                                                    aria-hidden="true" data-slot="icon">
+                                                    aria-hidden="true" data-slot="icon-mob">
                                                     <path fill-rule="evenodd"
                                                         d="M4 10a.75.75 0 0 1 .75-.75h10.5a.75.75 0 0 1 0 1.5H4.75A.75.75 0 0 1 4 10Z"
                                                         clip-rule="evenodd" />
@@ -97,28 +97,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="border-t border-gray-200 px-4 py-6">
-                                    <!-- Filter section, show/hide based on section state. -->
-                                    <div class="pt-6" id="filter-section-mob-1">
-                                        <section class="section wrapper wrapper-section">
-                                            <div class="container wrapper-column">
-                                                <div class="form-group">
-                                                    <span class="form-arrow"><i class="bx bx-chevron-down"></i></span>
-                                                    <select name="organization" id="organization"
-                                                        class="select_org_mob  rounded-xl text-sm">
-                                                        <option disabled>Pilih Organisasi</option>
-                                                        <option value="">Semua Organisasi</option>
-                                                        @foreach ($organization as $o)
-                                                            <option value="{{ $o->organization_code }}">
-                                                                {{ $o->organization_name }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </section>
-                                    </div>
-                                </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -126,8 +105,8 @@
                 <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-7">
                     <div class="text-center mb-5 w-2xl">
                         <h1 data-aos="fade-up" class="font-semibold text-2xl">Butuh Aplikasi?</h1>
-                        <h2 data-aos="fade-up" data-aos-duration="300" class="text-xl">Ajukan Kebutuhan Anda terkait
-                            aplikasi di organisasi Anda di sini</h2>
+                        <h2 data-aos="fade-up" data-aos-duration="300" class="text-xl">Ajukan permintaan aplikasi yang
+                            dibutuhkan organisasi Anda di sini</h2>
                     </div>
                     <div class=" max-w-2xl mx-auto">
                         <label for="search"
@@ -148,54 +127,54 @@
                         </div>
                     </div>
                     <div class="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-10">
-                        <h2 class="text-sm md:text-base"><span id="pengajuan-count">{{ $submission->count() }}</span>
+                        <h2 class="text-sm md:text-base"><span id="pengajuan-count">{{ $submissions->count() }}</span>
                             Pengajuan ditampilkan</h2>
 
                         <div class="flex items-center">
-                            <div class="relative inline-block text-left">
-                                <div>
-                                    <button type="button" id="sort-button" data-dropdown-toggle="dropdownHover"
-                                        data-dropdown-trigger="hover"
-                                        class="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900"
-                                        aria-expanded="false" aria-haspopup="true">
-                                        Sort
-                                        <svg class="-mr-1 ml-1 h-5 w-5 shrink-0 text-gray-400 group-hover:text-gray-500"
-                                            viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
-                                            <path fill-rule="evenodd"
-                                                d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
-                                                clip-rule="evenodd" />
-                                        </svg>
-                                    </button>
-                                </div>
-                                <div class="absolute right-0 z-10 mt-2 w-44 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none hidden"
-                                    role="menu" id="dropdownHover" aria-orientation="vertical"
-                                    aria-labelledby="menu-button" tabindex="-1">
-                                    <div class="py-1" role="none" aria-labelledby="dropdownHoverButton">
-                                        <button id="sort-by-submission_title-asc" href="#"
-                                            class="block text-left px-4 py-2 text-xs font-medium text-gray-500 hover:text-gray-900"
-                                            role="menuitem" tabindex="-1" id="menu-item-0">Judul Pengajuan
-                                            (A-Z)</button>
-                                        <button id="sort-by-submission_title-desc" href="#"
-                                            class="block text-left px-4 py-2 text-xs font-medium text-gray-500 hover:text-gray-900"
-                                            role="menuitem" tabindex="-1" id="menu-item-1">Judul Pengajuan
-                                            (Z-A)</button>
-                                        <button id="sort-by-created_at-desc" href="#"
-                                            class="block px-4 py-2 text-xs text-gray-500 hover:text-gray-900"
-                                            role="menuitem" tabindex="-1" id="menu-item-2">Terbaru</button>
-                                    </div>
-                                </div>
-                            </div>
 
-                            <div class="relative inline-block text-left ml-4">
-                                <label class="text-sm" for="perPageDropdown">Tampilkan:</label>
-                                <select id="perPageDropdown" class="rounded bg-white border-0 text-sm p-2">
+                            <div class="relative inline-block text-left mx-4">
+                                <label class="text-sm" for="perPageDropdown">Tampilkan</label>
+                                <select id="perPageDropdown" class="rounded bg-white text-sm py-1 mx-2">
                                     <option value="5">5</option>
                                     <option value="10">10</option>
                                     <option value="50">50</option>
                                 </select>
+                                <label class="text-sm" for="perPageDropdown">data</label>
                             </div>
 
-                            <button type="button" class="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7">
+                            <div class="relative inline-block text-left">
+                                <div>
+                                    <button type="button" id="sort-button"
+                                        class="group inline-flex border-[1px] border-gray-500 rounded px-2 py-1 justify-center text-sm font-medium text-gray-700"
+                                        aria-expanded="false" aria-haspopup="true">
+                                        Sort by
+                                        <svg class="-mr-1 ml-1 h-5 w-5 shrink-0 text-gray-400" viewBox="0 0 20 20"
+                                        fill="currentColor" aria-hidden="true" data-slot="icon">
+                                        <path fill-rule="evenodd"
+                                            d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    </button>
+                                </div>
+                                <div id="sort-dropdown"
+                                    class="absolute right-0 z-10 mt-2 w-44 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none hidden"
+                                    role="menu" aria-orientation="vertical" aria-labelledby="sort-button"
+                                    tabindex="-1">
+                                    <div class="py-1" role="none">
+                                        <button id="sort-by-submission_title-asc"
+                                            class="block text-left px-4 py-2 text-xs font-medium text-gray-500 hover:bg-gray-100 w-full"
+                                            role="menuitem" tabindex="-1">Judul Pengajuan (A-Z)</button>
+                                        <button id="sort-by-submission_title-desc"
+                                            class="block text-left px-4 py-2 text-xs font-medium text-gray-500 hover:bg-gray-100 w-full"
+                                            role="menuitem" tabindex="-1">Judul Pengajuan (Z-A)</button>
+                                        <button id="sort-by-created_at-desc"
+                                            class="block text-left px-4 py-2 text-xs font-medium text-gray-500 hover:bg-gray-100 w-full"
+                                            role="menuitem" tabindex="-1">Terbaru</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="button" id="openMenu" class="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7">
                                 <span class="sr-only">View grid</span>
                                 <svg class="h-5 w-5" aria-hidden="true" viewBox="0 0 20 20" fill="currentColor"
                                     data-slot="icon">
@@ -204,6 +183,7 @@
                                         clip-rule="evenodd" />
                                 </svg>
                             </button>
+
                             <button type="button"
                                 class="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden">
                                 <span class="sr-only">Filters</span>
@@ -306,10 +286,10 @@
                                                 <div class="form-group">
                                                     <span class="form-arrow"><i class="bx bx-chevron-down"></i></span>
                                                     <select name="organization" id="organization"
-                                                        class="select_org  rounded-xl text-xs">
+                                                        class="select_org rounded-xl text-xs">
                                                         <option disabled>Pilih Organisasi</option>
                                                         <option value="">Semua Organisasi</option>
-                                                        @foreach ($organization as $o)
+                                                        @foreach ($organizations as $o)
                                                             <option value="{{ $o->organization_code }}">
                                                                 {{ $o->organization_name }}</option>
                                                         @endforeach
@@ -326,17 +306,17 @@
                             <div class="lg:col-span-3">
 
                                 <div id="search-results" class="list-view">
-                                    @if ($submission->count() == 0)
+                                    @if ($submissions->count() == 0)
                                         <div class="text-center py-20 bg-gray-100 rounded-lg">
                                             <p class="text-gray-500">Tidak ada data pengajuan yang ditemukan.</p>
                                         </div>
                                     @else
-                                        @include('components.list_view', ['pengajuan' => $submission])
+                                        @include('components.list_view', ['pengajuan' => $submissions])
                                     @endif
                                 </div>
                                 <div class="mb-10 flex justify-center items-center mx-auto mt-10" data-aos="fade-up"
                                     data-aos-duration="700">
-                                    {!! $submission->appends(['sort_by' => request('sort_by')])->links('vendor.pagination.custom') !!}
+                                    {!! $submissions->appends(request()->query())->links('vendor.pagination.custom') !!}
                                 </div>
                             </div>
                         </div>
@@ -348,22 +328,70 @@
     <script type="module">
         $(document).ready(function() {
             $(".select_org").select2();
-            $(".select_org_mob").select2();
 
             const $searchResults = $('#search-results');
-            const $pengajuanCount = $('#pengajuan-count');
             const $searchInput = $('#search');
             const $searchButton = $('#search-button');
-            const $perPageDropdown = $('#perPageDropdown');
-            let filterExisting = null;
             const initialHtml = $searchResults.html();
+
+            const $pengajuanCount = $('#pengajuan-count');
             const initialCount = $pengajuanCount.text();
+
+            let perPage = $('#perPageDropdown').val()
+            let filterExisting = null;
+            let selectedOrganization = null;
+
             const toggleButton = document.querySelector('button[aria-controls="filter-section-0"]');
             const toggleButtonMob = document.querySelector('button[aria-controls="filter-section-mobile-0"]');
             const filterSection = document.getElementById('filter-section-0');
             const filterSectionMob = document.getElementById('filter-section-mobile-0');
             const icons = toggleButton.querySelectorAll('svg[data-slot="icon"]');
-            let selectedOrganization = null;
+            const iconsMob = toggleButton.querySelectorAll('svg[data-slot="icon-mob"]');
+            const sortButton = document.getElementById('sort-button');
+            const sortDropdown = document.getElementById('sort-dropdown');
+                // Get DOM elements
+            const openFilterButton = $('button[id="mobile-filter-open"]');
+            const closeFilterButton = $('button[id="mobile-filter-close"]');
+            const mobileFilterDialog = $('.relative.z-40.lg\\:hidden[role="dialog"]');
+
+            // Tambahkan event listener untuk toggle dropdown
+            sortButton.addEventListener('click', () => {
+                const isExpanded = sortButton.getAttribute('aria-expanded') === 'true';
+
+                // Ubah atribut aria-expanded
+                sortButton.setAttribute('aria-expanded', !isExpanded);
+
+                // Toggle tampilan dropdown
+                if (isExpanded) {
+                    sortDropdown.classList.add('hidden');
+                } else {
+                    sortDropdown.classList.remove('hidden');
+                }
+            });
+
+            // Tutup dropdown jika klik di luar area
+            document.addEventListener('click', (event) => {
+                if (!sortDropdown.contains(event.target) && !sortButton.contains(event.target)) {
+                    sortDropdown.classList.add('hidden');
+                    sortButton.setAttribute('aria-expanded', 'false');
+                }
+            });
+            
+            // Hide mobile filter dialog initially
+            mobileFilterDialog.hide();
+            
+            // Show mobile filter when filter button is clicked
+            openFilterButton.on('click', function() {
+                mobileFilterDialog.show();
+            });
+            
+            // Hide mobile filter when close button or backdrop is clicked
+            const hideFilter = function() {
+                mobileFilterDialog.hide();
+            };
+            
+            closeFilterButton.on('click', hideFilter);
+            mobileFilterDialog.find('.fixed.inset-0.bg-black.bg-opacity-25').on('click', hideFilter);
 
             toggleButton.addEventListener('click', () => {
                 const isExpanded = toggleButton.getAttribute('aria-expanded') === 'true';
@@ -380,10 +408,9 @@
 
                 filterSectionMob.style.display = isExpandedMob ? 'none' : 'block';
 
-                icons.forEach(icon => icon.classList.toggle('hidden'));
+                iconsMob.forEach(icon => icon.classList.toggle('hidden'));
             });
 
-            // Initialize as expanded (visible)
             filterSection.style.display = 'block';
             icons[0].classList.add('hidden'); // Hide expand icon initially
 
@@ -395,56 +422,59 @@
                 $pengajuanCount.text(initialCount);
             };
 
-            const performSearchOrSort = (sortBy = null, sortDirection = null) => {
+            const performSearchOrSort = (sortBy = null, sortDirection = 'asc', page = 1) => {
                 const query = $searchInput.val().trim();
                 let platform = [];
-                const perPage = $perPageDropdown.val();
 
                 // Ambil nilai checkbox platform yang dicentang
                 $('input[name="platform[]"]:checked').each(function() {
                     platform.push($(this).val());
                 });
+                console.log('Current PerPage:', perPage);
+                console.log('Current platform:', platform);
+                console.log('Current filterExisting:', filterExisting);
 
-                if (!query && !sortBy && filterExisting === null && platform.length === 0 && !
-                    selectedOrganization) {
-                    resetSearch();
-                    return;
-                }
-
-                const requestData = {
-                    'search': query,
-                    'platform': platform,
-                    'per_page': perPage
+                let data = {
+                    search: query,
+                    platform: platform,
+                    perPage: perPage || $('#perPageDropdown').val(),
+                    sort_direction: sortDirection,
+                    existing_app: filterExisting,
+                    organization: selectedOrganization,
+                    page: page
                 };
-                if (sortBy && sortDirection) {
-                    requestData.sort_by = sortBy;
-                    requestData.sort_direction = sortDirection;
+                if (sortBy) {
+                    data.sort_by = sortBy;
                 }
-                if (filterExisting !== null) {
-                    requestData.existing_app = filterExisting; // Tambahkan filter sebagai boolean
-                }
-                if (selectedOrganization) {
-                    requestData.organization = selectedOrganization;
+                let url = window.location.href;
+
+                if (url) {
+                    const urlParams = new URLSearchParams(url.split('?')[1]);
+                    data.page = urlParams.get('page');
                 }
 
                 $.ajax({
                     url: "{{ route('submissions.search') }}",
                     type: "GET",
-                    data: requestData,
+                    data: data,
                     success: (data) => {
                         $searchResults.html(data.html);
-                        $pengajuanCount.text(data.count);
-                        if (sortBy && sortDirection) {
-                            window.history.pushState("", "",
-                                `?search=${query}&sort_by=${sortBy}&existing_app=${filterExisting}&platform=${platform.join(',')}&organization=${selectedOrganization}&perPage=${perPage}`
-                            );
-                        }
+                        window.history.pushState("", "", 
+                            `?search=${encodeURIComponent(query)}&sort_by=${encodeURIComponent(sortBy)}&existing_app=${encodeURIComponent(filterExisting)}&platform=${encodeURIComponent(platform.join(','))}&organization=${encodeURIComponent(selectedOrganization)}&perPage=${encodeURIComponent(perPage)}&page=${encodeURIComponent(page)}`
+                        );
+                        $('.pagination').html(data.pagination);
                     },
                     error: (jqXHR, textStatus, errorThrown) => {
                         console.error("AJAX error: ", textStatus, errorThrown);
                     }
                 });
             };
+
+            $(document).on('click', '.pagination a', function (e) {
+                e.preventDefault();
+                const page = $(this).attr('href').split('page=')[1];
+                performSearchOrSort(null, 'asc', page);
+            });
 
             $searchButton.on('click', () => performSearchOrSort());
             $searchInput.on('input', () => {
@@ -462,9 +492,11 @@
                     performSearchOrSort(sortBy, sortDirection);
                 });
 
-            $perPageDropdown.on('change', () => {
-                performSearchOrSort();
-            });
+                $('#perPageDropdown').on('change', function() {
+                    perPage = $(this).val();
+                    console.log('PerPage changed to:', perPage); // Debug log
+                    performSearchOrSort();
+                });
 
             // Event handler untuk tombol filter
             $('#filter-existing').on('click', () => {
@@ -475,10 +507,19 @@
                 filterExisting = false;
                 performSearchOrSort();
             });
+            $('#filter-existing-mob').on('click', () => {
+                filterExisting = true;
+                performSearchOrSort();
+            });
+            $('#filter-new-mob').on('click', () => {
+                filterExisting = false;
+                performSearchOrSort();
+            });
             $('#organization').on('change', function() {
                 selectedOrganization = $(this).val(); // Set nilai organisasi yang dipilih
                 performSearchOrSort();
             });
+            
         });
     </script>
 @endsection

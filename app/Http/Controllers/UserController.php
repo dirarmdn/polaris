@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\UpdateUserRequest;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class UserController extends Controller
 {
@@ -74,9 +75,10 @@ class UserController extends Controller
                 'position_in_organization' => $request->input('position_in_organization'),
             ]);
         }
+        
+        Alert::success('Berhasil', 'Anda berhasil memperbarui profil!');
     
-        return redirect()->back()
-            ->with('success', 'Selamat, profil Anda berhasil diperbaharui!');
+        return redirect()->back();
     }
 
     /**
@@ -89,6 +91,9 @@ class UserController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
+        $title = 'Logout:(';
+        $text = "Apakah kamu yakin akan logout?";
+        confirmDelete($title, $text);
         return redirect('/')->with('success', 'Anda telah berhasil logout.');
     }
 }

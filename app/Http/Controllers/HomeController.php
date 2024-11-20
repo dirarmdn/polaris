@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Submission;
 use Carbon\Carbon;
+use App\Mail\FeedbackMail;
+use App\Models\Submission;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class HomeController extends Controller
 {
@@ -35,6 +38,28 @@ class HomeController extends Controller
     public function faq()
     {
         return view('home.faq');
+    }
+
+    public function feedback()
+    {
+        return view('home.feedback');
+    }
+
+    public function feedbackStore(Request $request)
+    {
+        // Validasi input
+        $request->validate([
+            'email' => 'required|email',
+            'subject' => 'required|string|max:255',
+            'message' => 'required|string|max:1000',
+        ]);
+
+        $feedback = $request->only(['email', 'subject', 'message']);
+        Mail::to('contactsims11@gmail.com')->send(new FeedbackMail($feedback));
+
+        Alert::success('Berhasil', 'Terima kasih atas feedback Anda, pesan Anda sudah terkirim.');
+
+        return redirect()->back();
     }
 
     public function dashboard()
