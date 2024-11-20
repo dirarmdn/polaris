@@ -12,6 +12,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+
 
 class AuthController extends Controller
 {
@@ -76,8 +79,30 @@ class AuthController extends Controller
         ]);
     
         auth()->login($user);
+
+        event(new Registered($user));
     
         return redirect()->route('home');
+    }
+
+    //Verify Email Notice Handler
+    public function verifyNotice () {
+        return view('auth.verify-email');
+    }
+
+    // Email Veryfication Handler
+    public function verifyEmail(EmailVerificationRequest $request)
+    {
+        $request->fulfill();
+
+        return redirect()->route('home');
+    }
+
+    //Resending the Verification Email route
+    public function verifyHandler (Request $request) {
+        $request->user()->sendEmailVerificationNotification();
+     
+        return back()->with('message', 'Verification link sent!');
     }
 
     public function showLoginForm()
