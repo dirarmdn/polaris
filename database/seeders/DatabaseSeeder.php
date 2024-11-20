@@ -80,5 +80,4 @@ class DatabaseSeeder extends Seeder
         // // Review::factory(5)->create();
         // Reviewer::factory(10)->create();
     }
-
 }
