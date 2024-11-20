@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="flex items-center justify-center min-h-screen w-screen bg-cover bg-center" style="background-image: url('{{ asset('images/SignUp_BG.png') }}')">
-    <div class="w-full max-w-md px-8 py-4 bg-white shadow-md rounded-xl">
+    <div class="w-full h-screen md:h-full max-w-md px-8 py-4 bg-white shadow-md md:rounded-xl">
         <a href="{{ route('home') }}" class="flex justify-center mb-6 mt-8">
             <img src="{{ asset('images/Logo.png') }}" alt="Logo" class="h-20">
         </a>
@@ -27,7 +27,11 @@
 
             <!-- Remember Me -->
             <div class="flex items-center justify-between mb-4">
-                <a href="" class="text-md text-dark-400 hover:underline">Lupa Password?</a>
+                <div class="flex items-center">
+                    <input type="checkbox" id="remember" name="remember" class="mr-2">
+                    <label for="remember" class="text-gray-600">Ingat saya</label>
+                </div>
+                <a href="{{ route('password.request') }}" class="text-dark-400 hover:underline items-center">Lupa Password?</a>
             </div>
 
             <!-- Button Login -->
@@ -49,7 +53,7 @@
         @endif
 
         <!-- Sign Up -->
-        <p class="mt-6 mb-8 text-lg text-center text-dark-400">Tidak punya akun? <a href="{{ route('register') }}" class="text-dark-400 hover:underline font-bold">Daftar sekarang</a></p>
+        <p class="mt-6 mb-8 text-md text-center text-dark-400">Tidak punya akun? <a href="{{ route('register') }}" class="text-dark-400 hover:underline font-bold">Daftar sekarang</a></p>
     </div>
 </div>
             <script>

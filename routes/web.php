@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\SubmissionController;
 use Illuminate\Support\Facades\Route;
@@ -15,11 +16,19 @@ use Illuminate\Http\Request;
 Route::get('/', [HomeController::class,'index'])->name('home');
 Route::get('/about', [HomeController::class,'about'])->name('home.about');
 Route::get('/faq', [HomeController::class,'faq'])->name('home.faq');
+Route::get('/feedback', [HomeController::class,'feedback'])->name('home.feedback');
+Route::post('/feedback', [HomeController::class, 'feedbackStore'])->name('feedback.store');
 
-Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
-Route::post('/register/user', [AuthController::class, 'register'])->name('register.post');
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('/login/user', [AuthController::class, 'submitlogin'])->name('login.post');
+Route::group(['middleware' => 'guest'], function () {
+    Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
+    Route::post('/register/user', [AuthController::class, 'register'])->name('register.post');
+    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login/user', [AuthController::class, 'submitlogin'])->name('login.post');
+    Route::get('/forgot-password', [ForgotPasswordController::class, 'showResetForm'])->middleware('guest')->name('password.request');
+    Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink'])->middleware('guest')->name('password.email');
+    Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'showForm'])->middleware('guest')->name('password.reset');
+    Route::post('/reset-password', [ForgotPasswordController::class, 'reset'])->middleware('guest')->name('password.update');
+});
 
 Route::get('/organization/search', [OrganizationController::class, 'search'])->name('organization.search');
 Route::post('/organization/store', [OrganizationController::class, 'store'])->name('organization.store');
@@ -31,28 +40,24 @@ Route::get('/search', [SubmissionController::class, 'search'])->name('submission
 // Routes that require authentication
 Route::group(['middleware' => 'auth'], function () {
 
-    Route::prefix('admin')->group(function () {
-        Route::get('/index', [AdminController::class, 'index'])->name('admin');
-        Route::get('/create', [AdminController::class, 'create'])->name('admin.create');
-        Route::post('/store', [AdminController::class, 'store'])->name('admin.store');
-        Route::get('/detail/{id}', [AdminController::class, 'show'])->name('admin.admins.show');
-        Route::get('/{id}/edit', [AdminController::class, 'edit'])->name('admin.edit');
-        Route::put('/{id}', [AdminController::class, 'update'])->name('admin.update');
-        Route::get('/review/create/{submission_code}', [ReviewController::class, 'create'])->name('dashboard.submissions.review.create');
-        Route::post('/review/store', [ReviewController::class, 'store'])->name('dashboard.submissions.review.store');
-        Route::resource('/organization', OrganizationController::class);
-    });
-
     Route::prefix('dashboard')->group(function () {
         Route::get('/', [HomeController::class, 'dashboard'])->name('dashboard');
         Route::get('/pengajuan', [SubmissionController::class, 'showAllSubmissions'])->name('dashboard.submissions.index');
         Route::get('/pengajuan/detail/{submission_code}', [SubmissionController::class, 'showSubmission'])->name('dashboard.submissions.show');
+        Route::get('/pengajuan/{submission_code}/edit', [SubmissionController::class, 'edit'])->name('submissions.edit');
+        Route::put('/pengajuan/{submission}', [SubmissionController::class, 'update'])->name('submissions.update');
         Route::get('/pengajuan/create', [SubmissionController::class, 'create'])->name('submissions.create');
+        Route::post('/pengajuan/store', [SubmissionController::class, 'store'])->name('submissions.store');
+        Route::delete('/pengajuan/delete/{submission_code}', [SubmissionController::class, 'destroy'])->name('submission.destroy')->middleware('role:submitter');
+        Route::resource('/admin', AdminController::class)->middleware('role:admin');
+        Route::resource('/review', ReviewController::class)->middleware('role:reviewer');
+        Route::resource('/organization', OrganizationController::class);
         Route::post('/pengajuan/store', [SubmissionController::class, 'store'])->name('submissions.store');
         Route::get('/pengajuan/print', [SubmissionController::class, 'print'])->name('dashboard.submissions.print');    
     });
     
     Route::resource('/user', UserController::class);
+    Route::resource('/organization', OrganizationController::class);
     Route::post('/logout', [UserController::class, 'signOut'])->name('logout');
 
     // Email Verification Notice
@@ -72,7 +77,7 @@ Route::group(['middleware' => 'auth'], function () {
         return back()->with('message', 'Verification link sent!');
     })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
-});
-
 // Open Routes
 Route::get('/admins', [AdminController::class, 'index'])->name('admins.index');
+
+});

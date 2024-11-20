@@ -1,5 +1,5 @@
 <div class="list-view">
-    @foreach($submission as $p)
+    @foreach($submissions as $p)
         <div data-aos="fade-up" class="flex flex-col md:flex-row items-center justify-between gap-5 mb-3 p-6 bg-primary-50 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
             <div class="flex flex-col">
                 <h5 class="mb-2 text-lg font-semibold tracking-tight text-gray-900 dark:text-white">{{ $p->submission_title }}</h5>

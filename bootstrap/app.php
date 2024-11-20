@@ -1,7 +1,10 @@
 <?php
 
-use App\Http\Middleware\RevalidateBackHistory;
+use App\Http\Middleware\Admin;
+use App\Http\Middleware\CheckRole;
+use App\Http\Middleware\Reviewer;
 use Illuminate\Foundation\Application;
+use App\Http\Middleware\RevalidateBackHistory;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 
@@ -21,6 +24,9 @@ return Application::configure(basePath: dirname(__DIR__))
             \Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \Illuminate\Session\Middleware\AuthenticateSession::class,
+        ]);
+        $middleware->alias([
+            'role' => CheckRole::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

@@ -1,14 +1,15 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Tambah Data Pengajuan')
+@section('title', 'Edit Data Pengajuan')
 
 @section('content')
     <div class="container mx-auto px-4 py-8">
-        <h1 class="text-3xl font-bold mb-8">Form Pengajuan</h1>
+        <h1 class="text-3xl font-bold mb-8">Edit Pengajuan</h1>
 
-        <form id="submissionForm" action="{{ route('submissions.store') }}" method="POST" enctype="multipart/form-data"
+        <form id="submissionForm" action="{{ route('submissions.update', ['submission' => $submission]) }}" method="POST" enctype="multipart/form-data"
             class="max-w-4xl mx-auto">
             @csrf
+            @method('PUT')
             @if ($errors->any())
                 <div class="bg-red-500 text-white p-4 mb-4">
                     <ul>
@@ -74,17 +75,31 @@
                 <div class="mb-4">
                     <label for="submission_title" class="block mb-2">Judul Pengajuan</label>
                     <input type="text" id="submission_title" name="submission_title"
+                        value="{{ old('submission_title', $submission->submission_title) }}"
                         class="w-full border border-gray-300 rounded px-3 py-2">
                 </div>
+                
                 <div class="mb-4">
                     <label for="problem_description" class="block mb-2">Deskripsi Masalah</label>
                     <textarea id="problem_description" name="problem_description" rows="4"
-                        class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
+                        class="w-full border border-gray-300 rounded px-3 py-2">{{ old('problem_description', $submission->problem_description) }}</textarea>
                 </div>
+                
+                <div class="mb-4">
+                    <label for="platform" class="block mb-2">Platform</label>
+                    <select id="platform" name="platform" class="w-full border border-gray-300 rounded px-3 py-2">
+                        <option value="">Select Platform</option>
+                        <option value="web" {{ old('platform', $submission->platform) === 'web' ? 'selected' : '' }}>Web</option>
+                        <option value="mobile" {{ old('platform', $submission->platform) === 'mobile' ? 'selected' : '' }}>Mobile</option>
+                        <option value="desktop" {{ old('platform', $submission->platform) === 'desktop' ? 'selected' : '' }}>Desktop</option>
+                        <option value="multi-platform" {{ old('platform', $submission->platform) === 'multi-platform' ? 'selected' : '' }}>Multi-platform</option>
+                    </select>
+                </div>
+                
                 <div class="mb-4">
                     <label for="application_purpose" class="block mb-2">Tujuan Aplikasi</label>
                     <textarea id="application_purpose" name="application_purpose" rows="4"
-                        class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
+                        class="w-full border border-gray-300 rounded px-3 py-2">{{ $submission->application_purpose }}</textarea>
                 </div>
             </div>
 
@@ -97,12 +112,12 @@
                 <div class="mb-4">
                     <label for="business_process" class="block mb-2">Proses Bisnis</label>
                     <textarea id="business_process" name="business_process" rows="4"
-                        class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
+                        class="w-full border border-gray-300 rounded px-3 py-2">{{ old('business_process', $submission->business_process) }}</textarea>
                 </div>
                 <div class="mb-4">
                     <label for="business_rules" class="block mb-2">Aturan Bisnis</label>
                     <textarea id="business_rules" name="business_rules" rows="4"
-                        class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
+                        class="w-full border border-gray-300 rounded px-3 py-2">{{ old('business_rules', $submission->business_rules) }}</textarea>
                 </div>
             </div>
 
@@ -114,31 +129,39 @@
                 <hr class="border-gray-950 border-t-1 w-full mx-auto my-5">
                 <div class="mb-4">
                     <label for="stakeholders" class="block mb-2">Stakeholders</label>
-                    <textarea id="stakeholders" name="stakeholders" rows="4" class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
+                    <textarea id="stakeholders" name="stakeholders" rows="4" class="w-full border border-gray-300 rounded px-3 py-2">{{ old('stakeholders', $submission->stakeholders) }}</textarea>
                 </div>
                 <div class="mb-4">
                     <label for="platform" class="block mb-2">Platform</label>
                     <select id="platform" name="platform" class="w-full border border-gray-300 rounded px-3 py-2">
                         <option value="">Select Platform</option>
-                        <option value="web">Web</option>
-                        <option value="mobile">Mobile</option>
-                        <option value="desktop">Desktop</option>
-                        <option value="multi-platform">Multi-platform</option>
+                        <option value="web" {{ old('platform', $submission->platform ?? '') == 'web' ? 'selected' : '' }}>Web</option>
+                        <option value="mobile" {{ old('platform', $submission->platform ?? '') == 'mobile' ? 'selected' : '' }}>Mobile</option>
+                        <option value="desktop" {{ old('platform', $submission->platform ?? '') == 'desktop' ? 'selected' : '' }}>Desktop</option>
+                        <option value="multi-platform" {{ old('platform', $submission->platform ?? '') == 'multi-platform' ? 'selected' : '' }}>Multi-platform</option>
                     </select>
-                </div>
+                    @error('platform')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>                
                 <div class="mb-4">
                     <label class="block mb-2">Jenis Proyek</label>
                     <div class="flex items-center space-x-4">
                         <label class="inline-flex items-center">
-                            <input type="radio" name="project_type" value="0" class="form-radio">
+                            <input type="radio" name="project_type" value="0" class="form-radio"
+                                {{ old('project_type', $submission->project_type ?? '') == '0' ? 'checked' : '' }}>
                             <span class="ml-2">Aplikasi Baru</span>
                         </label>
                         <label class="inline-flex items-center">
-                            <input type="radio" name="project_type" value="1" class="form-radio">
+                            <input type="radio" name="project_type" value="1" class="form-radio"
+                                {{ old('project_type', $submission->project_type ?? '') == '1' ? 'checked' : '' }}>
                             <span class="ml-2">Aplikasi Sudah Ada</span>
                         </label>
                     </div>
-                </div>
+                    @error('project_type')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>                
             </div>
 
             <!-- Step 4: Referensi dan Upload File -->
@@ -160,10 +183,33 @@
                     </button>
                 </div>
 
-                <!-- Reference Container -->
                 <div id="reference-container" class="space-y-4">
-                    <!-- Reference items will be added here dynamically -->
+                    @foreach($submission->reference as $index => $reference)
+                        <div class="reference-item border border-gray-200 rounded-xl p-5 relative bg-gray-100">
+                            <button type="button" onclick="removeReference(this)" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                            <div>
+                                <label class="block mb-2 font-semibold">{{ $reference->type === 'file' ? 'Upload File' : 'Link Referensi' }}</label>
+                                @if ($reference->type == 'file')
+                                @php
+                                    $filePath = storage_path('app/public/' . $reference->path);
+                                    $fileExtension = pathinfo($reference->path, PATHINFO_EXTENSION);
+                                @endphp
+                                @if (in_array(strtolower($fileExtension), ['jpg', 'jpeg', 'png', 'gif']))
+                                    <img src="{{ asset('storage/' . $reference->path) }}" alt="Referensi Image" style="width: 100%; max-width: 300px;">
+                                @elseif (strtolower($fileExtension) == 'pdf')
+                                    <embed src="{{ asset('storage/' . $reference->path) }}" type="application/pdf" width="100%" height="600px">
+                                @endif
+                            @endif
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
+                
             </div>
 
             <!-- Templates for Dynamic Reference Items -->
@@ -180,15 +226,15 @@
                         <label class="block mb-2 font-semibold">Upload File</label>
                         <div
                             class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-gray-400 transition-colors duration-300">
-                            <input type="hidden" name="referensi[{index}][tipe]" value="file">
-                            <input type="file" name="referensi[{index}][file_path]" class="hidden"
+                            <input type="hidden" name="references[{index}][type]" value="file">
+                            <input type="file" name="references[{index}][file_path]" class="hidden"
                                 onchange="updateFileName(this)">
                             <p class="text-gray-500">Drag & drop file atau klik untuk memilih file</p>
                             <p class="file-name text-sm text-gray-400 mt-2"></p>
                         </div>
                         <div class="mt-4">
                             <label class="block mb-2">Keterangan</label>
-                            <input type="text" name="referensi[{index}][keterangan]"
+                            <input type="text" name="references[{index}][keterangan]"
                                 class="w-full border border-gray-300 rounded px-3 py-2"
                                 placeholder="Masukkan keterangan file">
                         </div>
@@ -207,13 +253,13 @@
                     </button>
                     <div>
                         <label class="block mb-2 font-semibold">Link Referensi</label>
-                        <input type="hidden" name="referensi[{index}][tipe]" value="link">
-                        <input type="url" name="referensi[{index}][link_path]"
+                        <input type="hidden" name="references[{index}][type]" value="link">
+                        <input type="url" name="references[{index}][link_path]"
                             class="w-full border border-gray-300 rounded px-3 py-2 mb-4"
                             placeholder="https://example.com">
                         <div>
                             <label class="block mb-2">Keterangan</label>
-                            <input type="text" name="referensi[{index}][keterangan]"
+                            <input type="text" name="references[{index}][keterangan]"
                                 class="w-full border border-gray-300 rounded px-3 py-2"
                                 placeholder="Masukkan keterangan link">
                         </div>

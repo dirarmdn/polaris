@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Submitter;
-use view;
 use App\Models\User;
-use App\Models\Pengaju;
+use App\Models\Submitter;
 use App\Models\Organization;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -117,14 +115,14 @@ class AuthController extends Controller
             'email' => 'required|email',
             'password' => 'required|min:8',
         ]);
-
-        // Attempt to log the user in
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            // Redirect to intended page or dashboard
+    
+        $remember = $request->has('remember');
+    
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password], $remember)) {
             return redirect()->intended('dashboard')->with('success', 'Login successful!');
         }
-
-         // If authentication fails
+    
+        // If authentication fails
         return back()->withErrors(['email' => 'Invalid email or password'])->onlyInput('email');
     }
 

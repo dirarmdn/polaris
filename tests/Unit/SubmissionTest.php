@@ -2,18 +2,18 @@
 
 namespace Tests\Feature;
 
-use App\Models\Pengajuan;
+use App\Models\Submission;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class PengajuanTest extends TestCase
+class SubmissionTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_index_returns_view_with_pengajuan()
+    public function test_index_returns_view_with_Submission()
     {
-        // Arrange: Membuat 10 data pengajuan
-        $pengajuan = Pengajuan::factory()->count(10)->create();
+        // Arrange: Membuat 10 data Submission
+        $Submission = Submission::factory()->count(10)->create();
     
         // Act: Mengakses route index
         $response = $this->get(route('submissions.index'));
@@ -21,27 +21,27 @@ class PengajuanTest extends TestCase
         // Assert: Memastikan response yang benar
         $response->assertStatus(200);
         $response->assertViewIs('submissions.index');
-        $response->assertViewHas('pengajuan', function ($value) use ($pengajuan) {
+        $response->assertViewHas('Submission', function ($value) use ($Submission) {
             return $value instanceof \Illuminate\Pagination\LengthAwarePaginator; // Expect LengthAwarePaginator
         });
     }
     
 
-    public function test_search_returns_filtered_pengajuan()
+    public function test_search_returns_filtered_Submission()
     {
-        // Arrange: Membuat pengajuan untuk dicari
-        $pengajuan = Pengajuan::factory()->create(['submission_title' => 'Test Judul']);
-        $pengajuan2 = Pengajuan::factory()->create(['submission_title' => 'Another Judul']);
+        // Arrange: Membuat Submission untuk dicari
+        $Submission = Submission::factory()->create(['submission_title' => 'Test Judul']);
+        $Submission2 = Submission::factory()->create(['submission_title' => 'Another Judul']);
 
         // Act: Mengakses route search
         $response = $this->get(route('submissions.search', ['search' => 'Test']));
 
         // Assert: Memastikan hasil pencarian sesuai
         $response->assertStatus(200);
-        $response->assertSee($pengajuan->submission_title);
-        $response->assertDontSee($pengajuan2->submission_title);
+        $response->assertSee($Submission->submission_title);
+        $response->assertDontSee($Submission2->submission_title);
     }
-    public function test_store_creates_new_pengajuan()
+    public function test_store_creates_new_Submission()
     {
         // Buat organisasi terlebih dahulu
         $organization = \App\Models\Organization::factory()->create();
@@ -61,7 +61,7 @@ class PengajuanTest extends TestCase
             'jabatan' => $pengaju->jabatan,
             'organization_code' => $pengaju->organization_code,
             'jenis_proyek' => 'Proyek Baru',
-            'submission_title' => 'Pengajuan Baru',
+            'submission_title' => 'Submission Baru',
             'deskripsi_masalah' => 'Masalah yang dijelaskan.',
             'tujuan_aplikasi' => 'Tujuan aplikasi.',
             'proses_bisnis' => 'Proses bisnis.',
@@ -75,28 +75,28 @@ class PengajuanTest extends TestCase
     
         $response->assertSessionHasNoErrors();
     
-        // Assert: Memastikan pengajuan baru berhasil disimpan
+        // Assert: Memastikan Submission baru berhasil disimpan
         $response->assertRedirect(route('submissions.index'));
-        $this->assertDatabaseHas('pengajuans', [
+        $this->assertDatabaseHas('Submissions', [
             'submission_code' => 'PKG123',
             'id_pengaju' => $pengaju->id_pengaju,
         ]);
     }    
 
-    public function test_show_displays_pengajuan()
+    public function test_show_displays_Submission()
     {
-        // Arrange: Membuat data pengajuan untuk ditampilkan
-        $pengajuan = \App\Models\Pengajuan::factory()->create();
+        // Arrange: Membuat data Submission untuk ditampilkan
+        $Submission = \App\Models\Submission::factory()->create();
 
         // Act: Mengakses route show
-        $response = $this->get(route('submissions.show', $pengajuan));
+        $response = $this->get(route('submissions.show', $Submission));
         // dd($response);
 
-        // Assert: Memastikan tampilan pengajuan sesuai
+        // Assert: Memastikan tampilan Submission sesuai
         $response->assertStatus(200);
         $response->assertViewIs('submissions.show');
         // dd($response);
-        $response->assertViewHas('pengajuan', $pengajuan);
+        $response->assertViewHas('Submission', $Submission);
     }
 
 }

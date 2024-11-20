@@ -7,8 +7,12 @@
     <link rel="icon" href="{{ asset('images/Logo-mini.png') }}" type="image/x-icon"/>
     <title>@yield('title')</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    @vite('resources/js/app.js')
     @vite('resources/css/app.css')
+    @vite('resources/js/app.js')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="{{ asset('vendor/select2/css/select2.min.css') }}">
+    <script src="{{ asset('vendor/select2/js/select2.min.js') }}"></script>
+
 </head>
 <body>
     <header>
@@ -20,6 +24,6 @@
     </div>
 
     @include('components.footer')
-
+    @include('sweetalert::alert')
 </body>
 </html>

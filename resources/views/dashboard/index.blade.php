@@ -7,7 +7,7 @@
         style="background-image: url('{{ asset('images/SignUp_BG.png') }}');">
         <div class="w-full p-6 bg-full">
             <div class="text-center pt-16 flex flex-col">
-                <h1 class="text-4xl font-bold">Halo selamat datang <span class="text-accent-600">
+                <h1 class="text-3xl font-bold">Halo selamat datang <span class="text-accent-600">
                         {{ auth()->user()->name }}
                     </span></h1>
                 @if (auth()->user()->role == 1)
@@ -61,7 +61,7 @@
             </div>
 
             <!-- FAQ and Other Submissions -->
-            <div class="space-y-10 bg-light-blue-300 my-10 mx-20 p-7 rounded-xl justify-center items-center flex flex-col">
+            <div class="space-y-10 bg-light-blue-300 my-10 mx-auto p-7 rounded-xl justify-center items-center flex flex-col">
                 @if (auth()->user()->role == 1)
                 <a href="{{ route('home.faq') }}" class="bg-light-blue-500 p-6 w-full rounded-lg text-center">
                     <h3 class="text-white text-7xl">

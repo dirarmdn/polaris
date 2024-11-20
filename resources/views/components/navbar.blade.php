@@ -7,7 +7,7 @@
             @auth
             <a href="{{ route('dashboard') }}" class="inline-block text-sm px-6 py-2.5 leading-none border rounded-lg hover:bg-gray-200 mr-5 font-medium border-transparent lg:mt-0">
             Dashboard</a>
-            <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-start" class="w-10 h-10 rounded-lg cursor-pointer object-cover" src="{{ asset('images/Avatar.svg') }}" alt="User dropdown">
+            <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-start" class="w-10 h-10 rounded-lg cursor-pointer object-cover" src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : asset('images/Avatar.svg') }}" alt="User dropdown">
 
             <div id="userDropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
                 <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
@@ -54,26 +54,10 @@
         <div class="justify-between hidden w-full md:flex items-center md:w-auto md:order-1" id="navbar-cta">
             <ul
                 class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-                <li>
-                    <a href="{{ route('home') }}"
-                        class="{{ Route::is('home') ? 'block py-2 px-3 md:p-0 border-b-2 border-accent-light-500 font-bold' : 'block py-2 px-3 md:p-0 text-gray-900' }} hover:bg-gray-100 md:hover:bg-transparent md:hover:text-secondary-900 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
-                        aria-current="page">Home</a>
-                </li>
-                <li>
-                    <a href="{{ route('submissions.index') }}"
-                        class="{{ Route::is('submissions.index') ? 'block py-2 px-3 md:p-0 border-b-2 border-accent-light-500 font-bold' : 'block py-2 px-3 md:p-0 text-gray-900' }} hover:bg-gray-100 md:hover:bg-transparent md:hover:text-secondary-900 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">
-                        Daftar Pengajuan</a>
-                </li>
-                <li>
-                    <a href="{{ route('home.about') }}"
-                        class="{{ Route::is('home.about') ? 'block py-2 px-3 md:p-0 border-b-2 border-accent-light-500 font-bold' : 'block py-2 px-3 md:p-0 text-gray-900' }} hover:bg-gray-100 md:hover:bg-transparent md:hover:text-secondary-900 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">
-                        About</a>
-                </li>
-                <li>
-                    <a href="{{ route('home.faq') }}"
-                        class="{{ Route::is('home.faq') ? 'block py-2 px-3 md:p-0 border-b-2 border-accent-light-500 font-bold' : 'block py-2 px-3 md:p-0 text-gray-900' }} hover:bg-gray-100 md:hover:bg-transparent md:hover:text-secondary-900 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">
-                        FAQ</a>
-                </li>
+                <x-nav-link :href="route('home')" :active="request()->routeIs('home')">Home</x-nav-link>
+                <x-nav-link :href="route('submissions.index')" :active="request()->routeIs('submissions.index')">Daftar Pengajuan</x-nav-link>
+                <x-nav-link :href="route('home.about')" :active="request()->routeIs('home.about')">About</x-nav-link>
+                <x-nav-link :href="route('home.faq')" :active="request()->routeIs('home.faq')">FAQ</x-nav-link>
             </ul>
         </div>
     </div>

@@ -23,7 +23,7 @@ class AdminController extends Controller
             ->paginate(10);
 
         // Pass data to the view
-        return view('dashboard.admins.index', compact('admins', 'name'));
+        return view('dashboard.admins.index', compact('admins', 'nama'));
     }
 
     public function create()
@@ -71,7 +71,6 @@ class AdminController extends Controller
 
     public function edit($id)
     {
-        // Ambil data admin berdasarkan ID
         $admin = User::findOrFail($id);
         return view('dashboard.admins.edit', compact('admin'));
     }
@@ -86,6 +85,7 @@ class AdminController extends Controller
             'role' => 'required',
             'phone_number' => 'nullable|string|max:15',
         ]);
+        
         $roleMap = [
             'admin' => 2,
             'reviewer' => 3,
@@ -120,13 +120,12 @@ class AdminController extends Controller
 
         $user->update($data);
 
-        // Redirect ke halaman edit dengan pesan sukses
-        //return redirect()->route('admins.edit', $id)->with('success', 'Admin updated successfully.');
+        return redirect()->route('admins.edit', $id)->with('success', 'Admin updated successfully.');
     }
 
     public function show($id)
     {
-        $admin = User::where('id', $id)->first();
+        $admin = User::findOrFail($id);
 
         return view('dashboard.admins.show', compact('admin'));
     }

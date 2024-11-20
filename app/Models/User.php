@@ -35,11 +35,11 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return false;
     }
-
+    
     public function getKeyType()
     {
         return 'string';
-    }
+    }    
     /**
      * The attributes that are mass assignable.
      *
@@ -49,11 +49,11 @@ class User extends Authenticatable implements MustVerifyEmail
         'user_id',
         'name',
         'email',
-        'no_telp',
+        'phone_number',
         'kode_organisasi',
-        'jabatan',
         'role',
         'password',
+        'avatar'
     ];
 
     /**
