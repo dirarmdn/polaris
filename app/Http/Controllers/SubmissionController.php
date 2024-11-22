@@ -44,8 +44,9 @@ class SubmissionController extends Controller
         // Ambil user yang sedang login
         $user = auth()->user();
 
-        // Query untuk mengambil semua data dengan pencarian tanpa pagination
+        // Query untuk mengambil semua data dengan pencarian tanpa pagination, hanya yang 'terverifikasi'
         $data_pengajuans = Submission::with('submitter') // Mengambil relasi user
+            ->where('status', 'terverifikasi') // Tambahkan kondisi untuk status 'terverifikasi'
             ->when($submission_title, function ($query) use ($submission_title) {
                 // Filter berdasarkan judul pengajuan jika ada pencarian
                 return $query->where('submission_title', 'LIKE', '%' . $submission_title . '%');
@@ -57,7 +58,8 @@ class SubmissionController extends Controller
             'data_pengajuans' => $data_pengajuans,
             'submission_title' => $submission_title,
         ]);
-    } 
+    }
+
 
     public function search(Request $request)
     {

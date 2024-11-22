@@ -81,7 +81,7 @@
             @forelse($data_pengajuans as $pengajuan)
                 <tr class="bg-white border-b hover:bg-gray-50">
                     <td class="px-6 py-4">{{ $pengajuan->submission_title }}</td>
-                    <td class="px-6 py-4">{{ $pengajuan->user->name ?? 'Tidak diketahui' }}</td>
+                    <td class="px-6 py-4">{{ $pengajuan->submitter->name ?? 'Tidak diketahui' }}</td>
                     <td class="px-6 py-4">
                         {{ $pengajuan->created_at ? $pengajuan->created_at->format('Y-m-d H:i:s') : 'Tanggal tidak tersedia' }}
                     </td>
@@ -89,7 +89,7 @@
                     <td class="px-6 py-4">{{ $pengajuan->application_purpose ?? 'Tidak ada tujuan' }}</td>
                     <td class="px-6 py-4">{{ $pengajuan->platform ?? 'Tidak ada platform' }}</td>
                     <td class="px-6 py-4 text-center">
-                        @if ($pengajuan->isVerified)
+                        @if ($pengajuan->status == 'terverifikasi')
                             <span class="inline-block px-3 py-1 text-sm font-semibold text-white bg-green-500 rounded-full">Diverifikasi</span>
                         @elseif ($pengajuan->status == 'belum_direview')
                             <span class="inline-block min-w-40 px-3 py-1 text-sm font-semibold text-white bg-gray-400 rounded-full">Belum Diverifikasi</span>
@@ -97,8 +97,11 @@
                             <span class="inline-block min-w-40 px-3 py-1 text-sm font-semibold text-white bg-red-500 rounded-full">Ditolak</span>
                         @elseif ($pengajuan->status == 'diarsipkan')
                             <span class="inline-block min-w-40 px-3 py-1 text-sm font-semibold text-white bg-gray-300 rounded-full">Diarsipkan</span>
+                        @else
+                            <span class="inline-block px-3 py-1 text-sm font-semibold text-white bg-yellow-500 rounded-full">Status Tidak Diketahui</span>
                         @endif
                     </td>
+
                     @if (auth()->user()->role == 3)
                         <td class="px-6 py-4">
                             <a href="{{ route('dashboard.submissions.review.create', ['submission_code' => $pengajuan->submission_code]) }}"
