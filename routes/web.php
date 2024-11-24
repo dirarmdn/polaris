@@ -9,7 +9,6 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\OrganizationController;
-
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\NotificationController;
@@ -60,17 +59,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('/user', UserController::class);
     Route::resource('/organization', OrganizationController::class);
     Route::post('/logout', [UserController::class, 'signOut'])->name('logout');
-    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications');
-    Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllRead'])->name('notifications.markAllRead');
-       // Untuk menampilkan notifikasi di navbar
-       Route::get('/navbar-notifications', [NotificationController::class, 'index'])->name('notifications.index');
-
-       // Untuk menampilkan halaman semua notifikasi
-       Route::get('/all-notifications', [NotificationController::class, 'show'])->name('notifications.show');
-
-       // Route untuk menghitung jumlah notifikasi yang belum terbaca
-       Route::get('/notifications/unread-count', [NotificationController::class, 'countUnreadNotifications']);
-        // Email Verification Notice
+    // Email Verification Notice
     Route::get('/email/verify', function () {
         return view('auth.verify-email');
     })->middleware('auth')->name('verification.notice');
@@ -89,5 +78,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 // Open Routes
 Route::get('/admins', [AdminController::class, 'index'])->name('admins.index');
+Route::get('/send-notification', [emailNotificationsController::class, 'sendNotification']);
 
 });
+
