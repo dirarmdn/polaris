@@ -6,6 +6,7 @@ use App\Models\Review;
 use App\Models\Submission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Validator;
 
 class ReviewController extends Controller
@@ -26,11 +27,8 @@ class ReviewController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(string $submission_code)
+    public function create()
     {
-        $pengajuan = Submission::with('reference')->where('submission_code', $submission_code)->first();
-
-        return view('dashboard.submissions.review', compact('pengajuan')); // Sesuaikan nama view
     }
 
 
@@ -54,9 +52,12 @@ class ReviewController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($hasilReview)
+    public function edit($submission_code)
     {
         //
+        $pengajuan = Submission::with('reference')->where('submission_code', $submission_code)->first();
+
+        return view('dashboard.submissions.review', compact('pengajuan')); // Sesuaikan nama view
     }
 
     /**
@@ -84,10 +85,13 @@ class ReviewController extends Controller
             $submission->fill($request->all());
             $submission->review_description = $request->review_description;
             $submission->status = $request->status;
+            $submission->review_date = now();
 
             $submission->save();
+
+            Alert::success('Berhasil', 'Anda berhasil mereview pengajuan!');
         
-            return redirect()->route('dashboard.submissions.index')->with('success', 'Anda berhasil mereview pengajuan!');
+            return redirect()->route('dashboard.submissions.index');
                 
         } catch (\Exception $e) {
             DB::rollback();

@@ -69,9 +69,19 @@
                     <div class="bg-gray-100 p-6 shadow-lg rounded-lg">
                         <h2 class="text-xl font-bold mb-6">Referensi</h2>
                         @foreach ($pengajuan->reference as $ref)
-                            <p class="text-lg text-gray-600">{{ $ref->keterangan }}</p>
-                            @if($ref->tipe == 'image') 
-                                <img src="{{ $ref->path }}" alt="Referensi Image"> 
+                        <p class="text-lg text-gray-600 mb-2">{{ $ref->description }}</p>
+                        @if ($ref->type == 'file')
+                                @php
+                                    $filePath = storage_path('app/public/' . $ref->path);
+                                    $fileExtension = pathinfo($ref->path, PATHINFO_EXTENSION);
+                                @endphp
+                                @if (in_array(strtolower($fileExtension), ['jpg', 'jpeg', 'png', 'gif']))
+                                    <img src="{{ asset('storage/' . $ref->path) }}" alt="Referensi Image" class="mb-2" style="width: 100%; max-width: 300px;">
+                                @elseif (strtolower($fileExtension) == 'pdf')
+                                    <embed src="{{ asset('storage/' . $ref->path) }}" type="application/pdf" class="mb-2" width="100%" height="600px">
+                                @endif
+                            @else
+                                <a href="{{ $ref->path }}" class="text-lg text-gray-600 mb-2">{{ $ref->path }}</a>
                             @endif
                         @endforeach
                     </div>
@@ -81,7 +91,7 @@
     </div>
     
     <div class="px-4 py-8">    
-        <form id="submissionForm" method="POST" action="{{ route('dashboard.submissions.review.update', ['submission_code' => $pengajuan->submission_code]) }}" class="max-w-4xl mx-auto">
+        <form id="submissionForm" method="POST" action="{{ route('review.update', ['review' => $pengajuan->submission_code]) }}" class="max-w-4xl mx-auto">
             @csrf
             @method('PUT')
             @if($errors->any())
@@ -107,9 +117,9 @@
                 <div class="mb-4">
                     <label for="status" class="block mb-2">Status</label>
                     <select id="status" name="status" class="w-full border border-gray-300 rounded px-3 py-2" required>
-                        <option value="">Pilih Status</option>
-                        <option value="ditolak">Ditolak</option>
-                        <option value="terverifikasi">Terverifikasi</option>
+                        <option value="">Pilih Tindakan</option>
+                        <option value="ditolak">Tolak</option>
+                        <option value="terverifikasi">Verifikasi</option>
                     </select>
                 </div>
             </div>

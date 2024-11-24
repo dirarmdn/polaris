@@ -30,6 +30,14 @@ class DatabaseSeeder extends Seeder
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
 
+        $user = User::create([
+            'name' => 'Miya Soraya',
+            'email' => 'miya@smartek.com',
+            'phone_number' => '0987654321',
+            'role' => 1,
+            'password' => Hash::make('password123!')
+        ]);
+
         $admin = User::create([
             'name' => 'Mamang Admin',
             'email' => 'mamang@polaris.com',
@@ -45,6 +53,12 @@ class DatabaseSeeder extends Seeder
             'role' => 3,
             'password' => Hash::make('password123!')
         ]);
+
+        Submitter::create([
+            'user_id' => $user->user_id,
+            'position_in_organization' => 'Pegawai',
+            'organization_code' => 'POL1234'
+        ]);
         
         Admin::create([
             'nip' => '1234567890',
@@ -59,12 +73,11 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Organization::factory(10)->create();
-        User::factory(10)->create();
-        Submitter::factory(10)->create();
+        // User::factory(10)->create();
+        // Submitter::factory(10)->create();
         Submission::factory(30)->create();
-        Reference::factory(5)->create();
+        // Reference::factory(5)->create();
         // // Review::factory(5)->create();
-        Reviewer::factory(10)->create();
+        // Reviewer::factory(10)->create();
     }
-
 }

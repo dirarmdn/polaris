@@ -180,6 +180,7 @@
                         <label class="block mb-2 font-semibold">Upload File</label>
                         <div
                             class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-gray-400 transition-colors duration-300">
+                            <input type="hidden" name="referensi[{index}][tipe]" value="file">
                             <input type="file" name="referensi[{index}][file_path]" class="hidden"
                                 onchange="updateFileName(this)">
                             <p class="text-gray-500">Drag & drop file atau klik untuk memilih file</p>
@@ -206,6 +207,7 @@
                     </button>
                     <div>
                         <label class="block mb-2 font-semibold">Link Referensi</label>
+                        <input type="hidden" name="referensi[{index}][tipe]" value="link">
                         <input type="url" name="referensi[{index}][link_path]"
                             class="w-full border border-gray-300 rounded px-3 py-2 mb-4"
                             placeholder="https://example.com">
