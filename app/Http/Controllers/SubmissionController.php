@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Requests\StoreSubmissionRequest;
 use App\Http\Requests\UpdateSubmissionRequest;
+use App\Models\Notification;
 
 class SubmissionController extends Controller
 {
@@ -157,6 +158,16 @@ class SubmissionController extends Controller
                     'path' => $path,
                 ]);
             }
+            // Membuat notifikasi berhasil mengirim pengajuan
+        Notification::create([
+            'user_id' => Auth::id(),
+            'submission_code' => $submission->submission_code,
+            'message' => "Pengajuan '{$submission->submission_title}' berhasil dikirim.",
+            'notifiable_id' => $submission->submission_code,
+            'notifiable_type' => Submission::class,
+        ]);
+
+        return redirect()->route('submissions.index')->with('success', 'Pengajuan berhasil dikirim!');
         }
         
         Alert::success('Berhasil', 'Anda berhasil mengirim pengajuan!');
@@ -289,4 +300,45 @@ class SubmissionController extends Controller
 
         return view('dashboard.submissions.show', compact('submission'));
     }
+
+    public function updateSubmissionStatus($submissionCode, $newStatus)
+{
+    $submission = Submission::where('submission_code', $submissionCode)->first();
+    
+    if (!$submission) {
+        return redirect()->back()->withErrors('Submission tidak ditemukan.');
+    }
+
+    // Update status submission
+    $submission->status = $newStatus;
+    $submission->review_date = now(); // Jika perlu update tanggal review
+    $submission->save();
+
+    // Membuat pesan notifikasi berdasarkan status
+    $message = match ($newStatus) {
+        'terverifikasi' => "Submission '{$submission->submission_title}' Anda telah terverifikasi.",
+        'ditolak' => "Submission '{$submission->submission_title}' Anda telah ditolak.",
+        'diarsipkan' => "Submission '{$submission->submission_title}' telah diarsipkan.",
+        default => "Submission '{$submission->submission_title}' belum direview.",
+    };
+
+    // Membuat notifikasi
+    Notification::create([
+        'user_id' => $submission->submitter_id,
+        'submission_code' => $submission->submission_code,
+        'message' => $message,
+        'notifiable_id' => $submission->submission_code,
+        'notifiable_type' => Submission::class,
+    ]);
+
+    return redirect()->route('dashboard.submissions.index')->with('success', 'Status submission berhasil diupdate.');
+}
+
+public function sendNotification($userId)
+{
+    $submissions = Submission::where('user_id', $userId)->get();
+    return view('notification.notificationEmail', compact('submissions'));
+}
+
+
 }

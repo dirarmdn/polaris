@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use RealRashid\SweetAlert\Facades\Alert;
-
+use App\Models\Notification; 
 class HomeController extends Controller
 {
     public function index()
@@ -76,9 +76,19 @@ class HomeController extends Controller
         } else {
             $pengajuan = Submission::latest()->where('status', '!=', 'diarsipkan')->get();
         }
-
+        
         $jumlah_terverifikasi = Submission::where('status', 'terverifikasi')->count();
         $jumlah_belum = Submission::where('status', 'belum_direview')->count();
-        return view('dashboard.index', compact(['pengajuan', 'jumlah_terverifikasi', 'jumlah_belum', 'user']));
+        if (Auth::check()) {
+            $userId = Auth::id();
+            $notifications = Notification::where('user_id', $userId)
+                ->where('isRead', false)
+                ->latest()
+                ->take(5)
+                ->get();
+        } else {
+            $notifications = collect(); // Kosongkan koleksi jika belum login
+        }
+        return view('dashboard.index', compact(['pengajuan', 'jumlah_terverifikasi', 'jumlah_belum', 'user','notifications']));
     }
 }

@@ -2,26 +2,34 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Notification extends Model
 {
     use HasFactory;
 
-    protected $table = 'notifications';
-    protected $primaryKey = 'notif_id';
-
     protected $fillable = [
         'user_id',
+        'submission_code',
         'isRead',
-        'message'
+        'message',
+        'notifiable_id',
+        'notifiable_type',
     ];
 
-    public $incrementing = true;
+    public function notifiable()
+    {
+        return $this->morphTo();
+    }
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class);
+    }
+
+    public function submission()
+    {
+        return $this->belongsTo(Submission::class, 'submission_code', 'submission_code');
     }
 }
