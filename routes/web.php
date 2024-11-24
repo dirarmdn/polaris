@@ -55,7 +55,16 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/pengajuan/store', [SubmissionController::class, 'store'])->name('submissions.store');
         Route::get('/pengajuan/print', [SubmissionController::class, 'print'])->name('dashboard.submissions.print');    
     });
-    
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications');
+    Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllRead'])->name('notifications.markAllRead');
+       // Untuk menampilkan notifikasi di navbar
+       Route::get('/navbar-notifications', [NotificationController::class, 'index'])->name('notifications.index');
+
+       // Untuk menampilkan halaman semua notifikasi
+       Route::get('/all-notifications', [NotificationController::class, 'show'])->name('notifications.show');
+
+       // Route untuk menghitung jumlah notifikasi yang belum terbaca
+       Route::get('/notifications/unread-count', [NotificationController::class, 'countUnreadNotifications']);
     Route::resource('/user', UserController::class);
     Route::resource('/organization', OrganizationController::class);
     Route::post('/logout', [UserController::class, 'signOut'])->name('logout');
