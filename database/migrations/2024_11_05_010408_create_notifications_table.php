@@ -12,10 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('notifications', function (Blueprint $table) {
-            $table->id('notif_id');
-            $table->foreignUuid('user_id')->references('user_id')->on('users')->onDelete('cascade');
-            $table->boolean('isRead');
-            $table->text('message');
+            $table->string('notification_id')->primary(); 
+            $table->foreignUuid('user_id')->references('user_id')->on('users')->onDelete('cascade'); // Foreign key ke tabel users
+            $table->boolean('isRead')->default(false);
+            $table->string('message');
+            $table->string('notifiable_id'); 
+            $table->string('notifiable_type'); // Tipe morph untuk model
             $table->timestamps();
         });
     }
@@ -27,4 +29,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('notifications');
     }
-};
+};  

@@ -6,6 +6,7 @@ use App\Models\Submission;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Notification; 
 
 class HomeController extends Controller
 {
@@ -17,8 +18,8 @@ class HomeController extends Controller
         Carbon::setLocale('id');
 
         $time_ago = $newest_pengajuan ? $newest_pengajuan->created_at->diffForHumans() : null;
-
-        return view('home.index', compact('count_pengajuan', 'newest_pengajuan', 'time_ago'));
+        // Ambil notifikasi yang belum dibaca untuk pengguna yang sedang login
+        return view('home.index', compact('count_pengajuan', 'newest_pengajuan', 'time_ago',));
     }
 
     public function about()
@@ -45,9 +46,19 @@ class HomeController extends Controller
         } else {
             $pengajuan = Submission::latest()->where('status', '!=', 'diarsipkan')->get();
         }
-
+        
         $jumlah_terverifikasi = Submission::where('status', 'terverifikasi')->count();
         $jumlah_belum = Submission::where('status', 'belum_direview')->count();
-        return view('dashboard.index', compact(['pengajuan', 'jumlah_terverifikasi', 'jumlah_belum', 'user']));
+        if (Auth::check()) {
+            $userId = Auth::id();
+            $notifications = Notification::where('user_id', $userId)
+                ->where('isRead', false)
+                ->latest()
+                ->take(5)
+                ->get();
+        } else {
+            $notifications = collect(); // Kosongkan koleksi jika belum login
+        }
+        return view('dashboard.index', compact(['pengajuan', 'jumlah_terverifikasi', 'jumlah_belum', 'user','notifications']));
     }
 }

@@ -21,7 +21,7 @@
     @endif
     <div class="container mx-auto p-6">
         <div class="bg-white rounded-lg shadow-lg mx-auto p-5 mt-0" style="max-width: 72rem;">
-            <form action="{{ route('admin.update', ['id' => $admin->id]) }}" method="POST">
+            <form action="{{ route('admin.update', ['id' => $admin->user_id]) }}" method="POST">
                 @csrf
                 @method('PUT')
 
