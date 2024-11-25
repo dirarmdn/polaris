@@ -35,6 +35,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'miya@smartek.com',
             'phone_number' => '0987654321',
             'role' => 1,
+            'email_verified_at' => now(),
             'password' => Hash::make('password123!')
         ]);
 
@@ -43,6 +44,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'mamang@polaris.com',
             'phone_number' => '0987654321',
             'role' => 2,
+            'email_verified_at' => now(),
             'password' => Hash::make('password123!')
         ]);
 
@@ -51,6 +53,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'asepbinbudi@polaris.com',
             'phone_number' => '0987654321',
             'role' => 3,
+            'email_verified_at' => now(),
             'password' => Hash::make('password123!')
         ]);
 

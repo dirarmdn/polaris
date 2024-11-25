@@ -31,7 +31,6 @@ class SubmissionController extends Controller
     
         return view('submissions.index', compact('submission', 'organization'));
     }
-    
 
     public function print(Request $request)
     {
@@ -65,9 +64,11 @@ class SubmissionController extends Controller
         $platform_filter = $request->input('platform', []);
         $existing_app = $request->boolean('existing_app');
         $organization = $request->input('organization');
-        $perPage = $request->input('perPage', 5);
+        $perPage = $request->input('perPage');
 
-        $submissions = Submission::query()
+        // dd($perPage);
+    
+        $submission = Submission::query()
             ->when($query, function ($q) use ($query) {
                 return $q->where('submission_title', 'like', "%{$query}%");
             })
@@ -76,8 +77,8 @@ class SubmissionController extends Controller
             })
             ->when(!is_null($existing_app), function ($q) use ($existing_app) {
                 return $existing_app
-                    ? $q->where('project_type', true) // Aplikasi yang sudah ada
-                    : $q->where('project_type', false); // Aplikasi baru
+                    ? $q->where('project_type', true) // Hanya aplikasi yang sudah ada
+                    : $q->where('project_type', false); // Hanya aplikasi baru
             })
             ->when($organization, function ($q) use ($organization) {
                 if ($organization) {
@@ -86,22 +87,20 @@ class SubmissionController extends Controller
                     });
                 }
                 return $q;
-            })
+            })            
             ->where('status', 'terverifikasi')
             ->orderBy($sort_by, $sort_direction)
-            ->paginate($perPage)
-            ->appends($request->query()); 
-
+            ->paginate($perPage);
+    
         if ($request->ajax()) {
             return response()->json([
-                'html' => view('components.list_view', ['submissions' => $submissions])->render(),
-                'pagination' => $submissions->appends($request->query())->links('vendor.pagination.custom')->render(),
+                'html' => view('components.list_view', ['submission' => $submission])->render(),
+                'count' => $submission->total(),
             ]);
         }
-
-        return view('submissions.index', compact('submissions')); // Ensure 'submissions' is passed, not 'submission'
+    
+        return view('submissions.index', compact('submission'));
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -158,7 +157,7 @@ class SubmissionController extends Controller
 
         // Create notification for the user
         Notification::create([
-            'user_id' => $submission->user_id,
+            'user_id' => $submission->submitter->submitter_id,
             'id' => Str::uuid(), // Generate UUID untuk primary key
             'isRead' => false,
             'message' => "Pengajuan berhasil dikirim",

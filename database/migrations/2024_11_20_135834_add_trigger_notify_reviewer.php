@@ -19,7 +19,7 @@ return new class extends Migration
                 IF NEW.nip_reviewer IS NOT NULL THEN
                     -- Tambahkan notifikasi ke tabel notifications
                     INSERT INTO notifications (
-                        notification_id,
+                        id,
                         user_id,
                         \"isRead\",
                         message,
