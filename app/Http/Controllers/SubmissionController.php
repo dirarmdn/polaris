@@ -137,25 +137,24 @@ class SubmissionController extends Controller
                     $fileName = time() . '_' . $file->getClientOriginalName();
                     $path = $file->storeAs('uploads', $fileName);
                 }
-            } elseif ($data['tipe'] === 'link') {
-                $path = $data['link_path'] ?? null;
+            } elseif ($ref['tipe'] === 'link') {
+                $path = $ref['link_path'] ?? null;
             }
 
             // Hanya buat entri jika path sudah di-set
             if ($path !== null) {
                 $submission->reference()->create([
-                    'keterangan' => $data['keterangan'] ?? null,
-                    'tipe' => $data['tipe'],
+                    'description' => $ref['keterangan'] ?? null,
+                    'type' => $ref['tipe'],
                     'path' => $path,
                 ]);
             }
         }
-
+        
         Alert::success('Berhasil', 'Anda berhasil mengirim pengajuan!');
 
         return redirect()->route('dashboard.submissions.index')->with('success', 'Submission berhasil dibuat!');
     }
-
     /**
      * Display the specified resource.
      */
