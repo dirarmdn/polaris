@@ -17,9 +17,11 @@
     <div class="content">
         @yield('content')
     </div>
-
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     @include('components.footer_dashboard')
-    @vite('resources/js/app.js')
+    {{-- @if (Route::currentRouteName() != 'dashboard.submissions.index') --}}
+        @vite('resources/js/app.js')
+    {{-- @endif --}}
     @stack('scripts')
     @include('sweetalert::alert')
 </body>

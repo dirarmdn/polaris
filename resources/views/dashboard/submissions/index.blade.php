@@ -17,57 +17,27 @@
             text-align: center;
         }
     </style>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.5/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
 @endpush
 
 @section('content')
     <!-- Header -->
-    <div class="container mx-auto px-4">
+    <div class="container mx-auto pl-32 pt-10">
         <!-- Title -->
         <h1 class="text-2xl font-bold mb-6">
             <span class="text-black">Data</span>
             <span class="text-[#ff7600]">Pengajuan</span>
         </h1>
-        
-        <!-- Controls Container -->
-        <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
-            <!-- Export Button -->
-            <a href="{{ route('dashboard.submissions.print') }}" class="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors" style="margin-left: 120px"> 
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                    <polyline points="7 10 12 15 17 10"/>
-                    <line x1="12" y1="15" x2="12" y2="3"/>
-                </svg>
-                Export Data
-            </a>
-
-            <!-- Search Form -->
-            <form action="{{ route('dashboard.submissions.index') }}" method="GET" class="relative flex-1 max-w-md" style="margin-right: 120px">
-                <input 
-                    type="text" 
-                    name="submission_title" 
-                    id="table-search"
-                    class="w-full p-2 pr-12 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:ring-2 focus:ring-primary-600 focus:border-primary-600" 
-                    placeholder="Search Here"
-                    value="{{ request('submission_title') }}"
-                >
-                <button 
-                    type="submit"
-                    class="absolute right-0 top-0 h-full px-4 text-white bg-primary-900 rounded-r-lg hover:bg-primary-950 transition-colors"
-                >
-                    <span class="sr-only">Search</span>
-                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5A7 7 0 1 1 5 7a7 7 0 0 1 12 0z" />
-                    </svg>
-                </button>
-            </form>
-        </div>
     </div>
 
     <!-- Table -->
-    <div class="table-container mx-auto" style="max-width: 1300px; padding: 1rem;">
-        <table
-            class="w-full text-sm text-left text-black-700 border border-gray-400 border-collapse rounded-lg overflow-hidden shadow-lg">
-            <thead class="text-lg text-nowrap text-black-900 bg-gray-50 border-b">
+    <div class="table-container datatable-dark data-tables mx-auto" style="max-width: 1300px; padding: 1rem;">
+        <table id="mauexport"
+            class="w-full text-sm text-left text-black-700 border border-gray-400 border-collapse rounded-xl overflow-hidden shadow-lg">
+            <thead class="text-md text-nowrap text-black-900 bg-gray-50 border-b">
                 <tr>
                     <th scope="col" class="px-6 py-4 font-semibold">Judul Aplikasi</th>
                     @if (auth()->user()->role != 1)
@@ -82,8 +52,7 @@
                     <th scope="col" class="px-6 py-4 text-center font-semibold">Aksi</th>
                 </tr>
             </thead>
-            <tbody>
-            <tbody>
+            <tbody class="text-md">
                 @forelse($data_pengajuans as $pengajuan)
                     <tr class="bg-white border-b hover:bg-gray-50">
                         <td class="px-6 py-4">{{ $pengajuan->submission_title }}</td>
@@ -172,9 +141,25 @@
             </tbody>
         </table>
     </div>
-
-    <!-- Pagination -->
-    <div class="flex justify-center my-10">
-        {{ $data_pengajuans->links() }}
-    </div>
 @endsection
+
+@push('scripts')
+<script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.flash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.print.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#mauexport').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ]
+        });
+    });
+</script>
+@endpush

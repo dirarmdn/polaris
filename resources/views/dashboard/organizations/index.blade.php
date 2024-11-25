@@ -58,3 +58,14 @@
 </div>
 @endsection
 
+@push('scripts')
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
+        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
+    <script>
+        const dataTable = new simpleDatatables.DataTable("#mitra-table", {
+            searchable: true,
+            sortable: true
+        });
+    </script>
+@endpush
+

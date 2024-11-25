@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Submission;
-use App\Models\Organization;
 use App\Models\Reference;
+use App\Models\Submission;
+use Illuminate\Support\Str;
+use App\Models\Notification;
+use App\Models\Organization;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Requests\StoreSubmissionRequest;
 use App\Http\Requests\UpdateSubmissionRequest;
-use App\Models\Notification;
 
 class SubmissionController extends Controller
 {
@@ -21,21 +22,16 @@ class SubmissionController extends Controller
     public function index(Request $request)
     {
         $perPage = $request->input('perPage', 5);
-        $submissions = Submission::where('status', 'terverifikasi')
-            ->paginate($perPage)
-            ->appends($request->query());
-
-        $organizations = Organization::get();
-
+        $submission = Submission::where('status', 'terverifikasi')->paginate($perPage);
+        $organization = Organization::get();
+    
         if ($request->ajax()) {
-            return response()->json([
-                'html' => view('components.list_view', compact('submissions'))->render(),
-                'pagination' => $submissions->appends($request->query())->links('vendor.pagination.custom')->render(),
-            ]);
+            return view('components.list_view', compact('submission'));
         }
-
-        return view('submissions.index', compact('submissions', 'organizations'));
+    
+        return view('submissions.index', compact('submission', 'organization'));
     }
+    
 
     public function print(Request $request)
     {
@@ -60,7 +56,6 @@ class SubmissionController extends Controller
             'submission_title' => $submission_title,
         ]);
     }
-
 
     public function search(Request $request)
     {
@@ -107,6 +102,7 @@ class SubmissionController extends Controller
         return view('submissions.index', compact('submissions')); // Ensure 'submissions' is passed, not 'submission'
     }
 
+
     /**
      * Show the form for creating a new resource.
      */
@@ -118,13 +114,9 @@ class SubmissionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-
     public function store(StoreSubmissionRequest $request)
     {
         $data = $request->validated();
-
-        // Debug: Tampilkan data referensi yang diterima
-        \Log::info('Referensi data:', $request->input('referensi'));
 
         // Add additional data
         $data['submitter_id'] = Auth::user()->submitter->submitter_id;
@@ -135,41 +127,45 @@ class SubmissionController extends Controller
         $submission = Submission::create($data);
         // Penanganan referensi
         $referensiData = $request->input('referensi', []);
-        foreach ($data['referensi'] as $index => $ref) {
-            
+
+        foreach ($referensiData as $index => $data) {
+            if (!isset($data['tipe'])) {
+                continue;
+            }
+
             $path = null;
 
             // Pastikan file tersedia jika tipe adalah 'file'
-            if ($ref['tipe'] === 'file' && isset($ref['file_path'])) {
-                $file = $ref['file_path']; // Ambil dari ref array
+            if ($data['tipe'] === 'file' && isset($data['file_path'])) {
+                $file = $data['file_path']; // Ambil dari data array
                 if ($file instanceof \Illuminate\Http\UploadedFile) {
                     $fileName = time() . '_' . $file->getClientOriginalName();
                     $path = $file->storeAs('uploads', $fileName);
                 }
-            } elseif ($ref['tipe'] === 'link') {
-                $path = $ref['link_path'] ?? null;
+            } elseif ($data['tipe'] === 'link') {
+                $path = $data['link_path'] ?? null;
             }
 
             // Hanya buat entri jika path sudah di-set
             if ($path !== null) {
                 $submission->reference()->create([
-                    'description' => $ref['keterangan'] ?? null,
-                    'type' => $ref['tipe'],
+                    'keterangan' => $data['keterangan'] ?? null,
+                    'tipe' => $data['tipe'],
                     'path' => $path,
                 ]);
             }
-            // Membuat notifikasi berhasil mengirim pengajuan
+        }
+
+        // Create notification for the user
         Notification::create([
-            'user_id' => Auth::id(),
-            'submission_code' => $submission->submission_code,
-            'message' => "Pengajuan '{$submission->submission_title}' berhasil dikirim.",
+            'user_id' => $submission->user_id,
+            'id' => Str::uuid(), // Generate UUID untuk primary key
+            'isRead' => false,
+            'message' => "Pengajuan berhasil dikirim",
             'notifiable_id' => $submission->submission_code,
-            'notifiable_type' => Submission::class,
+            'notifiable_type`' => Submission::class,
         ]);
 
-        return redirect()->route('submissions.index')->with('success', 'Pengajuan berhasil dikirim!');
-        }
-        
         Alert::success('Berhasil', 'Anda berhasil mengirim pengajuan!');
 
         return redirect()->route('dashboard.submissions.index')->with('success', 'Submission berhasil dibuat!');

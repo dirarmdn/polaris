@@ -40,7 +40,7 @@
                 <ul class="avatars flex list-none mx-auto">
                     <li
                         class="avatars_item shadow-md rounded-full block h-[45px] w-[45px] leading-[45px] transition-all duration-100 ease-in-out overflow-hidden first:z-5 nth-child-2:z-4 nth-child-3:z-3 nth-child-4:z-2 nth-child-5:z-1 last:z-0">
-                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fHByb2ZpbGV8ZW58MHx8MHx8fDA%3D"
+                        <img src="https://images.unsplash.com/photo-1506863530036-1efeddceb993?q=80&w=1944&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                             class="w-full h-full object-cover rounded-full" alt="Avatar">
                     </li>
                     <li
@@ -50,7 +50,7 @@
                     </li>
                     <li
                         class="avatars_item shadow-md rounded-full block h-[45px] w-[45px] leading-[45px] transition-all duration-100 ease-in-out overflow-hidden -ml-[10px] first:z-5 nth-child-2:z-4 nth-child-3:z-3 nth-child-4:z-2 nth-child-5:z-1 last:z-0">
-                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fHByb2ZpbGV8ZW58MHx8MHx8fDA%3D"
+                        <img src="https://images.unsplash.com/photo-1600180758890-6b94519a8ba6?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                             class="w-full h-full object-cover rounded-full" alt="Avatar">
                     </li>
                     <li
@@ -64,8 +64,8 @@
             <div data-aos="fade-left" class="h-52 md:h-60 md:w-56 rounded-2xl overflow-hidden relative group">
                 <div class="absolute inset-0 flex flex-col justify-center items-center z-20 p-5 text-center">
                     <h1 class="text-xl text-white font-semibold">Tidak tahu mau apa?<br><br></h1>
-                    <h1 class="text-base text-white ">Pelajari tata cara pengajuan kebutuhan aplikasi <span
-                            class="underline">disini</span></h1>
+                    <a href="{{ route('home.faq') }}" class="text-base text-white ">Pelajari tata cara pengajuan kebutuhan aplikasi <span
+                            class="underline">di sini</span></a>
                 </div>
                 <div class="w-full h-full inset-0 bg-accent-600 opacity-65 rounded-md absolute z-10"></div>
                 <img class="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-125 z-0"

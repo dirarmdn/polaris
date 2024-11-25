@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('notifications', function (Blueprint $table) {
-            $table->string('notification_id')->primary(); 
+            $table->uuid('id')->primary()->default(DB::raw('gen_random_uuid()'));
             $table->foreignUuid('user_id')->references('user_id')->on('users')->onDelete('cascade'); // Foreign key ke tabel users
             $table->boolean('isRead')->default(false);
             $table->string('message');
@@ -29,4 +29,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('notifications');
     }
-};  
+};

@@ -67,20 +67,30 @@ class HomeController extends Controller
         $user = auth()->user();
 
         if ($user->role == 1) {
-            $pengajuan = Submission::with('submitter') 
-                ->when($user->role === 1, function ($query) use ($user) {
-                    return $query->where('submitter_id', $user->submitter->submitter_id);
-                })->get();
-        } else if ($user->role == 1) {
-            $pengajuan = Submission::latest()->where('status', 'belum_direview')->where('nip_reviewer', $user->nip_reviewer)->get();
+            $pengajuan = DB::table('submissions')
+                ->join('submitters', 'submissions.submitter_id', '=', 'submitters.submitter_id') // Sesuaikan nama tabel dan kolom
+                ->where('submissions.submitter_id', $user->submitter->submitter_id)
+                ->take(3)
+                ->get();
+        } else if ($user->role == 3) {
+            $pengajuan = DB::table('submissions')
+                ->where('status', 'belum_direview')
+                ->where('nip_reviewer', $user->nip_reviewer)
+                ->orderBy('created_at', 'desc')
+                ->take(3)
+                ->get();
         } else {
-            $pengajuan = Submission::latest()->where('status', '!=', 'diarsipkan')->get();
+            $pengajuan = DB::table('submissions')
+                ->where('status', '!=', 'diarsipkan')
+                ->orderBy('created_at', 'desc')
+                ->take(3)
+                ->get();
         }
         
         $jumlah_terverifikasi = Submission::where('status', 'terverifikasi')->count();
         $jumlah_belum = Submission::where('status', 'belum_direview')->count();
         if (Auth::check()) {
-            $userId = Auth::id();
+            $userId = $user->user_id;
             $notifications = Notification::where('user_id', $userId)
                 ->where('isRead', false)
                 ->latest()

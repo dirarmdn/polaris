@@ -8,7 +8,6 @@ use App\Models\Notification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 use App\Models\Submission;
-use App\Observers\SubmissionObserver;
 use Illuminate\Support\Facades\Request;
 
 
@@ -73,7 +72,6 @@ class AppServiceProvider extends ServiceProvider
                 $view->with('notifications', $latestNotifications);
             }
         });
-        Submission::observe(SubmissionObserver::class);
     }
 
 }
