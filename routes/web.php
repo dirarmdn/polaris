@@ -41,7 +41,7 @@ Route::get('/search', [SubmissionController::class, 'search'])->name('submission
 Route::group(['middleware' => 'auth'], function () {
 
     Route::prefix('dashboard')->group(function () {
-        Route::get('/', [HomeController::class, 'dashboard'])->name('dashboard');
+        Route::get('/', [HomeController::class, 'dashboard'])->middleware('verified')->name('dashboard');
         Route::get('/pengajuan', [SubmissionController::class, 'showAllSubmissions'])->name('dashboard.submissions.index');
         Route::get('/pengajuan/detail/{submission_code}', [SubmissionController::class, 'showSubmission'])->name('dashboard.submissions.show');
         Route::get('/pengajuan/{submission_code}/edit', [SubmissionController::class, 'edit'])->name('submissions.edit');
@@ -68,22 +68,34 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('/user', UserController::class);
     Route::resource('/organization', OrganizationController::class);
     Route::post('/logout', [UserController::class, 'signOut'])->name('logout');
-    // Email Verification Notice
-    Route::get('/email/verify', function () {
-        return view('auth.verify-email');
-    })->middleware('auth')->name('verification.notice');
 
-    // Email Verification Handler
-    Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-        $request->fulfill();
-        return redirect()->route('home');
-    })->middleware(['auth', 'signed'])->name('verification.verify');
+    // // Email Verification Notice route
+    // Route::get('/email/verify', [AuthController::class, 'verifyNotice'])->name
+    // ('verification.notice');
+
+    // // Email Verification Handler route
+    // Route::get('/email/verify/{id}/{hash}', [AuthController::class,
+    // 'verifyEmail'] )->middleware('signed')->name('verification.verify');
+
+    // // Resending the Verification Email
+    // Route::post('/email/verification-notification', [AuthController::class,
+    // 'verifyHandler'])->middleware(['throttle:6,1'])->name('verification.send');
+
+    // Email Verification Notice route
+    Route::get('/email/verify', [AuthController::class, 'verifyNotice'])
+    ->middleware('auth')
+    ->name('verification.notice');
+
+    // Email Verification Handler route
+    Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'verifyEmail'])
+    ->middleware(['auth', 'signed'])
+    ->name('verification.verify');
 
     // Resending the Verification Email
-    Route::post('/email/verification-notification', function (Request $request) {
-        $request->user()->sendEmailVerificationNotification();
-        return back()->with('message', 'Verification link sent!');
-    })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+    Route::post('/email/verification-notification', [AuthController::class, 'verifyHandler'])
+    ->middleware(['auth', 'throttle:6,1'])
+    ->name('verification.send');
+
 
 // Open Routes
 Route::get('/admins', [AdminController::class, 'index'])->name('admins.index');

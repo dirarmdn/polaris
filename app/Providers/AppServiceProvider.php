@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
 use App\Models\Notification;
@@ -29,6 +31,12 @@ class AppServiceProvider extends ServiceProvider
         // Use the Tailwind pagination template
         Paginator::defaultView('vendor.pagination.tailwind');
 
+        VerifyEmail::toMailUsing(function (object $notifiable, string $url) {
+            return (new MailMessage)
+                ->subject('Verify Email Address')
+                ->view('mail.email-verification-message', [ 'url' => $url ]);
+        });
+        
         View::composer('*', function ($view) {
             if (Auth::check()) {
                 $userId = Auth::id();

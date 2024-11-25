@@ -80,7 +80,7 @@ class AuthController extends Controller
 
         event(new Registered($user));
     
-        return redirect()->route('home');
+        return redirect()->route('verification.notice');
     }
 
     //Verify Email Notice Handler
