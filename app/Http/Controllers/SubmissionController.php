@@ -126,17 +126,13 @@ class SubmissionController extends Controller
         $submission = Submission::create($data);
         // Penanganan referensi
         $referensiData = $request->input('referensi', []);
-
-        foreach ($referensiData as $index => $data) {
-            if (!isset($data['tipe'])) {
-                continue;
-            }
-
+        foreach ($data['referensi'] as $index => $ref) {
+            
             $path = null;
 
             // Pastikan file tersedia jika tipe adalah 'file'
-            if ($data['tipe'] === 'file' && isset($data['file_path'])) {
-                $file = $data['file_path']; // Ambil dari data array
+            if ($ref['tipe'] === 'file' && isset($ref['file_path'])) {
+                $file = $ref['file_path']; // Ambil dari ref array
                 if ($file instanceof \Illuminate\Http\UploadedFile) {
                     $fileName = time() . '_' . $file->getClientOriginalName();
                     $path = $file->storeAs('uploads', $fileName);
