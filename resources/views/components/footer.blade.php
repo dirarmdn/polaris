@@ -2,7 +2,7 @@
     <div class="flex flex-col md:flex-row p-14 justify-between">
         <div class="flex flex-col gap-4 mb-9">
             <img class="max-w-32 mx-auto" src="{{ asset('images/Logo.png') }}" alt="">
-            <a href="" class="py-2 px-5 flex items-center gap-2 border-2 border-accent-500 mx-auto rounded-3xl">
+            <a href="{{ route('home.feedback') }}" class="py-2 px-5 flex items-center gap-2 border-2 border-accent-500 mx-auto rounded-3xl">
                 <span class="material-symbols-outlined">
                     sms
                     </span>

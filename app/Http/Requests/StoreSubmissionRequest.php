@@ -28,7 +28,7 @@ class StoreSubmissionRequest extends FormRequest
             'referensi' => 'nullable|array',
             'referensi.*.tipe' => 'nullable|in:link,file',
             'referensi.*.link_path' => 'nullable',
-            'referensi.*.file_path' => 'nullable|file',
+            'referensi.*.file_path' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
             'referensi.*.keterangan' => 'nullable|string|max:255',
         ];
     }

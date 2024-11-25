@@ -11,7 +11,7 @@ class UpdateSubmissionRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,14 @@ class UpdateSubmissionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'submission_title' => 'required|string|max:255',
+            'problem_description' => 'required|string',
+            'application_purpose' => 'required|string',
+            'platform' => 'required|in:web,mobile,desktop,multi-platform',
+            'project_type' => 'required|boolean',
+            'references.*.type' => 'nullable|in:file,link',
+            'references.*.file_path' => 'nullable|file|max:2048', // Validasi file
+            'references.*.link_path' => 'nullable|url', // Validasi URL
         ];
     }
 }

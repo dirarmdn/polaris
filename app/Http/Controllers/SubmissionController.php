@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Organization;
+use App\Models\Reference;
 use App\Models\Submission;
+use Illuminate\Support\Str;
+use App\Models\Notification;
+use App\Models\Organization;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Requests\StoreSubmissionRequest;
 use App\Http\Requests\UpdateSubmissionRequest;
-use App\Models\Notification;
 
 class SubmissionController extends Controller
 {
@@ -29,6 +33,30 @@ class SubmissionController extends Controller
     }
     
 
+    public function print(Request $request)
+    {
+        // Ambil input pencarian dari form
+        $submission_title = $request->input('submission_title');
+
+        // Ambil user yang sedang login
+        $user = auth()->user();
+
+        // Query untuk mengambil semua data dengan pencarian tanpa pagination, hanya yang 'terverifikasi'
+        $data_pengajuans = Submission::with('submitter') // Mengambil relasi user
+            ->where('status', 'terverifikasi') // Tambahkan kondisi untuk status 'terverifikasi'
+            ->when($submission_title, function ($query) use ($submission_title) {
+                // Filter berdasarkan judul pengajuan jika ada pencarian
+                return $query->where('submission_title', 'LIKE', '%' . $submission_title . '%');
+            })
+            ->get(); // Mengambil semua data tanpa pagination
+
+        // Kirimkan data ke view dengan hasil pencarian
+        return view('dashboard.submissions.print-submission', [
+            'data_pengajuans' => $data_pengajuans,
+            'submission_title' => $submission_title,
+        ]);
+    }
+
     public function search(Request $request)
     {
         $query = $request->input('search');
@@ -37,11 +65,9 @@ class SubmissionController extends Controller
         $platform_filter = $request->input('platform', []);
         $existing_app = $request->boolean('existing_app');
         $organization = $request->input('organization');
-        $perPage = $request->input('perPage');
+        $perPage = $request->input('perPage', 5);
 
-        // dd($perPage);
-    
-        $submission = Submission::query()
+        $submissions = Submission::query()
             ->when($query, function ($q) use ($query) {
                 return $q->where('submission_title', 'like', "%{$query}%");
             })
@@ -50,8 +76,8 @@ class SubmissionController extends Controller
             })
             ->when(!is_null($existing_app), function ($q) use ($existing_app) {
                 return $existing_app
-                    ? $q->where('project_type', true) // Hanya aplikasi yang sudah ada
-                    : $q->where('project_type', false); // Hanya aplikasi baru
+                    ? $q->where('project_type', true) // Aplikasi yang sudah ada
+                    : $q->where('project_type', false); // Aplikasi baru
             })
             ->when($organization, function ($q) use ($organization) {
                 if ($organization) {
@@ -60,21 +86,22 @@ class SubmissionController extends Controller
                     });
                 }
                 return $q;
-            })            
+            })
             ->where('status', 'terverifikasi')
             ->orderBy($sort_by, $sort_direction)
-            ->paginate($perPage);
-    
+            ->paginate($perPage)
+            ->appends($request->query()); 
+
         if ($request->ajax()) {
             return response()->json([
-                'html' => view('components.list_view', ['submission' => $submission])->render(),
-                'count' => $submission->total(),
+                'html' => view('components.list_view', ['submissions' => $submissions])->render(),
+                'pagination' => $submissions->appends($request->query())->links('vendor.pagination.custom')->render(),
             ]);
         }
-    
-        return view('submissions.index', compact('submission'));
+
+        return view('submissions.index', compact('submissions')); // Ensure 'submissions' is passed, not 'submission'
     }
-    
+
 
     /**
      * Show the form for creating a new resource.
@@ -87,7 +114,6 @@ class SubmissionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-
     public function store(StoreSubmissionRequest $request)
     {
         $data = $request->validated();
@@ -128,20 +154,21 @@ class SubmissionController extends Controller
                     'path' => $path,
                 ]);
             }
-            // Membuat notifikasi berhasil mengirim pengajuan
+        }
+
+        // Create notification for the user
         Notification::create([
-            'user_id' => Auth::id(),
-            'submission_code' => $submission->submission_code,
-            'message' => "Pengajuan '{$submission->submission_title}' berhasil dikirim.",
+            'user_id' => $submission->user_id,
+            'id' => Str::uuid(), // Generate UUID untuk primary key
+            'isRead' => false,
+            'message' => "Pengajuan berhasil dikirim",
             'notifiable_id' => $submission->submission_code,
-            'notifiable_type' => Submission::class,
+            'notifiable_type`' => Submission::class,
         ]);
 
-        return redirect()->route('submissions.index')->with('success', 'Pengajuan berhasil dikirim!');
-        }
-        
+        Alert::success('Berhasil', 'Anda berhasil mengirim pengajuan!');
 
-        return redirect()->route('submissions.index')->with('success', 'Submission berhasil dibuat!');
+        return redirect()->route('dashboard.submissions.index')->with('success', 'Submission berhasil dibuat!');
     }
 
     /**
@@ -161,9 +188,10 @@ class SubmissionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Submission $submissions)
+    public function edit($submission_code)
     {
-        return view('submissions.edit', compact('submissions'));
+        $submission = Submission::findOrFail($submission_code);
+        return view('dashboard.submissions.edit', compact('submission'));
     }
 
     /**
@@ -171,17 +199,45 @@ class SubmissionController extends Controller
      */
     public function update(UpdateSubmissionRequest $request, Submission $submission)
     {
-        $submission->update($request->validated()); // Perbarui data pengajuan
-        return redirect()->route('submissions.index')->with('success', 'Pengajuan berhasil diperbarui!');
+        // Perbarui data utama pengajuan
+        $submission->update(array_merge(
+            $request->validated(),
+            ['status' => 'belum_direview'] // Set status menjadi 'belum_direview'
+        ));
+    
+        // Tangani referensi (file/link)
+        if ($request->has('references')) {
+            $references = collect($request->input('references'))->map(function ($reference) {
+                if ($reference['type'] === 'file' && request()->hasFile("references.{$reference['index']}.file_path")) {
+                    $file = request()->file("references.{$reference['index']}.file_path");
+                    $reference['file_path'] = $file->store('references'); // Simpan file
+                }
+                return $reference;
+            });
+    
+            $submission->references()->delete(); // Hapus referensi lama
+            $submission->references()->createMany($references->toArray()); // Tambahkan referensi baru
+        }
+    
+        // Tampilkan notifikasi
+        Alert::success('Berhasil', 'Pengajuan berhasil diperbaharui!');
+    
+        return redirect()->route('dashboard.submissions.index');
     }
-
+    
+    
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Submission $submission)
+    public function destroy(string $submission_code)
     {
+        $submission = Submission::where('submission_code', $submission_code)->firstOrFail();
+
         $submission->delete();
-        return redirect()->route('submissions.index')->with('success', 'PEngajuan berhasil dihapus!');
+
+        Alert::success('Berhasil', 'Pengajuan berhasil dihapus!');
+        
+        return redirect()->back();
     }
 
     // AFTER LOGIN
@@ -190,7 +246,6 @@ class SubmissionController extends Controller
         // Ambil input pencarian dari form
         $submission_title = $request->input('submission_title');
 
-        // Ambil user yang sedang login
         $user = auth()->user();
 
         // Query untuk mengambil data dengan pencarian dan paginasi
@@ -211,14 +266,17 @@ class SubmissionController extends Controller
                 })
                 ->paginate(10);
         } else {
-            $data_pengajuans = Submission::with('submitter')
-                ->where('status', 'belum_direview')
-                //->where('nip_reviewer', $user->reviewer->nip_reviewer)
+            $data_pengajuans = DB::table('submissions_need_review')
+                // ->where('nip_reviewer', $user->reviewer->nip_reviewer)
                 ->when($submission_title, function ($query) use ($submission_title) {
                     return $query->where('submission_title', 'LIKE', '%' . $submission_title . '%');
                 })
                 ->paginate(10);
         }
+
+        $title = 'Hapus Pengajuan!';
+        $text = "Apakah kamu yakin akan menghapus pengajuan?";
+        confirmDelete($title, $text);
 
         return view('dashboard.submissions.index', [
             'data_pengajuans' => $data_pengajuans,

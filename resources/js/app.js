@@ -1,8 +1,8 @@
 import './bootstrap';
 import 'flowbite';
 
-import $ from 'jquery';
-window.$ = window.jQuery = $;
+// import $ from 'jquery';
+// window.$ = window.jQuery = $;
 
 import 'material-icons/iconfont/material-icons.css';
 import '@material/web/button/filled-button.js';
@@ -19,14 +19,6 @@ window.Swal = swal;
 AOS.init();
 
 import 'flowbite';
-import { DataTable } from "simple-datatables";
-if (document.getElementById("mitra-table")) {
-    const dataTable = new DataTable("#mitra-table", {
-        searchable: true,
-        sortable: true
-    });
-}
-
 import select2 from 'select2';
 select2();
 

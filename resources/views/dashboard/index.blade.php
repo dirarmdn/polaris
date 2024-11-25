@@ -34,13 +34,13 @@
                         </span>
                     </a>
                 </div>
-                <div class="mt-4 space-y-4 px-10 py-4 text-left overflow-y-scroll max-h-[400px] scrollbar-thin">
+                <div class="mt-4 space-y-4 px-10 py-4 text-left">
                     <!-- Submission Item -->
                     @forelse ($pengajuan as $p)
                     <div class="bg-white py-4 px-6 rounded-xl">
                         <h3 class="text-black text-lg font-bold">{{ $p->submission_title }}</h3>
-                        <p class="text-sm text-primary-200 mt-1">
-                            {{ $p->deskripsi_masalah }}
+                        <p class="text-sm text-gray-500 mt-1">
+                            {{ \Illuminate\Support\Str::limit($p->problem_description, 100, '...') }}
                         </p>
                         <p class="text-accent-light-500 font-semibold mt-2">
                             @if ($p->status == 'belum_direview')
@@ -61,7 +61,7 @@
             </div>
 
             <!-- FAQ and Other Submissions -->
-            <div class="space-y-10 bg-light-blue-300 my-10 mx-auto p-7 rounded-xl justify-center items-center flex flex-col">
+            <div class="space-y-10 bg-light-blue-300 my-auto mx-auto p-7 rounded-xl justify-center items-center flex flex-col">
                 @if (auth()->user()->role == 1)
                 <a href="{{ route('home.faq') }}" class="bg-light-blue-500 p-6 w-full rounded-lg text-center">
                     <h3 class="text-white text-7xl">
