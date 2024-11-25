@@ -155,16 +155,6 @@ class SubmissionController extends Controller
             }
         }
 
-        // Create notification for the user
-        Notification::create([
-            'user_id' => $submission->submitter->submitter_id,
-            'id' => Str::uuid(), // Generate UUID untuk primary key
-            'isRead' => false,
-            'message' => "Pengajuan berhasil dikirim",
-            'notifiable_id' => $submission->submission_code,
-            'notifiable_type`' => Submission::class,
-        ]);
-
         Alert::success('Berhasil', 'Anda berhasil mengirim pengajuan!');
 
         return redirect()->route('dashboard.submissions.index')->with('success', 'Submission berhasil dibuat!');
