@@ -22,14 +22,14 @@ class SubmissionController extends Controller
     public function index(Request $request)
     {
         $perPage = $request->input('perPage', 5);
-        $submission = Submission::where('status', 'terverifikasi')->paginate($perPage);
-        $organization = Organization::get();
+        $submissions = Submission::where('status', 'terverifikasi')->paginate($perPage);
+        $organizations = Organization::get();
     
         if ($request->ajax()) {
-            return view('components.list_view', compact('submission'));
+            return view('components.list_view', compact('submissions'));
         }
     
-        return view('submissions.index', compact('submission', 'organization'));
+        return view('submissions.index', compact('submissions', 'organizations'));
     }
 
     public function print(Request $request)
@@ -66,9 +66,7 @@ class SubmissionController extends Controller
         $organization = $request->input('organization');
         $perPage = $request->input('perPage');
 
-        // dd($perPage);
-    
-        $submission = Submission::query()
+        $submissions = Submission::query()
             ->when($query, function ($q) use ($query) {
                 return $q->where('submission_title', 'like', "%{$query}%");
             })
@@ -94,12 +92,12 @@ class SubmissionController extends Controller
     
         if ($request->ajax()) {
             return response()->json([
-                'html' => view('components.list_view', ['submission' => $submission])->render(),
-                'count' => $submission->total(),
+                'html' => view('components.list_view', ['submissions' => $submissions])->render(),
+                'count' => $submissions->total(),
             ]);
         }
     
-        return view('submissions.index', compact('submission'));
+        return view('submissions.index', compact('submissions'));
     }
 
     /**
@@ -318,6 +316,17 @@ public function sendNotification($userId)
 {
     $submissions = Submission::where('user_id', $userId)->get();
     return view('notification.notificationEmail', compact('submissions'));
+}
+
+public function archiveSubmission(string $submission_code)
+{
+    $submission = Submission::where('submission_code', $submission_code)->firstOrFail();
+
+    $submission->update(['status' => 'diarsipkan']);
+
+    Alert::success('Berhasil', 'Pengajuan berhasil diarsipkan!');
+    
+    return redirect()->back();
 }
 
 

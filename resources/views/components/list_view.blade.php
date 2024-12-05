@@ -20,7 +20,7 @@
                 <a href="{{ route('submissions.show', ['submission_code' => $p->submission_code]) }}">
                     <button type="button" class="text-white bg-dark-800 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-12 py-2.5 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Detail</button>
                 </a>
-                <p class="text-xs text-end">{{ $p->created_at->translatedFormat('d M Y') }}</p>
+                <p class="text-xs text-end">{{ $p->created_at }}</p>
             </div>
         </div>
     @endforeach

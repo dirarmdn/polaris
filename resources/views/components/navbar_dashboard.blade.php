@@ -1,10 +1,10 @@
-<nav class="bg-white border-gray-200 dark:bg-gray-900 px-10">
+<nav class="sticky border-gray-200 py-3 dark:bg-gray-900 px-10">
     <div class="flex items-center justify-between w-full">
         <!-- Navbar Links -->
         <div class="flex items-center space-x-8">
             <!-- Logo -->
             <a href="{{ route('home') }}" class="flex items-center space-x-3 rtl:space-x-reverse">
-                <img class="max-h-16" src="{{ asset('images/Logo(2).png') }}" alt="Logo">
+                <img class="max-h-12" src="{{ asset('images/Logo.png') }}" alt="Logo">
             </a>
             
             <!-- Navbar Links -->
@@ -57,7 +57,7 @@
                 </button>
                 
                 <!-- Dropdown Notifikasi -->
-                <div id="notificationDropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-80 dark:bg-gray-700">
+                <div id="notificationDropdown" class="z-10 bg-white hidden divide-y divide-gray-100 rounded-lg shadow-lg w-80 dark:bg-gray-700">
                     <div class="px-4 py-3 text-gray-900 dark:text-white">
                         <span class="font-bold">Notifikasi Terbaru</span>
                     </div>
@@ -83,7 +83,7 @@
                 <img id="avatarButton" data-dropdown-toggle="userDropdown" class="w-10 h-10 rounded-lg cursor-pointer object-cover" src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : asset('images/Avatar.svg') }}" alt="User dropdown">
                 
                 <!-- Dropdown User -->
-                <div id="userDropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                <div id="userDropdown" class="z-10 hidden divide-y bg-white divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
                     <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
                         <div>{{ Auth::user()->name }}</div>
                         <div class="font-medium truncate">{{ Auth::user()->email }}</div>

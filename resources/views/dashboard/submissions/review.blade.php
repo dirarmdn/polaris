@@ -3,10 +3,13 @@
 @section('title', 'Review Pengajuan')
 
 @section('content')
-<h1 class="text-2xl font-bold mx-20">Review <span class="text-accent-600">Pengajuan</span></h1>
+<h1 class="text-2xl font-bold mb-6 pl-32 pt-10">
+    Review
+    <span class="text-accent-600">Pengajuan</span>
+</h1>
 
-<div class="flex gap-10">
-    <div class="max-w-4xl ml-16 min-w-4xl my-10 p-6 bg-white shadow-lg rounded-xl font-manrope">
+<div class="flex gap-10 mx-auto px-24">
+    <div class="w-full my-10 p-6 bg-white shadow-lg rounded-xl font-manrope">
         <h1 class="text-2xl font-semibold mb-6 text-center">{{ $pengajuan->submission_title }}</h1>
         <div>
             <!-- Tabs -->
@@ -90,7 +93,7 @@
         </div>
     </div>
     
-    <div class="px-4 py-8">    
+    <div class="py-8 w-full">    
         <form id="submissionForm" method="POST" action="{{ route('review.update', ['review' => $pengajuan->submission_code]) }}" class="max-w-4xl mx-auto">
             @csrf
             @method('PUT')

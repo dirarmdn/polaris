@@ -27,7 +27,7 @@ return new class extends Migration
                 IF v_user_id IS NOT NULL THEN
                     -- Menyisipkan data notifikasi
                     INSERT INTO notifications (
-                        notification_id,
+                        id,
                         user_id,  -- Use the user_id from the notifications table
                         \"isRead\",
                         message,

@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('reviewers', function (Blueprint $table) {
-            $table->char('nip_reviewer')->primary();
+            $table->char('nip_reviewer', 20)->primary();
             $table->foreignUuid(column: 'user_id')->references('user_id')->on('users')->onDelete('cascade');
             $table->boolean('isActive');
             $table->integer('review_total')->default(0);

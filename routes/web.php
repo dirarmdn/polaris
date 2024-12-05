@@ -53,7 +53,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('/review', ReviewController::class)->middleware('role:reviewer');
         Route::resource('/organization', OrganizationController::class);
         Route::post('/pengajuan/store', [SubmissionController::class, 'store'])->name('submissions.store');
-        Route::get('/pengajuan/print', [SubmissionController::class, 'print'])->name('dashboard.submissions.print');    
+        Route::get('/pengajuan/print', [SubmissionController::class, 'print'])->name('dashboard.submissions.print');  
+        Route::post('/submission/{submission_code}/archive', [SubmissionController::class, 'archiveSubmission'])->name('submission.archive');
     });
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications');
     Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllRead'])->name('notifications.markAllRead');

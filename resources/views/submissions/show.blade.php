@@ -18,8 +18,10 @@
                         DETAIL APLIKASI</li>
                     <li class="cursor-pointer pb-2 transition-all duration-300 hover:text-primary-900"
                         data-target="referensi">REFERENSI</li>
-                    <li class="cursor-pointer pb-2 transition-all duration-300 hover:text-primary-900"
+                    @if (auth()->user()->user_id == $submission->submitter->user_id)
+                        <li class="cursor-pointer pb-2 transition-all duration-300 hover:text-primary-900"
                         data-target="hasil-review">HASIL REVIEW</li>
+                    @endif
                 </ul>
                 <!-- Blue underline animation -->
                 <div id="underline" class="absolute bottom-0 left-0 h-0.5 bg-primary-900 transition-all duration-300"></div>

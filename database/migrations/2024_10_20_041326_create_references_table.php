@@ -17,7 +17,7 @@ return new class extends Migration
             $table->enum('type', ['link', 'file']);
             $table->string('path');
             $table->string('submission_code');
-            $table->foreign('submission_code')->references('submission_code')->on('submissions');
+            $table->foreign('submission_code')->references('submission_code')->on('submissions')->onDelete('cascade');
             $table->timestamps();
         });
     }

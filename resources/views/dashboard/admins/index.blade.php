@@ -1,43 +1,117 @@
 @extends('layouts.dashboard')
+
+@section('title', 'Daftar Admin')
+
+@push('styles')
+<style>
+    .card {
+        border-radius: 15px;
+    }
+
+    .table {
+        border-radius: 12px;
+        overflow: hidden;
+        background-color: white!important;
+    }
+
+    .table thead th {
+        color: #000;
+    }
+
+    .table tbody tr {
+        background-color: white;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .badge {
+        padding: 5px 10px;
+        border-radius: 10px;
+        font-size: 0.9rem;
+    }
+
+    .btn-info {
+        color: #fff;
+        background-color: #17a2b8;
+        border-color: #17a2b8;
+    }
+
+    .btn-warning {
+        color: #1d3b6c;
+    }
+
+    .table-custom {
+        margin-left: 20px;
+    }
+
+    th,
+    td {
+        text-align: center;
+        padding: 15px!important;
+        border-bottom: 2px solid #ffffff6f!important;
+    }
+
+    table {
+            border-color: #ffffffc7!important;
+            border-bottom: 1px solid #ffffffc7!important;
+        }
+
+    .header-container {
+        justify-content: space-between;
+    }
+
+    .dataTables_length { 
+        margin-bottom: 20px!important;
+    }
+
+    .dataTables_length label {
+        color: #fff;
+    }
+
+    .dataTables_length select {
+        color: #000;
+        border-radius: 10px;
+    }
+
+    .dataTables_filter label {
+        color: #fff;
+    }
+
+    .dataTables_filter input {
+        color: #000;
+        border-radius: 10px;
+    }
+
+    .dataTables_info {
+        color: #fff!important;
+    }
+
+    .dataTables_paginate {
+        color: #fff!important;
+    }
+
+</style>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.5/css/buttons.dataTables.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+@endpush
+
 @section('content')
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=add_2" />
     <!-- Header -->
-    <div class="flex items-center mb-0 header-container">
-        <h1 class="text-3xl font-bold header-title" style="margin-top: 0; margin-left: 170px;">
-            <span class="text-black">Data</span>
-            <span style="color: #ff7600;">Admin</span>
-        </h1>
-    </div>
+    <h1 class="text-2xl font-bold mb-6 pl-32 pt-10">
+        Data
+        <span class="text-accent-600">Admin</span>
+    </h1>
+
     <div class="mt-4 flex justify-center">
-        <div class="py-16 w-5/6 rounded-lg bg-primary-900 px-20"> <!-- Blue container -->
-            <!-- Container untuk Tombol Tambah Admin dan Form Pencarian -->
-            <div class="flex items-center justify-between mb-5 px-10">
-                <!-- Tombol Tambah Admin dengan teks di tengah -->
-                <a href="{{ route('admin.create') }}"
-                    class="flex items-center justify-center btn btn-primary bg-orange-500 text-white py-2 px-6 rounded-lg hover:bg-orange-600">
-                    <span class="material-symbols-outlined mr-2">add_2</span>
-                    <!-- Memberi jarak sedikit antara ikon dan teks -->
-                    Tambah Admin
-                </a>
-                <!-- Form Pencarian -->
-                <form action="{{ route('admin.index') }}" method="GET" class="relative">
-                    <input type="text" name="nama" id="table-search"
-                        class="block w-80 p-2 pr-11 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:ring-secondary-600 focus:border-primary-900"
-                        placeholder="Search Here" value="{{ request('nama') }}">
-                    <button type="submit"
-                        class="absolute inset-y-0 right-0 flex items-center p-2 text-white bg-gray-900 rounded-r-lg hover:bg-primary-950">
-                        <span class="sr-only">Search</span>
-                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M21 21l-6-6m2-5A7 7 0 1 1 5 7a7 7 0 0 1 12 0z" />
-                        </svg>
-                    </button>
-                </form>
-            </div>
-            <div class="table-container mx-auto">
-                <table class="table table-hover text-black w-full rounded-lg">
+        <div class="py-16 mx-32 w-full rounded-lg bg-primary-900 px-16"> <!-- Blue container -->
+            <a href="{{ route('admin.create') }}"
+                class="mr-auto bg-orange-500 text-white py-2 px-4 rounded-lg hover:bg-orange-600">
+                <span class="material-symbols-outlined mr-2">add</span>
+                Tambah Admin
+            </a>
+            <div class="table-container mx-auto mt-7">
+                <table id="admin-table" class="table table-hover row-border text-black w-full rounded-lg">
                     <thead class="text-lg text-nowrap text-black-900 bg-gray-50 border-b">
                         <tr>
                             <th scope="col" class="px-4 py-4 font-semibold">Nama</th>
@@ -52,13 +126,19 @@
                                 <td class="px-6 py-4">{{ $admin->name }}</td>
                                 <td class="px-6 py-4">{{ $admin->email }}</td>
                                 <td class="px-6 py-4 text-center">{{ $admin->role == 2 ? 'Admin' : 'Reviewer' }}</td>
-                                <td class="px-6 py-4 text-center items-center flex justify-center">
+                                <td class="px-6 py-4 flex justify-center gap-2">
                                     <a href="{{ route('admin.show', ['admin' => $admin]) }}"
-                                        class="flex items-center text-black-600 mx-auto">
+                                        class="flex items-center text-black-600">
                                         <span
                                             class="inline-flex items-center px-4 py-1 text-sm font-semibold text-white bg-blue-500 rounded-full">
                                             <span class="material-symbols-outlined text-base">visibility</span>
-                                            <span class="ml-1">Lihat</span>
+                                        </span>
+                                    </a>
+                                    <a href="{{ route('admin.edit', ['admin' => $admin]) }}"
+                                        class="flex items-center text-black-600">
+                                        <span
+                                            class="inline-flex items-center px-4 py-1 text-sm font-semibold text-white bg-accent-500 rounded-full">
+                                            <span class="material-symbols-outlined text-base">edit</span>
                                         </span>
                                     </a>
                                 </td>
@@ -69,58 +149,21 @@
             </div>
         </div>
     </div>
-
-    <!-- Pagination -->
-    <div class="flex justify-center my-10">
-        {{ $admins->links() }}
-    </div>
-    <style>
-        .card {
-            border-radius: 15px;
-        }
-
-        .table {
-            border-radius: 12px;
-            overflow: hidden;
-            background-color: white;
-        }
-
-        .table thead th {
-            color: #000;
-        }
-
-        .table tbody tr {
-            background-color: white;
-            border-bottom: 1px solid #dee2e6;
-        }
-
-        .badge {
-            padding: 5px 10px;
-            border-radius: 10px;
-            font-size: 0.9rem;
-        }
-
-        .btn-info {
-            color: #fff;
-            background-color: #17a2b8;
-            border-color: #17a2b8;
-        }
-
-        .btn-warning {
-            color: #1d3b6c;
-        }
-
-        .table-custom {
-            margin-left: 20px;
-        }
-
-        th,
-        td {
-            text-align: center;
-        }
-
-        .header-container {
-            justify-content: space-between;
-        }
-    </style>
 @endsection
+
+@push('scripts')
+<script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.flash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.print.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    $('#admin-table').DataTable();
+});
+</script>
+@endpush
