@@ -1,5 +1,5 @@
 <div class="list-view">
-    @foreach($submissions as $p)
+    @forelse($submissions as $p)
         <div data-aos="fade-up" class="flex flex-col md:flex-row items-center justify-between gap-5 mb-3 p-6 bg-primary-50 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
             <div class="flex flex-col">
                 <h5 class="mb-2 text-lg font-semibold tracking-tight text-gray-900 dark:text-white">{{ $p->submission_title }}</h5>
@@ -23,5 +23,9 @@
                 <p class="text-xs text-end">{{ $p->created_at }}</p>
             </div>
         </div>
-    @endforeach
+    @empty
+        <div class="text-center py-20 bg-gray-100 rounded-lg">
+            <p class="text-gray-500">Tidak ada data pengajuan yang ditemukan.</p>
+        </div>
+    @endforelse
 </div>

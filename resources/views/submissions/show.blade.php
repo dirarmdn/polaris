@@ -22,8 +22,10 @@
             <li class="tab-item cursor-pointer pb-2 hover:text-accent-600" data-target="kebutuhan">KEBUTUHAN APLIKASI</li>
             <li class="tab-item cursor-pointer pb-2 hover:text-accent-600" data-target="detail">DETAIL APLIKASI</li>
             <li class="tab-item cursor-pointer pb-2 hover:text-accent-600" data-target="referensi">REFERENSI</li>
-            <li class="tab-item cursor-pointer pb-2 hover:text-accent-600" data-target="hasil-review">HASIL REVIEW</li>
+            @auth
+            <li class="tab-item cursor-pointer pb-2 hover:text-accent-600" data-target="hasil-review">HASIL REVIEW</li>                
             <li class="tab-item cursor-pointer pb-2 hover:text-accent-600" data-target="kontak">KONTAK</li>
+            @endauth
         </ul>
         <!-- Orange underline -->
         <div id="underline" class="absolute bottom-0 left-0 h-1 w-0 bg-accent-600 transition-all duration-300"></div>
