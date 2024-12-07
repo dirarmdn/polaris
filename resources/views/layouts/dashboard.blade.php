@@ -14,7 +14,7 @@
         @include('components.navbar_dashboard')
     </header>
 
-    <div class="content">
+    <div class="content pt-20">
         @yield('content')
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
@@ -24,5 +24,31 @@
     {{-- @endif --}}
     @stack('scripts')
     @include('sweetalert::alert')
+
+    <script>
+        function navToogle() {
+            var x = document.getElementById("nav-items");
+            if (x.style.display === "none") {
+                x.style.display = "block";
+            } else {
+                x.style.display = "none";
+            }
+        }
+
+        window.onscroll = function() {
+            myFunction()
+        };
+
+        var navlist = document.querySelector("#nav-list");
+        var sticky = navlist.offsetTop;
+
+        function myFunction() {
+            if (window.pageYOffset >= sticky) {
+                navlist.classList.add("sticky")
+            } else {
+                navlist.classList.remove("sticky");
+            }
+        }
+    </script>
 </body>
 </html>

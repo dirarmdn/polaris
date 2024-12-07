@@ -73,9 +73,13 @@ class HomeController extends Controller
                 ->take(3)
                 ->get();
         } else if ($user->role == 3) {
+            $reviewer = $user->reviewer;
+
+            // dd($reviewer->nip_reviewer);
+
             $pengajuan = DB::table('submissions')
                 ->where('status', 'belum_direview')
-                ->where('nip_reviewer', $user->nip_reviewer)
+                ->where('nip_reviewer', $reviewer->nip_reviewer)
                 ->orderBy('created_at', 'desc')
                 ->take(3)
                 ->get();
@@ -89,16 +93,7 @@ class HomeController extends Controller
         
         $jumlah_terverifikasi = Submission::where('status', 'terverifikasi')->count();
         $jumlah_belum = Submission::where('status', 'belum_direview')->count();
-        if (Auth::check()) {
-            $userId = $user->user_id;
-            $notifications = Notification::where('user_id', $userId)
-                ->where('isRead', false)
-                ->latest()
-                ->take(5)
-                ->get();
-        } else {
-            $notifications = collect(); // Kosongkan koleksi jika belum login
-        }
-        return view('dashboard.index', compact(['pengajuan', 'jumlah_terverifikasi', 'jumlah_belum', 'user','notifications']));
+
+        return view('dashboard.index', compact(['pengajuan', 'jumlah_terverifikasi', 'jumlah_belum', 'user']));
     }
 }

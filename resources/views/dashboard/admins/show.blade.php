@@ -44,7 +44,7 @@
         </div>
 
         <div class="mt-6 flex space-x-4">
-            <a href="{{ route('admin.edit', ['id' => $admin->user_id]) }}" class="bg-primary-700 text-white px-4 py-2 rounded-lg hover:bg-primary-600">
+            <a href="{{ route('admin.edit', ['admin' => $admin]) }}" class="bg-primary-700 text-white px-4 py-2 rounded-lg hover:bg-primary-600">
                 Ubah
             </a>
             {{-- <button class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-500">

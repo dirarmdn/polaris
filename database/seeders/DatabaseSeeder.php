@@ -78,7 +78,7 @@ class DatabaseSeeder extends Seeder
         Organization::factory(10)->create();
         // User::factory(10)->create();
         // Submitter::factory(10)->create();
-        Submission::factory(30)->create();
+        // Submission::factory(30)->create();
         // Reference::factory(5)->create();
         // // Review::factory(5)->create();
         // Reviewer::factory(10)->create();

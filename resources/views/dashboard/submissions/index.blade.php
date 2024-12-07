@@ -8,6 +8,10 @@
             box-shadow: none;
         }
 
+        table {
+            border-color: #ffffffc7 !important;
+        }
+
         .header-container {
             justify-content: space-between;
         }
@@ -15,6 +19,51 @@
         th,
         td {
             text-align: center;
+            padding: 15px !important;
+            border-bottom: 2px solid #ffffff6f !important;
+        }
+
+        .dt-buttons .dt-button {
+            border: none !important;
+            /* Hilangkan border */
+            border-radius: 8px !important;
+            /* Buat sudut tombol melengkung */
+            padding: 8px 12px !important;
+            /* Sesuaikan padding */
+            margin: 5px !important;
+            /* Jarak antar tombol */
+            font-size: 14px !important;
+            /* Sesuaikan ukuran font */
+            font-weight: bold !important;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dt-buttons .btn-copy {
+            background-color: #e86d00 !important;
+            /* Warna background */
+            color: white
+        }
+
+        .dt-buttons .btn-pdf {
+            background-color: #f2382e !important;
+            /* Warna background */
+            color: white
+        }
+
+        .dt-buttons .btn-excel {
+            background-color: #1d6f42 !important;
+            /* Warna background */
+            color: white
+        }
+
+        .dataTables_filter input {
+            border-radius: 10px !important;
+        }
+
+        .dataTables_length {
+            margin-bottom: 10px !important;
         }
     </style>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
@@ -24,14 +73,19 @@
 @endpush
 
 @section('content')
-    <!-- Header -->
-    <div class="container mx-auto pl-32 pt-10">
-        <!-- Title -->
-        <h1 class="text-2xl font-bold mb-6">
-            <span class="text-black">Data</span>
-            <span class="text-[#ff7600]">Pengajuan</span>
-        </h1>
-    </div>
+    <h1 class="text-2xl font-bold mb-6 pl-32 pt-10">
+        <span class="text-black">Data</span>
+        <span class="text-accent-600">Pengajuan</span>
+    </h1>
+    @if (auth()->user()->role == 3)
+    <a href="{{ route('admin.create') }}" class="mr-auto float-left bg-white ml-32 py-2 px-4 rounded-xl flex items-center border gap-5">
+        <span class="material-symbols-outlined text-lg">
+            history
+            </span>
+            History
+            <span class="bg-primary-700 rounded-full py-0.5 px-2 text-white text-xs">0</span>
+    </a>        
+    @endif
 
     <!-- Table -->
     <div class="table-container datatable-dark data-tables mx-auto" style="max-width: 1300px; padding: 1rem;">
@@ -68,11 +122,11 @@
                                     : $pengajuan->submitter->organization->organization_name ?? 'Tidak diketahui' }}
                             </td>
                         @else
-                        <td class="px-6 py-4">
-                        {{ $pengajuan->review_description ?? 'Belum di-review' }}
-                        </td>
-                        <td class="px-6 py-4">
-                            {{ $pengajuan->review_date ?? 'Belum di-review' }}
+                            <td class="px-6 py-4">
+                                {{ $pengajuan->review_description ?? 'Belum di-review' }}
+                            </td>
+                            <td class="px-6 py-4">
+                                {{ $pengajuan->review_date ?? 'Belum di-review' }}
                             </td>
                         @endif
                         <td class="px-6 py-4">
@@ -115,7 +169,7 @@
                                     class="flex items-center text-nowrap text-black-600 text-secondary-800">
                                     <span class="material-symbols-outlined mr-1 text-lg">visibility</span>
                                 </a>
-                                @if ($pengajuan->status != 'terverifikasi')
+                                @if ($pengajuan->status != 'terverifikasi' && auth()->user()->role == 1)
                                     <a href="{{ route('submissions.edit', ['submission_code' => $pengajuan->submission_code]) }}"
                                         class="flex items-center text-nowrap text-black-600 text-accent-light-500">
                                         <span class="material-symbols-outlined mr-1 text-lg">edit</span>
@@ -128,6 +182,15 @@
                                         <button type="submit">
                                             <span class="material-symbols-outlined mr-1 text-lg">delete</span>
                                         </button>
+                                    </form>
+                                @endif
+                                @if (auth()->user()->role == 2)
+                                    <form
+                                        action="{{ route('submission.archive', ['submission_code' => $pengajuan->submission_code]) }}"
+                                        method="POST" class="flex items-center text-nowrap text-black-600 text-gray-400">
+                                        @csrf
+                                        <button type="submit"><span class="material-symbols-outlined mr-1 text-lg"
+                                                title="Arsipkan">archive</span></button>
                                     </form>
                                 @endif
                             </td>
@@ -143,23 +206,42 @@
     </div>
 @endsection
 
+
 @push('scripts')
-<script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.flash.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.html5.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.print.min.js"></script>
-<script>
-    $(document).ready(function() {
-        $('#mauexport').DataTable({
-            dom: 'Bfrtip',
-            buttons: [
-                'copy', 'csv', 'excel', 'pdf', 'print'
-            ]
+    <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.flash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.print.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#mauexport').DataTable({
+                dom: 'Bfrtip',
+                buttons: [{
+                        extend: 'copy',
+                        text: '<span class="material-symbols-outlined">content_copy</span> Salin',
+                        className: 'btn-copy'
+                    },
+                    {
+                        extend: 'excel',
+                        text: '<span class="material-symbols-outlined">description</span> Excel',
+                        className: 'btn-excel'
+                    },
+                    {
+                        extend: 'pdf',
+                        text: '<span class="material-symbols-outlined">picture_as_pdf</span> PDF',
+                        className: 'btn-pdf'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<span class="material-symbols-outlined">print</span> Cetak',
+                        className: 'btn-print'
+                    }
+                ]
+            });
         });
-    });
-</script>
+    </script>
 @endpush

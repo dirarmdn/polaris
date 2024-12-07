@@ -22,18 +22,18 @@ class AddTriggerAssignSubmissionToReviewer extends Migration
             BEGIN
                 SELECT nip_reviewer
                 INTO selected_reviewer_id
-                FROM Reviewers
+                FROM reviewers
                 WHERE review_total = (
-                    SELECT MIN(review_total) FROM Reviewers
+                    SELECT MIN(review_total) FROM reviewers
                 ) AND "isActive" = TRUE
                 ORDER BY RANDOM()
                 LIMIT 1;
 
-                UPDATE Submissions
+                UPDATE submissions
                 SET nip_reviewer = selected_reviewer_id
                 WHERE submission_code = NEW.submission_code;
 
-                UPDATE Reviewers
+                UPDATE reviewers
                 SET review_total = review_total + 1
                 WHERE nip_reviewer = selected_reviewer_id;
 
@@ -42,7 +42,7 @@ class AddTriggerAssignSubmissionToReviewer extends Migration
             $$ LANGUAGE plpgsql;
 
             CREATE TRIGGER distribute_submission
-            BEFORE INSERT ON Submissions
+            AFTER INSERT ON submissions
             FOR EACH ROW
             EXECUTE FUNCTION assign_submission_to_reviewer();
         ');

@@ -22,14 +22,14 @@ class SubmissionController extends Controller
     public function index(Request $request)
     {
         $perPage = $request->input('perPage', 5);
-        $submission = Submission::where('status', 'terverifikasi')->paginate($perPage);
-        $organization = Organization::get();
+        $submissions = Submission::where('status', 'terverifikasi')->paginate($perPage);
+        $organizations = Organization::get();
     
         if ($request->ajax()) {
-            return view('components.list_view', compact('submission'));
+            return view('components.list_view', compact('submissions'));
         }
     
-        return view('submissions.index', compact('submission', 'organization'));
+        return view('submissions.index', compact('submissions', 'organizations'));
     }
 
     public function print(Request $request)
@@ -66,9 +66,7 @@ class SubmissionController extends Controller
         $organization = $request->input('organization');
         $perPage = $request->input('perPage');
 
-        // dd($perPage);
-    
-        $submission = Submission::query()
+        $submissions = Submission::query()
             ->when($query, function ($q) use ($query) {
                 return $q->where('submission_title', 'like', "%{$query}%");
             })
@@ -94,12 +92,12 @@ class SubmissionController extends Controller
     
         if ($request->ajax()) {
             return response()->json([
-                'html' => view('components.list_view', ['submission' => $submission])->render(),
-                'count' => $submission->total(),
+                'html' => view('components.list_view', ['submissions' => $submissions])->render(),
+                'count' => $submissions->total(),
             ]);
         }
     
-        return view('submissions.index', compact('submission'));
+        return view('submissions.index', compact('submissions'));
     }
 
     /**
@@ -126,56 +124,41 @@ class SubmissionController extends Controller
         $submission = Submission::create($data);
         // Penanganan referensi
         $referensiData = $request->input('referensi', []);
-
-        foreach ($referensiData as $index => $data) {
-            if (!isset($data['tipe'])) {
-                continue;
-            }
-
+        foreach ($data['referensi'] as $index => $ref) {
+            
             $path = null;
 
             // Pastikan file tersedia jika tipe adalah 'file'
-            if ($data['tipe'] === 'file' && isset($data['file_path'])) {
-                $file = $data['file_path']; // Ambil dari data array
+            if ($ref['tipe'] === 'file' && isset($ref['file_path'])) {
+                $file = $ref['file_path']; // Ambil dari ref array
                 if ($file instanceof \Illuminate\Http\UploadedFile) {
                     $fileName = time() . '_' . $file->getClientOriginalName();
                     $path = $file->storeAs('uploads', $fileName);
                 }
-            } elseif ($data['tipe'] === 'link') {
-                $path = $data['link_path'] ?? null;
+            } elseif ($ref['tipe'] === 'link') {
+                $path = $ref['link_path'] ?? null;
             }
 
             // Hanya buat entri jika path sudah di-set
             if ($path !== null) {
                 $submission->reference()->create([
-                    'keterangan' => $data['keterangan'] ?? null,
-                    'tipe' => $data['tipe'],
+                    'description' => $ref['keterangan'] ?? null,
+                    'type' => $ref['tipe'],
                     'path' => $path,
                 ]);
             }
         }
-
-        // Create notification for the user
-        Notification::create([
-            'user_id' => $submission->submitter->submitter_id,
-            'id' => Str::uuid(), // Generate UUID untuk primary key
-            'isRead' => false,
-            'message' => "Pengajuan berhasil dikirim",
-            'notifiable_id' => $submission->submission_code,
-            'notifiable_type`' => Submission::class,
-        ]);
-
+        
         Alert::success('Berhasil', 'Anda berhasil mengirim pengajuan!');
 
         return redirect()->route('dashboard.submissions.index')->with('success', 'Submission berhasil dibuat!');
     }
-
     /**
      * Display the specified resource.
      */
     public function show(string $submission_code)
     {
-        $submission = Submission::with('reference')->where('submission_code', $submission_code)->first();
+        $submission = Submission::with('submitter.organization')->where('submission_code', $submission_code)->first();
 
         if (!$submission) {
             return redirect()->route('submissions.index')->with('error', 'Pengajuan tidak ditemukan!');
@@ -333,6 +316,17 @@ public function sendNotification($userId)
 {
     $submissions = Submission::where('user_id', $userId)->get();
     return view('notification.notificationEmail', compact('submissions'));
+}
+
+public function archiveSubmission(string $submission_code)
+{
+    $submission = Submission::where('submission_code', $submission_code)->firstOrFail();
+
+    $submission->update(['status' => 'diarsipkan']);
+
+    Alert::success('Berhasil', 'Pengajuan berhasil diarsipkan!');
+    
+    return redirect()->back();
 }
 
 
