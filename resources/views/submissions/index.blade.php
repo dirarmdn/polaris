@@ -306,13 +306,7 @@
                             <div class="lg:col-span-3">
 
                                 <div id="search-results" class="list-view">
-                                    @if ($submissions->count() == 0)
-                                        <div class="text-center py-20 bg-gray-100 rounded-lg">
-                                            <p class="text-gray-500">Tidak ada data pengajuan yang ditemukan.</p>
-                                        </div>
-                                    @else
                                         @include('components.list_view', ['pengajuan' => $submissions])
-                                    @endif
                                 </div>
                                 <div class="mb-10 flex justify-center items-center mx-auto mt-10" data-aos="fade-up"
                                     data-aos-duration="700">
