@@ -77,13 +77,16 @@
         <span class="text-black">Data</span>
         <span class="text-accent-600">Pengajuan</span>
     </h1>
+    @if (auth()->user()->role == 3)
     <a href="{{ route('admin.create') }}" class="mr-auto float-left bg-white ml-32 py-2 px-4 rounded-xl flex items-center border gap-5">
         <span class="material-symbols-outlined text-lg">
             history
             </span>
             History
             <span class="bg-primary-700 rounded-full py-0.5 px-2 text-white text-xs">0</span>
-    </a>
+    </a>        
+    @endif
+
     <!-- Table -->
     <div class="table-container datatable-dark data-tables mx-auto" style="max-width: 1300px; padding: 1rem;">
         <table id="mauexport"
