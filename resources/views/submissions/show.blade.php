@@ -23,6 +23,7 @@
             <li class="tab-item cursor-pointer pb-2 hover:text-accent-600" data-target="detail">DETAIL APLIKASI</li>
             <li class="tab-item cursor-pointer pb-2 hover:text-accent-600" data-target="referensi">REFERENSI</li>
             <li class="tab-item cursor-pointer pb-2 hover:text-accent-600" data-target="hasil-review">HASIL REVIEW</li>
+            <li class="tab-item cursor-pointer pb-2 hover:text-accent-600" data-target="kontak">KONTAK</li>
         </ul>
         <!-- Orange underline -->
         <div id="underline" class="absolute bottom-0 left-0 h-1 w-0 bg-accent-600 transition-all duration-300"></div>
@@ -86,6 +87,21 @@
             <div class="bg-white p-6 shadow-xl rounded-lg h-[300px] overflow-y-auto">
                 <h2 class="text-lg font-bold mb-4">Hasil Review</h2>
                 <p class="text-md text-gray-600 mb-6">{{ $submission->review_description }}</p>
+            </div>
+        </div>
+
+        <!-- Kontact -->
+        <div id="kontak" class="tab-content hidden transition-opacity duration-300 text-left">
+            <div class="bg-white p-6 shadow-xl rounded-lg h-[300px] overflow-y-auto">
+                <h2 class="text-lg font-bold mb-4">Kontak</h2>
+                <h3 class="text-md font-semibold mb-2">Nama Pengaju:</h3>
+                <p class="text-md text-gray-600 mb-6">{{ $submission->submitter_name }}</p>
+
+                <h3 class="text-md font-semibold mb-2">No. Telp:</h3>
+                <p class="text-md text-gray-600 mb-6">{{ $submission->phone_number }}</p>
+
+                <h3 class="text-md font-semibold mb-2">Email:</h3>
+                <p class="text-md text-gray-600 mb-6">{{ $submission->email }}</p>
             </div>
         </div>
     </div>
