@@ -3,57 +3,80 @@
 @section('title', 'Tentang Polaris')
 
 @section('content')
-    <div class="w-screen">
-        <div class="w-full h-[500px] flex flex-col items-center justify-center text-center text-white bg-cover bg-center"
-            style="background-image: url('{{ asset('images/SignUp_BG.png') }}');">
-            <h1 class="text-5xl font-bold text-white mb-8">ABOUT US</h1>
-            <p class="text-lg max-w-2xl mt-4 mx-auto text-white">
-                POLARIS merupakan platform terpusat untuk mengelola dan mendokumentasikan pengajuan pembuatan aplikasi dari
-                berbagai organisasi di lingkungan Politeknik Negeri Bandung (Polban).
+<div class="container mx-auto px-16 mt-16">
+    <!-- Apa itu Polaris -->
+    <div class="container mx-auto px-16 mt-16 flex flex-col lg:flex-row items-center gap-8 lg:gap-16">
+        <!-- Teks -->
+        <div class="lg:w-3/4">
+            <h1 class="text-4xl font-bold text-primary-900 mb-4">Apa itu POLARIS?</h1>
+            <p class="text-lg text-dark-700 mb-6 leading-relaxed">
+                POLARIS merupakan platform terpusat untuk mengelola dan mendokumentasikan pengajuan pembuatan aplikasi dari berbagai organisasi di lingkungan Politeknik Negeri Bandung (Polban).
             </p>
         </div>
-
-        <div class="w-full bg-primary-900 py-12">
-            <div class="container mx-auto px-6 text-white">
-                <section class="mb-12">
-                    <h2 class="text-3xl font-semibold text-left mb-6 text-accent-600">Our Mission</h2>
-                    <div class="grid md:grid-cols-2 gap-8 mx-4 text-left leading-relaxed">
-                        <p>
-                            Misi Polaris adalah menyederhanakan dan mempercepat proses pengajuan kebutuhan aplikasi internal
-                            di lingkungan kampus. Polaris bertujuan menyediakan platform terpusat yang memudahkan pengajuan
-                            dan pendataan kebutuhan aplikasi dari seluruh civitas akademika, serta memfasilitasi komunikasi
-                            yang efektif antara pengaju dan pengembang. Setiap kebutuhan aplikasi dapat ditangani secara
-                            tepat dan efisien dengan transparansi yang ditingkatkan melalui akses real-time untuk memantau
-                            status pengajuan.
-                        </p>
-                        <p>
-                            Polaris juga mendorong kolaborasi antara pengaju dan pengembang agar solusi teknologi dapat
-                            diterapkan lebih cepat dan sesuai dengan kebutuhan. Dengan demikian, Polaris menjadi jembatan
-                            yang menghubungkan kebutuhan teknologi kampus dengan solusi yang tepat, memperkuat inovasi dan
-                            produktivitas di lingkungan akademis.
-                        </p>
-                    </div>
-                </section>
-
-                <section>
-                    <h2 class="text-3xl font-semibold text-left mb-6 text-accent-600">Our Team</h2>
-                    <div class="grid md:grid-cols-3 lg:grid-cols-5 gap-x-12 gap-y-8 mx-4">
-                        @foreach ([
-            ['name' => 'Alanna Tanisya Anwar', 'description' => 'Mahasiswa Teknik Informatika semester 3 yang tengah menjalani Proyek 3. Bertanggung jawab dalam pengembangan backend, termasuk pengelolaan database dan logika aplikasi. Berfokus pada integrasi fitur yang memudahkan pengelolaan data pengajuan.'],
-            ['name' => 'Erina Dwi Yanti', 'description' => 'Mahasiswa Teknik Informatika semester 3 yang berperan sebagai pengembang frontend. Mengelola tampilan dan antarmuka pengguna Polaris, memastikan pengalaman pengguna yang intuitif dan responsif di platform web.'],
-            ['name' => 'Dhira Ramadini', 'description' => 'Mahasiswa Teknik Informatika semester 3 dengan tanggung jawab pada aspek sistem keamanan dan validasi data. Mengimplementasikan mekanisme otentikasi dan perlindungan data pengguna di aplikasi.'],
-            ['name' => 'Febi Shintawati', 'description' => 'Mahasiswa Teknik Informatika semester 3 yang berfokus pada integrasi fitur notifikasi dan status pengajuan. Menyediakan solusi untuk memudahkan pengguna dalam memantau perkembangan pengajuan mereka melalui email.'],
-            ['name' => 'Firgianathyas Siti', 'description' => 'Mahasiswa Teknik Informatika semester 3 dengan peran sebagai pengembang dokumentasi dan testing. Memastikan setiap fitur Polaris berjalan dengan baik dan terdokumentasi dengan jelas agar mudah dipahami oleh pengguna dan pengembang lainnya.'],
-        ] as $member)
-                            <div class="text-left p-4 bg-primary-900">
-                                <div class="w-24 h-24 mx-auto bg-gray-300 rounded-full mb-4"></div>
-                                <h3 class="font-semibold text-lg text-accent-600 mb-2">{{ $member['name'] }}</h3>
-                                <p class="text-sm mt-2 leading-relaxed">{{ $member['description'] }}</p>
-                            </div>
-                        @endforeach
-                    </div>
-                </section>
-            </div>
+        <!-- Gambar -->
+        <div class="lg:w-1/4 items-left">
+            <img src="{{ asset('images/about.png') }}" alt="Apa itu Polaris" class="w-full max-w-sm mx-auto lg:max-w-md">
         </div>
     </div>
+
+    <!-- Our Mission -->
+    <div class="container mx-auto px-16 mt-16 text-dark-700">
+        <section class="mb-12">
+            <h2 class="text-3xl font-semibold text-left mb-6 text-primary-900">Our Mission</h2>
+            <div class="grid md:grid-cols-2 gap-8 mx-4 text-left leading-relaxed">
+                <p>
+                    Misi Polaris adalah menyederhanakan dan mempercepat proses pengajuan kebutuhan aplikasi internal
+                    di lingkungan kampus. Polaris bertujuan menyediakan platform terpusat yang memudahkan pengajuan
+                    dan pendataan kebutuhan aplikasi dari seluruh civitas akademika, serta memfasilitasi komunikasi
+                    yang efektif antara pengaju dan pengembang. Setiap kebutuhan aplikasi dapat ditangani secara
+                    tepat dan efisien dengan transparansi yang ditingkatkan melalui akses real-time untuk memantau
+                    status pengajuan.
+                </p>
+                <p>
+                    Polaris juga mendorong kolaborasi antara pengaju dan pengembang agar solusi teknologi dapat
+                    diterapkan lebih cepat dan sesuai dengan kebutuhan. Dengan demikian, Polaris menjadi jembatan
+                    yang menghubungkan kebutuhan teknologi kampus dengan solusi yang tepat, memperkuat inovasi dan
+                    produktivitas di lingkungan akademis.
+                </p>
+            </div>
+        </section>
+    </div>            
+
+    <!-- Our Team -->
+    <div class="container mx-auto px-16 mt-16">
+        <h2 class="text-3xl font-bold text-primary-900 mb-10">Our Team</h2>
+        <div class="flex flex-wrap justify-between gap-5">
+            <!-- Member -->
+            @foreach ([
+                ['name' => 'Alanna Tanisya', 'image' => 'profile_alanna.png', 'instagram' => 'https://instagram.com/alanna', 'linkedin' => 'https://linkedin.com/in/alanna', 'youtube' => 'https://youtube.com/alanna'],
+                ['name' => 'Erina Dwi Yanti', 'image' => 'profile_erina.png', 'instagram' => 'https://www.instagram.com/erinadwy_/', 'linkedin' => 'https://www.linkedin.com/in/erinadwy/', 'youtube' => 'https://www.youtube.com/@ERINADWIYANTI-jy7qt'],
+                ['name' => 'Dhira Ramadini', 'image' => 'profile_dhira.png', 'instagram' => 'https://www.instagram.com/dirarmdn/ ', 'linkedin' => 'https://www.linkedin.com/in/dhiraramadini/', 'youtube' => 'https://www.youtube.com/@dirarmdn'],
+                ['name' => 'Febi Shintawati', 'image' => 'profile_febi.png', 'instagram' => 'https://instagram.com/febi', 'linkedin' => 'https://linkedin.com/in/febi', 'youtube' => 'https://youtube.com/febi'],
+                ['name' => 'Firgianathyas Siti', 'image' => 'profile_gia.png', 'instagram' => 'https://instagram.com/gia', 'linkedin' => 'https://linkedin.com/in/gia', 'youtube' => 'https://youtube.com/gia']
+            ] as $member)
+            <div class="text-center w-40">
+                <img src="{{ asset('images/' . $member['image']) }}" alt="{{ $member['name'] }}" class="w-32 h-32 rounded-full mx-auto mb-4">
+                <h3 class="font-semibold text-lg text-primary-900">{{ $member['name'] }}</h3>
+                <div class="flex justify-center mt-2 space-x-2">
+                    @if (!empty($member['instagram']))
+                        <a href="{{ $member['instagram'] }}" target="_blank" class="text-dark-500 hover:text-primary-500">
+                            <img src="{{ asset('images/instagram.png') }}" alt="Instagram" class="w-6 h-6">
+                        </a>
+                    @endif
+                    @if (!empty($member['linkedin']))
+                        <a href="{{ $member['linkedin'] }}" target="_blank" class="text-dark-500 hover:text-primary-500">
+                            <img src="{{ asset('images/linkedin.png') }}" alt="LinkedIn" class="w-6 h-6">
+                        </a>
+                    @endif
+                    @if (!empty($member['youtube']))
+                        <a href="{{ $member['youtube'] }}" target="_blank" class="text-dark-500 hover:text-primary-500">
+                            <img src="{{ asset('images/youtube.png') }}" alt="YouTube" class="w-6 h-6">
+                        </a>
+                    @endif
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
+</div>
 @endsection
