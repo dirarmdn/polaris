@@ -158,7 +158,7 @@ class SubmissionController extends Controller
      */
     public function show(string $submission_code)
     {
-        $submission = Submission::with('reference')->where('submission_code', $submission_code)->first();
+        $submission = Submission::with('submitter.organization')->where('submission_code', $submission_code)->first();
 
         if (!$submission) {
             return redirect()->route('submissions.index')->with('error', 'Pengajuan tidak ditemukan!');
