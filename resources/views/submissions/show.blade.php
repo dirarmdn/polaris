@@ -11,8 +11,8 @@
 
     <!-- Nama Organisasi -->
     <div class="flex justify-left items-center">
-        <h2 class="text-xl font-medium text-gray-700 mr-4">{{ $submission->organization_name }}</h2>
         <img src="{{ asset('images/organization.png') }}" alt="Logo Organisasi" class="h-8 w-8">
+        <h2 class="text-xl font-bold text-gray-700 mr-4 px-6">{{ $submission->submitter->organization->organization_name }}</h2>
     </div>
 
     <!-- Tabs Navigation -->
@@ -97,13 +97,13 @@
             <div class="bg-white p-6 shadow-xl rounded-lg h-[300px] overflow-y-auto">
                 <h2 class="text-lg font-bold mb-4">Kontak</h2>
                 <h3 class="text-md font-semibold mb-2">Nama Pengaju:</h3>
-                <p class="text-md text-gray-600 mb-6">{{ $submission->submitter_name }}</p>
+                <p class="text-md text-gray-600 mb-6">{{ $submission->submitter->user->name }}</p>
 
                 <h3 class="text-md font-semibold mb-2">No. Telp:</h3>
-                <p class="text-md text-gray-600 mb-6">{{ $submission->phone_number }}</p>
+                <p class="text-md text-gray-600 mb-6">{{ $submission->submitter->user->phone_number }}</p>
 
                 <h3 class="text-md font-semibold mb-2">Email:</h3>
-                <p class="text-md text-gray-600 mb-6">{{ $submission->email }}</p>
+                <p class="text-md text-gray-600 mb-6">{{ $submission->submitter->user->email }}</p>
             </div>
         </div>
     </div>
