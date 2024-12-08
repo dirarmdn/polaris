@@ -57,7 +57,7 @@
                 <x-nav-link :href="route('home')" :active="request()->routeIs('home')">Home</x-nav-link>
                 <x-nav-link :href="route('submissions.index')" :active="request()->routeIs('submissions.index')">Daftar Pengajuan</x-nav-link>
                 <x-nav-link :href="route('home.about')" :active="request()->routeIs('home.about')">About</x-nav-link>
-                <x-nav-link :href="route('home.faq')" :active="request()->routeIs('home.faq')">FAQ</x-nav-link>
+                <x-nav-link :href="route('home.faq')" :active="request()->routeIs('home.faq')">Help</x-nav-link>
             </ul>
         </div>
     </div>

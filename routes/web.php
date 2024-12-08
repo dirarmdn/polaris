@@ -15,7 +15,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\emailNotificationsController;
 Route::get('/', [HomeController::class,'index'])->name('home');
 Route::get('/about', [HomeController::class,'about'])->name('home.about');
-Route::get('/faq', [HomeController::class,'faq'])->name('home.faq');
+Route::get('/help', [HomeController::class,'faq'])->name('home.faq');
 Route::get('/feedback', [HomeController::class,'feedback'])->name('home.feedback');
 Route::post('/feedback', [HomeController::class, 'feedbackStore'])->name('feedback.store');
 
