@@ -48,11 +48,11 @@
         <div class="flex flex-wrap justify-between gap-5">
             <!-- Member -->
             @foreach ([
-                ['name' => 'Alanna Tanisya', 'image' => 'profile_alanna.png', 'instagram' => 'https://instagram.com/alanna', 'linkedin' => 'https://linkedin.com/in/alanna', 'youtube' => 'https://youtube.com/alanna'],
+                ['name' => 'Alanna Tanisya', 'image' => 'profile_alanna.png', 'instagram' => 'https://www.instagram.com/alannatnsy/', 'linkedin' => 'https://www.linkedin.com/in/alanna-tanisya-b13056205/', 'youtube' => 'https://www.youtube.com/@01alannatanisyaanwar96'],
                 ['name' => 'Erina Dwi Yanti', 'image' => 'profile_erina.png', 'instagram' => 'https://www.instagram.com/erinadwy_/', 'linkedin' => 'https://www.linkedin.com/in/erinadwy/', 'youtube' => 'https://www.youtube.com/@ERINADWIYANTI-jy7qt'],
                 ['name' => 'Dhira Ramadini', 'image' => 'profile_dhira.png', 'instagram' => 'https://www.instagram.com/dirarmdn/ ', 'linkedin' => 'https://www.linkedin.com/in/dhiraramadini/', 'youtube' => 'https://www.youtube.com/@dirarmdn'],
-                ['name' => 'Febi Shintawati', 'image' => 'profile_febi.png', 'instagram' => 'https://instagram.com/febi', 'linkedin' => 'https://linkedin.com/in/febi', 'youtube' => 'https://youtube.com/febi'],
-                ['name' => 'Firgianathyas Siti', 'image' => 'profile_gia.png', 'instagram' => 'https://instagram.com/gia', 'linkedin' => 'https://linkedin.com/in/gia', 'youtube' => 'https://youtube.com/gia']
+                ['name' => 'Febi Shintawati', 'image' => 'profile_febi.png', 'instagram' => 'https://www.instagram.com/febi.shintawati1/', 'linkedin' => 'https://www.linkedin.com/in/febi-shintawati-b83a75340/', 'youtube' => 'https://youtube.com/@febishintaa?si=jS1uZ6SS1Cy0jIC2'],
+                ['name' => 'Firgianathyas Siti', 'image' => 'profile_gia.png', 'instagram' => 'https://www.instagram.com/f_giaaa/', 'linkedin' => 'https://linkedin.com/in/gia', 'youtube' => 'https://youtube.com/gia']
             ] as $member)
             <div class="text-center w-40">
                 <img src="{{ asset('images/' . $member['image']) }}" alt="{{ $member['name'] }}" class="w-32 h-32 rounded-full mx-auto mb-4">
