@@ -1,71 +1,36 @@
 @extends('layouts.app')
 
-@section('title', 'Frequently Asked Question')
+@section('title', 'Help Center')
 
 @section('content')
 <div class="bg-white dark:bg-gray-900">
     <div class="container px-6 py-12 mx-auto">
         <h3 class="text-1xl text-center text-gray-800 lg:text-1xl dark:text-white">Most people asked about</h3>
-        <h1 class="text-2xl font-semibold text-center text-gray-800 lg:text-3xl dark:text-white">Frequently Asked Question</h1>
+        <h1 class="text-2xl font-semibold text-center text-gray-800 lg:text-3xl dark:text-white">Help Center</h1>
 
-        <div class="mt-0 xl:mt-4 lg:flex lg:-mx-12 min-h-screen flex justify-center items-center">
+        <div class="mt-8 xl:mt-16 lg:flex lg:-mx-12">
+            <!-- Left Column: Tabs -->
+            <div class="lg:w-1/4 ml-12">
+                <div class="space-y-4">
+                    <a href="#" data-tab="howto" class="tab-link block text-xl font-semibold text-gray-800 dark:text-white py-5 px-4 shadow-md rounded-full">How To</a>
+                    <a href="#" data-tab="faq" class="tab-link block text-xl font-semibold text-gray-800 dark:text-white py-5 px-4 shadow-md rounded-full">FAQ</a>
+                </div>
+            </div>
+
+            <!-- Right Column: Tab Content -->
             <div class="lg:w-3/4 ml-7">
-                <!-- General Content -->
-                <div id="faq" class="tab-content">
-                    <hr class="mb-8 my-4 border-gray-200 dark:border-gray-700">
+                <!-- How to Content -->
+                <div id="howto" class="tab-content">
+                    <h2 class="text-xl font-semibold text-gray-800 dark:text-white">How To</h2>
+                    <p class="text-gray-500 dark:text-gray-300 mt-4">Halaman How To pada aplikasi Polaris bertujuan untuk memberikan panduan lengkap kepada pengguna mengenai cara menggunakan aplikasi secara efektif.</p>
+                    <hr class="my-4 border-gray-200 dark:border-gray-700">
 
-                    <!-- FAQ Items -->
+                    <!-- How to Items -->
                     <div class="space-y-8">
-                        <!-- FAQ Item 1 -->
+                        <!-- How to Item 1 -->
                         <div class="relative w-[800px]">
-                            <input type="checkbox" id="faq1" class="absolute opacity-0 peer">
-                            <label for="faq1" class="flex items-center cursor-pointer">
-                                <span class="material-symbols-outlined text-blue-500 pr-2 icon-rotate">arrow_forward_ios</span>
-                                <span class="text-xl text-gray-700 dark:text-white">Apa itu aplikasi Polaris ?</span>
-                            </label>
-                            <div class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out peer-checked:max-h-[200px]">
-                                <p class="px-4 mt-2 text-gray-500 dark:text-gray-300">
-                                    Polaris adalah aplikasi web yang dirancang untuk mempermudah proses pengajuan kebutuhan aplikasi di lingkungan kampus. Aplikasi ini menyediakan fitur untuk melakukan pengajuan, melacak status, serta mengelola pengajuan secara terpusat.
-                                </p>
-                            </div>
-                        </div>
-                        <hr class="my-8 border-gray-200 dark:border-gray-700">
-
-                        <!-- FAQ Item 2 -->
-                        <div class="relative w-[800px]">
-                            <input type="checkbox" id="faq2" class="absolute opacity-0 peer">
-                            <label for="faq2" class="flex items-center cursor-pointer">
-                                <span class="material-symbols-outlined text-blue-500 pr-2 icon-rotate">arrow_forward_ios</span>
-                                <span class="text-xl text-gray-700 dark:text-white">Bagaimana cara mengakses Polaris ?</span>
-                            </label>
-                            <div class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out peer-checked:max-h-[200px]">
-                                <p class="px-4 mt-2 text-gray-500 dark:text-gray-300">
-                                    Ketika pengguna pertama kali mengakses aplikasi Polaris, maka akan diarahkan ke Halama Utama yang tersedia menu navigasi untuk mengakses berbagai fitur aplikasi seperti daftar pengajuan, halaman About, dan FAQ.
-                                </p>
-                            </div>
-                        </div>
-                        <hr class="my-8 border-gray-200 dark:border-gray-700">
-
-                        <!-- FAQ Item 3 -->
-                        <div class="relative w-[800px]">
-                            <input type="checkbox" id="faq3" class="absolute opacity-0 peer">
-                            <label for="faq3" class="flex items-center cursor-pointer">
-                                <span class="material-symbols-outlined text-blue-500 pr-2 icon-rotate">arrow_forward_ios</span>
-                                <span class="text-xl text-gray-700 dark:text-white">Apa saja fitur utama yang tersedia di Polaris ?</span>
-                            </label>
-                            <div class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out peer-checked:max-h-[200px]">
-                                <p class="px-4 mt-2 text-gray-500 dark:text-gray-300">
-                                    Fitur utama yang tersedia pada aplikasi polaris adalah Dashboard, Daftar Pengajuan, Form Pengajuan Aplikasi, Detail Pengajuan,
-                                    Export Data Pengajuan, FAQ, serta About Us.
-                                </p>
-                            </div>
-                        </div>
-                        <hr class="my-8 border-gray-200 dark:border-gray-700">
-
-                        <!-- FAQ Item 4 -->
-                        <div class="relative w-[800px]">
-                            <input type="checkbox" id="faq4" class="absolute opacity-0 peer">
-                            <label for="faq4" class="flex items-center cursor-pointer">
+                            <input type="checkbox" id="how1" class="absolute opacity-0 peer">
+                            <label for="how1" class="flex items-center cursor-pointer">
                                 <span class="material-symbols-outlined text-blue-500 pr-2 icon-rotate">arrow_forward_ios</span>
                                 <span class="text-xl text-gray-700 dark:text-white">Bagaimana Cara Membuat Akun di Polaris ?</span>
                             </label>
@@ -78,10 +43,10 @@
                         </div>
                         <hr class="my-8 border-gray-200 dark:border-gray-700">
 
-                        <!-- FAQ Item 5 -->
+                        <!-- How to Item 2 -->
                         <div class="relative w-[800px]">
-                            <input type="checkbox" id="faq5" class="absolute opacity-0 peer">
-                            <label for="faq5" class="flex items-center cursor-pointer">
+                            <input type="checkbox" id="how2" class="absolute opacity-0 peer">
+                            <label for="how2" class="flex items-center cursor-pointer">
                                 <span class="material-symbols-outlined text-blue-500 pr-2 icon-rotate">arrow_forward_ios</span>
                                 <span class="text-xl text-gray-700 dark:text-white">Bagaimana cara melakukan login ke aplikasi ?</span>
                             </label>
@@ -94,26 +59,10 @@
                         </div>
                         <hr class="my-8 border-gray-200 dark:border-gray-700">
 
-                        <!-- FAQ Item 6 -->
+                        <!-- How to Item 3 -->
                         <div class="relative w-[800px]">
-                            <input type="checkbox" id="faq6" class="absolute opacity-0 peer">
-                            <label for="faq6" class="flex items-center cursor-pointer">
-                                <span class="material-symbols-outlined text-blue-500 pr-2 icon-rotate">arrow_forward_ios</span>
-                                <span class="text-xl text-gray-700 dark:text-white">Apa yang harus dilakukan jika lupa kata sandi ?</span>
-                            </label>
-                            <div class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out peer-checked:max-h-[200px]">
-                                <p class="px-4 mt-2 text-gray-500 dark:text-gray-300">
-                                    Jika lupa kata sandi maka klik pada tautan "Lupa Kata Sandi" yang tersedia di halaman login, ikuti instruksi
-                                    untuk melakukan pemulihan kata sandi dan untuk mempermudah proses login dapat mengaktifkan 'ingat saya'.
-                                </p>
-                            </div>
-                        </div>
-                        <hr class="my-8 border-gray-200 dark:border-gray-700">
-
-                        <!-- FAQ Item 7 -->
-                        <div class="relative w-[800px]">
-                            <input type="checkbox" id="faq7" class="absolute opacity-0 peer">
-                            <label for="faq7" class="flex items-center cursor-pointer">
+                            <input type="checkbox" id="how3" class="absolute opacity-0 peer">
+                            <label for="how3" class="flex items-center cursor-pointer">
                                 <span class="material-symbols-outlined text-blue-500 pr-2 icon-rotate">arrow_forward_ios</span>
                                 <span class="text-xl text-gray-700 dark:text-white">Bagaimana cara melakukan pengajuan baru ?</span>
                             </label>
@@ -127,10 +76,10 @@
                         </div>
                         <hr class="my-8 border-gray-200 dark:border-gray-700">
 
-                        <!-- FAQ Item 8 -->
+                        <!-- How to Item 4 -->
                         <div class="relative w-[800px]">
-                            <input type="checkbox" id="faq8" class="absolute opacity-0 peer">
-                            <label for="faq8" class="flex items-center cursor-pointer">
+                            <input type="checkbox" id="how4" class="absolute opacity-0 peer">
+                            <label for="how4" class="flex items-center cursor-pointer">
                                 <span class="material-symbols-outlined text-blue-500 pr-2 icon-rotate">arrow_forward_ios</span>
                                 <span class="text-xl text-gray-700 dark:text-white">Bagaimana cara melacak status pengajuan saya ?</span>
                             </label>
@@ -143,42 +92,10 @@
                         </div>
                         <hr class="my-8 border-gray-200 dark:border-gray-700">
 
-                        <!-- FAQ Item 9 -->
+                        <!-- How to Item 5 -->
                         <div class="relative w-[800px]">
-                            <input type="checkbox" id="faq9" class="absolute opacity-0 peer">
-                            <label for="faq9" class="flex items-center cursor-pointer">
-                                <span class="material-symbols-outlined text-blue-500 pr-2 icon-rotate">arrow_forward_ios</span>
-                                <span class="text-xl text-gray-700 dark:text-white">Apa yang harus dilakukan jika terdapat masalah saat menggunakan aplikasi ?</span>
-                            </label>
-                            <div class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out peer-checked:max-h-[200px]">
-                                <p class="px-4 mt-2 text-gray-500 dark:text-gray-300">
-                                    Jika terdapat masalah saat menggunakan aplikasi maka dapat mengakses halaman FAQ untuk mencari solusi dari masalah umum atau
-                                    dapat juga mengakses halaman 'Hubungi Kami' dengan menekan tombol feedback yang tersedia pada bagian bawah aplikasi.
-                                </p>
-                            </div>
-                        </div>
-                        <hr class="my-8 border-gray-200 dark:border-gray-700">
-
-                        <!-- FAQ Item 10 -->
-                        <div class="relative w-[800px]">
-                            <input type="checkbox" id="faq10" class="absolute opacity-0 peer">
-                            <label for="faq10" class="flex items-center cursor-pointer">
-                                <span class="material-symbols-outlined text-blue-500 pr-2 icon-rotate">arrow_forward_ios</span>
-                                <span class="text-xl text-gray-700 dark:text-white">Apakah ada batasan pengguna email untuk sign up atau registrasi ?</span>
-                            </label>
-                            <div class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out peer-checked:max-h-[200px]">
-                                <p class="px-4 mt-2 text-gray-500 dark:text-gray-300">
-                                    Ya, untuk melakukan sign up atau registrasi terdapat batasan email bahwa hanya email yang memiliki domain corporate yang
-                                    dapat digunakan untuk mendaftar dan mengakses fitur utama aplikasi.
-                                </p>
-                            </div>
-                        </div>
-                        <hr class="my-8 border-gray-200 dark:border-gray-700">
-
-                        <!-- FAQ Item 11 -->
-                        <div class="relative w-[800px]">
-                            <input type="checkbox" id="faq11" class="absolute opacity-0 peer">
-                            <label for="faq11" class="flex items-center cursor-pointer">
+                            <input type="checkbox" id="how5" class="absolute opacity-0 peer">
+                            <label for="how5" class="flex items-center cursor-pointer">
                                 <span class="material-symbols-outlined text-blue-500 pr-2 icon-rotate">arrow_forward_ios</span>
                                 <span class="text-xl text-gray-700 dark:text-white">Bagaimana cara mengubah informasi profil saya ?</span>
                             </label>
@@ -192,26 +109,10 @@
                         </div>
                         <hr class="my-8 border-gray-200 dark:border-gray-700">
 
-                        <!-- FAQ Item 12 -->
+                        <!-- How to Item 6 -->
                         <div class="relative w-[800px]">
-                            <input type="checkbox" id="faq12" class="absolute opacity-0 peer">
-                            <label for="faq12" class="flex items-center cursor-pointer">
-                                <span class="material-symbols-outlined text-blue-500 pr-2 icon-rotate">arrow_forward_ios</span>
-                                <span class="text-xl text-gray-700 dark:text-white">Bagaimana cara keluar dari akun saya ?</span>
-                            </label>
-                            <div class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out peer-checked:max-h-[200px]">
-                                <p class="px-4 mt-2 text-gray-500 dark:text-gray-300">
-                                    Untuk keluar dari akun Anda, klik ikon profil di pojok kanan atas dan pilih opsi Logout. Anda akan diarahkan kembali 
-                                    ke halaman Landing Page setelah logout.
-                                </p>
-                            </div>
-                        </div>
-                        <hr class="my-8 border-gray-200 dark:border-gray-700">
-
-                        <!-- FAQ Item 13 -->
-                        <div class="relative w-[800px]">
-                            <input type="checkbox" id="faq13" class="absolute opacity-0 peer">
-                            <label for="faq13" class="flex items-center cursor-pointer">
+                            <input type="checkbox" id="how6" class="absolute opacity-0 peer">
+                            <label for="how6" class="flex items-center cursor-pointer">
                                 <span class="material-symbols-outlined text-blue-500 pr-2 icon-rotate">arrow_forward_ios</span>
                                 <span class="text-xl text-gray-700 dark:text-white">Bagaimana cara mengubah informasi Organisasi ?</span>
                             </label>
@@ -225,26 +126,10 @@
                         </div>
                         <hr class="my-8 border-gray-200 dark:border-gray-700">
 
-                        <!-- FAQ Item 14 -->
+                        <!-- How to Item 7 -->
                         <div class="relative w-[800px]">
-                            <input type="checkbox" id="faq14" class="absolute opacity-0 peer">
-                            <label for="faq14" class="flex items-center cursor-pointer">
-                                <span class="material-symbols-outlined text-blue-500 pr-2 icon-rotate">arrow_forward_ios</span>
-                                <span class="text-xl text-gray-700 dark:text-white">Apa fungsi halaman Dashboard ?</span>
-                            </label>
-                            <div class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out peer-checked:max-h-[200px]">
-                                <p class="px-4 mt-2 text-gray-500 dark:text-gray-300">
-                                    Dashboard merupakan pusat kendali setelah melakukan login, dalam dashboard juga anda dapat melihat status pengajuan yang sedang
-                                    berlangsung, mengakses data pengajuan, mengelila informasi profil.
-                                </p>
-                            </div>
-                        </div>
-                        <hr class="my-8 border-gray-200 dark:border-gray-700">
-
-                        <!-- FAQ Item 15 -->
-                        <div class="relative w-[800px]">
-                            <input type="checkbox" id="faq15" class="absolute opacity-0 peer">
-                            <label for="faq15" class="flex items-center cursor-pointer">
+                            <input type="checkbox" id="how7" class="absolute opacity-0 peer">
+                            <label for="how7" class="flex items-center cursor-pointer">
                                 <span class="material-symbols-outlined text-blue-500 pr-2 icon-rotate">arrow_forward_ios</span>
                                 <span class="text-xl text-gray-700 dark:text-white">Bagaimana cara melakukan export data pada data pengajuan yang telah diverifikasi ?</span>
                             </label>
@@ -256,22 +141,126 @@
                             </div>
                         </div>
                         <hr class="my-8 border-gray-200 dark:border-gray-700">
+                    </div>
+                </div>
 
-                        <!-- FAQ Item 16 -->
+                <!-- FAQ Content -->
+                <div id="faq" class="tab-content hidden">
+                    <h2 class="text-xl font-semibold text-gray-800 dark:text-white">Frequently Asked Question</h2>
+                    <p class="text-gray-500 dark:text-gray-300 mt-4">Halaman FAQ (Frequently Asked Questions) dirancang untuk menjawab pertanyaan umum yang sering diajukan oleh pengguna aplikasi Polaris.</p>
+                    <hr class="my-4 border-gray-200 dark:border-gray-700">
+
+                    <!-- FAQ Items -->
+                    <div class="space-y-8">
+                        <!-- FAQ Item 1 -->
                         <div class="relative w-[800px]">
-                            <input type="checkbox" id="faq16" class="absolute opacity-0 peer">
-                            <label for="faq16" class="flex items-center cursor-pointer">
+                            <input type="checkbox" id="faq1" class="absolute opacity-0 peer">
+                            <label for="faq1" class="flex items-center cursor-pointer">
                                 <span class="material-symbols-outlined text-blue-500 pr-2 icon-rotate">arrow_forward_ios</span>
-                                <span class="text-xl text-gray-700 dark:text-white">Bagaimana cara kembali ke Landing Page saat berada di halaman Dashboard ?</span>
+                                <span class="text-xl text-gray-700 dark:text-white">Apa saja fitur utama yang tersedia di Polaris ?</span>
                             </label>
                             <div class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out peer-checked:max-h-[200px]">
                                 <p class="px-4 mt-2 text-gray-500 dark:text-gray-300">
-                                    Cara kembali ke landing page saat berada di halaman Dashboard adalah dengan melakukan klik pada logo Polaris.
+                                    Fitur utama yang tersedia pada aplikasi polaris adalah Dashboard, Daftar Pengajuan, Form Pengajuan Aplikasi, Detail Pengajuan,
+                                    Export Data Pengajuan, FAQ, serta About Us.
                                 </p>
                             </div>
                         </div>
                         <hr class="my-8 border-gray-200 dark:border-gray-700">
 
+                        <!-- FAQ Item 2 -->
+                        <div class="relative w-[800px]">
+                            <input type="checkbox" id="faq2" class="absolute opacity-0 peer">
+                            <label for="faq2" class="flex items-center cursor-pointer">
+                                <span class="material-symbols-outlined text-blue-500 pr-2 icon-rotate">arrow_forward_ios</span>
+                                <span class="text-xl text-gray-700 dark:text-white">Apa yang harus dilakukan jika lupa kata sandi ?</span>
+                            </label>
+                            <div class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out peer-checked:max-h-[200px]">
+                                <p class="px-4 mt-2 text-gray-500 dark:text-gray-300">
+                                    Jika lupa kata sandi maka klik pada tautan "Lupa Kata Sandi" yang tersedia di halaman login, ikuti instruksi
+                                    untuk melakukan pemulihan kata sandi dan untuk mempermudah proses login dapat mengaktifkan 'ingat saya'.
+                                </p>
+                            </div>
+                        </div>
+                        <hr class="my-8 border-gray-200 dark:border-gray-700">
+
+                        <!-- FAQ Item 3 -->
+                        <div class="relative w-[800px]">
+                            <input type="checkbox" id="faq3" class="absolute opacity-0 peer">
+                            <label for="faq3" class="flex items-center cursor-pointer">
+                                <span class="material-symbols-outlined text-blue-500 pr-2 icon-rotate">arrow_forward_ios</span>
+                                <span class="text-xl text-gray-700 dark:text-white">Apa yang harus dilakukan jika terdapat masalah saat menggunakan aplikasi ?</span>
+                            </label>
+                            <div class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out peer-checked:max-h-[200px]">
+                                <p class="px-4 mt-2 text-gray-500 dark:text-gray-300">
+                                    Jika terdapat masalah saat menggunakan aplikasi maka dapat mengakses halaman FAQ untuk mencari solusi dari masalah umum atau
+                                    dapat juga mengakses halaman 'Hubungi Kami' dengan menekan tombol feedback yang tersedia pada bagian bawah aplikasi.
+                                </p>
+                            </div>
+                        </div>
+                        <hr class="my-8 border-gray-200 dark:border-gray-700">
+
+                        <!-- FAQ Item 4 -->
+                        <div class="relative w-[800px]">
+                            <input type="checkbox" id="faq4" class="absolute opacity-0 peer">
+                            <label for="faq4" class="flex items-center cursor-pointer">
+                                <span class="material-symbols-outlined text-blue-500 pr-2 icon-rotate">arrow_forward_ios</span>
+                                <span class="text-xl text-gray-700 dark:text-white">Apakah ada batasan pengguna email untuk sign up atau registrasi ?</span>
+                            </label>
+                            <div class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out peer-checked:max-h-[200px]">
+                                <p class="px-4 mt-2 text-gray-500 dark:text-gray-300">
+                                    Ya, untuk melakukan sign up atau registrasi terdapat batasan email bahwa hanya email yang memiliki domain corporate yang
+                                    dapat digunakan untuk mendaftar dan mengakses fitur utama aplikasi.
+                                </p>
+                            </div>
+                        </div>
+                        <hr class="my-8 border-gray-200 dark:border-gray-700">
+
+                        <!-- FAQ item 5 -->
+                        <div class="relative w-[800px]">
+                            <input type="checkbox" id="faq5" class="absolute opacity-0 peer">
+                            <label for="faq5" class="flex items-center cursor-pointer">
+                                <span class="material-symbols-outlined text-blue-500 pr-2 icon-rotate">arrow_forward_ios</span>
+                                <span class="text-xl text-gray-700 dark:text-white">Kenapa tidak dapat melakukan login ?</span>
+                            </label>
+                            <div class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out peer-checked:max-h-[200px]">
+                                <p class="px-4 mt-2 text-gray-500 dark:text-gray-300">
+                                    Untuk dapat melakukan login dan mengakses aplikasi polaris harus dipastikan bahwa telah memiliki akun atau pastikan telah melakukan register sebelumnya.
+                                </p>
+                            </div>
+                        </div>
+                        <hr class="my-8 border-gray-200 dark:border-gray-700">
+
+                        <!-- FAQ item 6 -->
+                        <div class="relative w-[800px]">
+                            <input type="checkbox" id="faq6" class="absolute opacity-0 peer">
+                            <label for="faq6" class="flex items-center cursor-pointer">
+                                <span class="material-symbols-outlined text-blue-500 pr-2 icon-rotate">arrow_forward_ios</span>
+                                <span class="text-xl text-gray-700 dark:text-white">Kenapa email dan password tidak otomatis tersimpan saat melakukan login ?</span>
+                            </label>
+                            <div class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out peer-checked:max-h-[200px]">
+                                <p class="px-4 mt-2 text-gray-500 dark:text-gray-300">
+                                    Untuk dapat menyimpan email dan password agar dapat langsung melakukan login adalah pastikan untuk mengaktifkan 'ingat saya' pada halaman login.
+                                </p>
+                            </div>
+                        </div>
+                        <hr class="my-8 border-gray-200 dark:border-gray-700">
+
+                        <!-- FAQ item 7 -->
+                        <div class="relative w-[800px]">
+                            <input type="checkbox" id="faq7" class="absolute opacity-0 peer">
+                            <label for="faq7" class="flex items-center cursor-pointer">
+                                <span class="material-symbols-outlined text-blue-500 pr-2 icon-rotate">arrow_forward_ios</span>
+                                <span class="text-xl text-gray-700 dark:text-white">Kenapa tidak dapat melakukan register ?</span>
+                            </label>
+                            <div class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out peer-checked:max-h-[200px]">
+                                <p class="px-4 mt-2 text-gray-500 dark:text-gray-300">
+                                    Agar proses register berhasil, pastikan mengisi keseluruhan data, pastikan yang diinput pada form konfirmasi password sama dengan password yang telah diinput sebelumnya,
+                                    dan jangan lupa untuk menyetujui syarat dan ketentuan.
+                                </p>
+                            </div>
+                        </div>
+                        <hr class="my-8 border-gray-200 dark:border-gray-700">
                     </div>
                 </div>
             </div>

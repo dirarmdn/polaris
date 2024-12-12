@@ -50,10 +50,12 @@ class OrganizationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Organization $organization)
+    public function show($id)
     {
         //
-        return view('dashboard.organizations.show');
+        $organization=Organization::findOrFail($id);
+        return view('dashboard.organizations.show', compact('organization'));
+    
     }
 
     /**
