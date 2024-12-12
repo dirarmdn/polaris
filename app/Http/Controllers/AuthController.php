@@ -9,8 +9,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Auth\Events\Registered;
+use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 
@@ -110,20 +111,32 @@ class AuthController extends Controller
 
     public function submitlogin(Request $request)
     {
-        // Validate 
+        // Validasi input email dan password
         $request->validate([
             'email' => 'required|email',
             'password' => 'required|min:8',
         ]);
-    
+
+        // Cek apakah user ingin diingat
         $remember = $request->has('remember');
-    
+
+        // Proses login
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password], $remember)) {
+            $user = Auth::user();
+
+            // Cek jika email pengguna sudah terverifikasi
+            if (!$user->hasVerifiedEmail()) {
+                Auth::logout();  // Log out jika email belum terverifikasi
+                Alert::error('Error', 'Email Anda belum terverifikasi!');
+                return back()->onlyInput('email');
+            }
+
+            // Jika berhasil login dan email terverifikasi, redirect ke dashboard
             return redirect()->intended('dashboard')->with('success', 'Login successful!');
         }
-    
-        // If authentication fails
-        return back()->withErrors(['email' => 'Invalid email or password'])->onlyInput('email');
+
+        // Jika autentikasi gagal, kembalikan error
+        return back()->withErrors(['email' => 'Invalid email or password.'])->onlyInput('email');
     }
 
 }

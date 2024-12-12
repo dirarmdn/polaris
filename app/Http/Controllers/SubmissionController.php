@@ -2,17 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\Reference;
 use App\Models\Submission;
 use Illuminate\Support\Str;
 use App\Models\Notification;
 use App\Models\Organization;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Requests\StoreSubmissionRequest;
 use App\Http\Requests\UpdateSubmissionRequest;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class SubmissionController extends Controller
 {
@@ -22,8 +26,15 @@ class SubmissionController extends Controller
     public function index(Request $request)
     {
         $perPage = $request->input('perPage', 5);
-        $submissions = Submission::where('status', 'terverifikasi')->paginate($perPage);
-        $organizations = Organization::get();
+    
+        $submissions = DB::table('submissions')
+            ->select('submission_code', 'submission_title', 'problem_description', 'project_type', 'platform', 'created_at')
+            ->where('status', 'terverifikasi')
+            ->paginate($perPage);
+    
+        $organizations = DB::table('organizations')
+            ->select('organization_code', 'organization_name')
+            ->get();
     
         if ($request->ajax()) {
             return view('components.list_view', compact('submissions'));
@@ -66,6 +77,10 @@ class SubmissionController extends Controller
         $organization = $request->input('organization');
         $perPage = $request->input('perPage');
 
+        $organizations = DB::table('organizations')
+        ->select('organization_code', 'organization_name')
+        ->get();
+
         $submissions = Submission::query()
             ->when($query, function ($q) use ($query) {
                 return $q->where('submission_title', 'like', "%{$query}%");
@@ -92,12 +107,12 @@ class SubmissionController extends Controller
     
         if ($request->ajax()) {
             return response()->json([
-                'html' => view('components.list_view', ['submissions' => $submissions])->render(),
+                'html' => view('components.list_view', ['submissions' => $submissions, 'organizations' => $organizations])->render(),
                 'count' => $submissions->total(),
             ]);
         }
     
-        return view('submissions.index', compact('submissions'));
+        return view('submissions.index', compact('submissions', 'organizations'));
     }
 
     /**
@@ -113,46 +128,62 @@ class SubmissionController extends Controller
      */
     public function store(StoreSubmissionRequest $request)
     {
-        $data = $request->validated();
+        try {
+            // Validasi data dari request
+            $data = $request->validated();
 
-        // Add additional data
-        $data['submitter_id'] = Auth::user()->submitter->submitter_id;
-        $data['submission_code'] = 'PGN-' . strtoupper(uniqid());
-        $data['status'] = 'belum_direview';
-
-        // Create the pengajuan record
-        $submission = Submission::create($data);
-        // Penanganan referensi
-        $referensiData = $request->input('referensi', []);
-        foreach ($data['referensi'] as $index => $ref) {
-            
-            $path = null;
-
-            // Pastikan file tersedia jika tipe adalah 'file'
-            if ($ref['tipe'] === 'file' && isset($ref['file_path'])) {
-                $file = $ref['file_path']; // Ambil dari ref array
-                if ($file instanceof \Illuminate\Http\UploadedFile) {
-                    $fileName = time() . '_' . $file->getClientOriginalName();
-                    $path = $file->storeAs('uploads', $fileName);
+    
+            // Tambahkan data tambahan
+            $data['submitter_id'] = Auth::user()->submitter->submitter_id;
+            $data['submission_code'] = 'PGN-' . strtoupper(uniqid());
+            $data['status'] = 'belum_direview';
+    
+            // Buat data pengajuan
+            $submission = Submission::create($data);
+    
+            // Penanganan referensi
+            $referensiData = $request->input('referensi', []);
+            foreach ($referensiData as $index => $ref) {
+                $path = null;
+    
+                // Pastikan file tersedia jika tipe adalah 'file'
+                if ($ref['tipe'] === 'file' && isset($ref['file_path'])) {
+                    $file = $ref['file_path']; // Ambil dari ref array
+                    if ($file instanceof \Illuminate\Http\UploadedFile) {
+                        $fileName = time() . '_' . $file->getClientOriginalName();
+                        $path = $file->storeAs('uploads', $fileName);
+                    }
+                } elseif ($ref['tipe'] === 'link') {
+                    $path = $ref['link_path'] ?? null;
                 }
-            } elseif ($ref['tipe'] === 'link') {
-                $path = $ref['link_path'] ?? null;
+    
+                // Hanya buat entri jika path sudah di-set
+                if ($path !== null) {
+                    $submission->reference()->create([
+                        'description' => $ref['keterangan'] ?? null,
+                        'type' => $ref['tipe'],
+                        'path' => $path,
+                    ]);
+                }
             }
-
-            // Hanya buat entri jika path sudah di-set
-            if ($path !== null) {
-                $submission->reference()->create([
-                    'description' => $ref['keterangan'] ?? null,
-                    'type' => $ref['tipe'],
-                    'path' => $path,
-                ]);
-            }
+    
+            Alert::success('Berhasil', 'Anda berhasil mengirim pengajuan!');
+    
+            return redirect()->route('dashboard.submissions.index');
+        } catch (ValidationException $e) {
+            // Menangani kesalahan validasi
+            Alert::error('Gagal', 'Terjadi kesalahan dalam validasi data. Silakan periksa kembali input Anda.');
+            return redirect()->back()->withInput();
+        } catch (ModelNotFoundException $e) {
+            // Menangani kesalahan model tidak ditemukan (misalnya submitter)
+            Alert::error('Gagal', 'Data yang Anda cari tidak ditemukan.');
+            return redirect()->back()->withInput();
+        } catch (Exception $e) {
+            // Menangani kesalahan lainnya
+            Alert::error('Gagal', 'Terjadi kesalahan, coba lagi nanti.');
+            return redirect()->back()->withInput();
         }
-        
-        Alert::success('Berhasil', 'Anda berhasil mengirim pengajuan!');
-
-        return redirect()->route('dashboard.submissions.index')->with('success', 'Submission berhasil dibuat!');
-    }
+    }    
     /**
      * Display the specified resource.
      */

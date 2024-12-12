@@ -37,7 +37,7 @@ return new class extends Migration
                         updated_at
                     )
                     VALUES (
-                        CONCAT('NTF-', NEW.submitter_id, '-', EXTRACT(EPOCH FROM NOW())), 
+                        gen_random_uuid(), 
                         v_user_id,  
                         false,
                         CONCAT('Status pengajuan Anda berubah menjadi: ', NEW.status),
