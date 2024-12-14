@@ -25,5 +25,6 @@
         "material-icons": "^1.13.12",
         "simple-datatables": "^9.2.1",
         "sweetalert2": "^11.14.5"
-    }
+    },
+    "engines": { "node": "18.x" },
 }
