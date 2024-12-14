@@ -64,7 +64,7 @@
             <div data-aos="fade-left" class="h-52 md:h-60 md:w-56 rounded-2xl overflow-hidden relative group">
                 <div class="absolute inset-0 flex flex-col justify-center items-center z-20 p-5 text-center">
                     <h1 class="text-xl text-white font-semibold">Tidak tahu mau apa?<br><br></h1>
-                    <a href="{{ route('home.faq') }}" class="text-base text-white ">Pelajari tata cara pengajuan kebutuhan aplikasi <span
+                    <a href="{{ route('home.help') }}" class="text-base text-white ">Pelajari tata cara pengajuan kebutuhan aplikasi <span
                             class="underline">di sini</span></a>
                 </div>
                 <div class="w-full h-full inset-0 bg-accent-600 opacity-65 rounded-md absolute z-10"></div>

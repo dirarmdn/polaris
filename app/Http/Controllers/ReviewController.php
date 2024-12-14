@@ -17,44 +17,10 @@ class ReviewController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-    }
-
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request, $id)
-    {
-    }
-
-
-
-    /**
-     * Display the specified resource.
-     */
-    public function show($hasilReview)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
     public function edit($submission_code)
     {
-        //
         $pengajuan = Submission::with('reference')->where('submission_code', $submission_code)->first();
 
         return view('dashboard.submissions.review', compact('pengajuan')); // Sesuaikan nama view
@@ -65,7 +31,6 @@ class ReviewController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
         $user = auth()->user();
         $validator = Validator::make($request->all(), [
             'review_description' => 'required',

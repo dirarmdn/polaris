@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Submitter;
 use App\Models\Organization;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -52,37 +53,50 @@ class AuthController extends Controller
         ]);
     
         if ($validator->fails()) {
+            Alert::error('Gagal', 'Validasi data gagal. Periksa input Anda.');
             return redirect()->back()->withErrors($validator)->withInput();
         }
     
-        // Generate kode organisasi
-        $organization_code = strtoupper(substr($request->organization_name, 0, 3) . rand(100, 999));
+        DB::beginTransaction();
     
-        // Cek apakah organisasi sudah ada atau belum
-        $organization = Organization::firstOrCreate(
-            ['organization_name' => $request->organization_name],
-            ['organization_code' => $organization_code]
-        );
+        try {
+            $organization_code = strtoupper(substr($request->organization_name, 0, 3) . rand(100, 999));
     
-        // Buat user baru
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
-
-        $submitter = Submitter::create([
-            'user_id' => $user->user_id,
-            'position_in_organization' => $request->position,
-            'organization_code' => $organization->organization_code,
-        ]);
+            $organization = Organization::firstOrCreate(
+                ['organization_name' => $request->organization_name],
+                ['organization_code' => $organization_code]
+            );
     
-        auth()->login($user);
-
-        event(new Registered($user));
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
     
-        return redirect()->route('verification.notice');
-    }
+            Submitter::create([
+                'user_id' => $user->user_id,
+                'position_in_organization' => $request->position,
+                'organization_code' => $organization->organization_code,
+            ]);
+    
+            DB::commit();
+    
+            auth()->login($user);
+    
+            event(new Registered($user));
+    
+            Alert::success('Berhasil', 'Registrasi berhasil. Silakan verifikasi email Anda.');
+            return redirect()->route('verification.notice');
+        } catch (\Exception $e) {
+            // Rollback transaksi jika terjadi error
+            DB::rollBack();
+    
+            \Log::error('Error saat registrasi: ' . $e->getMessage());
+    
+            Alert::error('Gagal', 'Terjadi kesalahan saat proses registrasi. Silakan coba lagi.');
+            return redirect()->back()->withErrors(['error' => 'Terjadi kesalahan saat proses registrasi.'])->withInput();
+        }
+    }    
 
     //Verify Email Notice Handler
     public function verifyNotice () {
@@ -100,7 +114,7 @@ class AuthController extends Controller
     //Resending the Verification Email route
     public function verifyHandler (Request $request) {
         $request->user()->sendEmailVerificationNotification();
-     
+    
         return back()->with('message', 'Verification link sent!');
     }
 
@@ -111,16 +125,13 @@ class AuthController extends Controller
 
     public function submitlogin(Request $request)
     {
-        // Validasi input email dan password
         $request->validate([
             'email' => 'required|email',
             'password' => 'required|min:8',
         ]);
 
-        // Cek apakah user ingin diingat
         $remember = $request->has('remember');
 
-        // Proses login
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password], $remember)) {
             $user = Auth::user();
 
@@ -131,11 +142,9 @@ class AuthController extends Controller
                 return back()->onlyInput('email');
             }
 
-            // Jika berhasil login dan email terverifikasi, redirect ke dashboard
             return redirect()->intended('dashboard')->with('success', 'Login successful!');
         }
 
-        // Jika autentikasi gagal, kembalikan error
         return back()->withErrors(['email' => 'Invalid email or password.'])->onlyInput('email');
     }
 

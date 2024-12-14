@@ -253,15 +253,12 @@ class SubmissionController extends Controller
         return redirect()->back();
     }
 
-    // AFTER LOGIN
     public function showAllSubmissions(Request $request)
     {
-        // Ambil input pencarian dari form
         $submission_title = $request->input('submission_title');
 
         $user = auth()->user();
 
-        // Query untuk mengambil data dengan pencarian dan paginasi
         if ($user->role == 1) {
             $data_pengajuans = Submission::with('submitter')
                 ->when($user->role === 1, function ($query) use ($user) {
@@ -280,7 +277,7 @@ class SubmissionController extends Controller
                 ->paginate(10);
         } else {
             $data_pengajuans = DB::table('submissions_need_review')
-                // ->where('nip_reviewer', $user->reviewer->nip_reviewer)
+                ->where('nip_reviewer', $user->reviewer->nip_reviewer)
                 ->when($submission_title, function ($query) use ($submission_title) {
                     return $query->where('submission_title', 'LIKE', '%' . $submission_title . '%');
                 })
@@ -311,54 +308,53 @@ class SubmissionController extends Controller
     }
 
     public function updateSubmissionStatus($submissionCode, $newStatus)
-{
-    $submission = Submission::where('submission_code', $submissionCode)->first();
-    
-    if (!$submission) {
-        return redirect()->back()->withErrors('Submission tidak ditemukan.');
+    {
+        $submission = Submission::where('submission_code', $submissionCode)->first();
+        
+        if (!$submission) {
+            return redirect()->back()->withErrors('Submission tidak ditemukan.');
+        }
+
+        // Update status submission
+        $submission->status = $newStatus;
+        $submission->review_date = now(); // Jika perlu update tanggal review
+        $submission->save();
+
+        // Membuat pesan notifikasi berdasarkan status
+        $message = match ($newStatus) {
+            'terverifikasi' => "Submission '{$submission->submission_title}' Anda telah terverifikasi.",
+            'ditolak' => "Submission '{$submission->submission_title}' Anda telah ditolak.",
+            'diarsipkan' => "Submission '{$submission->submission_title}' telah diarsipkan.",
+            default => "Submission '{$submission->submission_title}' belum direview.",
+        };
+
+        // Membuat notifikasi
+        Notification::create([
+            'user_id' => $submission->submitter_id,
+            'submission_code' => $submission->submission_code,
+            'message' => $message,
+            'notifiable_id' => $submission->submission_code,
+            'notifiable_type' => Submission::class,
+        ]);
+
+        return redirect()->route('dashboard.submissions.index')->with('success', 'Status submission berhasil diupdate.');
     }
 
-    // Update status submission
-    $submission->status = $newStatus;
-    $submission->review_date = now(); // Jika perlu update tanggal review
-    $submission->save();
+    public function sendNotification($userId)
+    {
+        $submissions = Submission::where('user_id', $userId)->get();
+        return view('notification.notificationEmail', compact('submissions'));
+    }
 
-    // Membuat pesan notifikasi berdasarkan status
-    $message = match ($newStatus) {
-        'terverifikasi' => "Submission '{$submission->submission_title}' Anda telah terverifikasi.",
-        'ditolak' => "Submission '{$submission->submission_title}' Anda telah ditolak.",
-        'diarsipkan' => "Submission '{$submission->submission_title}' telah diarsipkan.",
-        default => "Submission '{$submission->submission_title}' belum direview.",
-    };
+    public function archiveSubmission(string $submission_code)
+    {
+        $submission = Submission::where('submission_code', $submission_code)->firstOrFail();
 
-    // Membuat notifikasi
-    Notification::create([
-        'user_id' => $submission->submitter_id,
-        'submission_code' => $submission->submission_code,
-        'message' => $message,
-        'notifiable_id' => $submission->submission_code,
-        'notifiable_type' => Submission::class,
-    ]);
+        $submission->update(['status' => 'diarsipkan']);
 
-    return redirect()->route('dashboard.submissions.index')->with('success', 'Status submission berhasil diupdate.');
-}
-
-public function sendNotification($userId)
-{
-    $submissions = Submission::where('user_id', $userId)->get();
-    return view('notification.notificationEmail', compact('submissions'));
-}
-
-public function archiveSubmission(string $submission_code)
-{
-    $submission = Submission::where('submission_code', $submission_code)->firstOrFail();
-
-    $submission->update(['status' => 'diarsipkan']);
-
-    Alert::success('Berhasil', 'Pengajuan berhasil diarsipkan!');
-    
-    return redirect()->back();
-}
-
+        Alert::success('Berhasil', 'Pengajuan berhasil diarsipkan!');
+        
+        return redirect()->back();
+    }
 
 }

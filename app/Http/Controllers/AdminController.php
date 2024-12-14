@@ -18,10 +18,8 @@ class AdminController extends Controller
 
     public function index(Request $request)
     {
-        // Retrieve the search input from the request
-        $nama = $request->input('name'); // Get the search query for 'nama'
+        $nama = $request->input('name');
 
-        // Query for users with roles 1 or 2 and apply search and pagination
         $admins = User::whereIn('role', [2, 3])
             ->when($nama, function ($query) use ($nama) {
                 return $query->where('name', 'LIKE', '%' . $nama . '%');
@@ -29,7 +27,6 @@ class AdminController extends Controller
             ->with('admin')
             ->paginate(10);
 
-        // Pass data to the view
         return view('dashboard.admins.index', compact('admins', 'nama'));
     }
 
@@ -80,26 +77,40 @@ class AdminController extends Controller
 
             Alert::error('Error', 'Terjadi kesalahan: ' . $e->getMessage());
     
-            return redirect()->route('admin.index')->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->route('admin.index');
         }
     }
-    
-
     public function edit($id)
     {
         $admin = User::with('admin')->findOrFail($id);
+
         return view('dashboard.admins.edit', compact('admin'));
     }
 
     public function update(UpdateAdminRequest $request, $id)
     {
-        $data = $request->validated();
-        $user = User::find($id);
-        $user->update($data);
+        try {
+            $data = $request->validated();
 
-        Alert::success('Berhasil', 'Data Admin berhasil diperbaharui!');
+            $user = User::findOrFail($id);
 
-        return redirect()->route('admin.index', $id);
+            $user->update($data);
+
+            Alert::success('Berhasil', 'Data Admin berhasil diperbaharui!');
+
+            return redirect()->route('admin.index', $id);
+
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            // Jika user tidak ditemukan
+            Alert::error('Gagal', 'Data Admin tidak ditemukan.');
+
+            return redirect()->route('admin.index')->withErrors(['error' => 'Data tidak ditemukan.']);
+        } catch (\Exception $e) {
+            // Tangkap error lainnya
+            Alert::error('Gagal', 'Terjadi kesalahan saat memperbarui data admin.');
+
+            return redirect()->route('admin.index')->withErrors(['error' => 'Terjadi kesalahan saat memperbarui data.']);
+        }
     }
 
     public function show($id)

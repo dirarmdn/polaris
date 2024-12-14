@@ -14,7 +14,7 @@
                 <h1 class="text-sm font-bold">INFO</h1>
                 <ul>
                     <li><a href="{{ route('submissions.index') }}">Daftar Pengajuan</a></li>
-                    <li><a href="{{ route('home.faq') }}">FAQ</a></li>
+                    <li><a href="{{ route('home.help') }}">FAQ</a></li>
                 </ul>
             </div>
             <div class="flex flex-col gap-5">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Organization;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Requests\StoreOrganizationRequest;
 use App\Http\Requests\UpdateOrganizationRequest;
 
@@ -14,7 +15,6 @@ class OrganizationController extends Controller
      */
     public function index()
     {
-        //
         $organization = Organization::all();
         return view('dashboard.organizations.index', compact('organization'));
     }
@@ -31,7 +31,6 @@ class OrganizationController extends Controller
      */
     public function create()
     {
-        //
         return view('dashboard.organizations.create');
     }
 
@@ -40,19 +39,29 @@ class OrganizationController extends Controller
      */
     public function store(StoreOrganizationRequest $request)
     {
-        $data = $request->validated();
-
-        Organization::create($data);
-
-        return response()->json(['success' => true, 'organization_code' => $data->organization_code]);
-    }
+        try {
+            $data = $request->validated();
+    
+            Organization::create($data);
+    
+            Alert::success('Berhasil', 'Organisasi berhasil disimpan!');
+    
+            return redirect()->route('organizations.index');
+    
+        } catch (\Exception $e) {
+            \Log::error('Error creating organization: ' . $e->getMessage());
+    
+            Alert::error('Gagal', 'Terjadi kesalahan saat menyimpan data organisasi.');
+    
+            return redirect()->back()->withInput();
+        }
+    }    
 
     /**
      * Display the specified resource.
      */
     public function show($id)
     {
-        //
         $organization=Organization::findOrFail($id);
         return view('dashboard.organizations.show', compact('organization'));
     
@@ -71,22 +80,33 @@ class OrganizationController extends Controller
      */
     public function update(UpdateOrganizationRequest $request, $id)
     {
-        //
-        $request->validated();
+        try {
+            $request->validated();
     
-        $organization = Organization::findOrFail($id);
-        $organization->fill($request->all());
+            $organization = Organization::findOrFail($id);
     
-        if($request->hasFile('logo')) {
-            $path = $request->logo->store('organization', 'public');
-            $organization->logo = $path;
+            $organization->fill($request->all());
+    
+            if ($request->hasFile('logo')) {
+                $path = $request->logo->store('organization', 'public');
+                $organization->logo = $path;
+            }
+    
+            $organization->save();
+    
+            Alert::success('Berhasil', 'Profil organisasi berhasil diperbaharui!');
+            
+            return redirect()->back();
+    
+        } catch (\Exception $e) {
+            \Log::error('Error updating organization: ' . $e->getMessage());
+    
+            Alert::error('Gagal', 'Terjadi kesalahan saat memperbarui profil organisasi.');
+    
+            return redirect()->back();
         }
-    
-        $organization->save();
-    
-        return redirect()->back()
-            ->with('success', 'Selamat, profil Anda berhasil diperbaharui!');
     }
+    
 
     /**
      * Remove the specified resource from storage.

@@ -35,7 +35,7 @@ class HomeController extends Controller
         return view('home.about');
     }
 
-    public function faq()
+    public function help()
     {
         return view('home.faq');
     }
@@ -47,21 +47,30 @@ class HomeController extends Controller
 
     public function feedbackStore(Request $request)
     {
-        // Validasi input
         $request->validate([
             'email' => 'required|email',
             'subject' => 'required|string|max:255',
             'message' => 'required|string|max:1000',
         ]);
-
+    
         $feedback = $request->only(['email', 'subject', 'message']);
-        Mail::to('contactsims11@gmail.com')->send(new FeedbackMail($feedback));
-
-        Alert::success('Berhasil', 'Terima kasih atas feedback Anda, pesan Anda sudah terkirim.');
-
-        return redirect()->back();
+    
+        try {
+            
+            Mail::to('contactsims11@gmail.com')->send(new FeedbackMail($feedback));
+    
+            Alert::success('Berhasil', 'Terima kasih atas feedback Anda, pesan Anda sudah terkirim.');
+    
+            return redirect()->back();
+        } catch (\Exception $e) {
+            \Log::error('Error saat mengirim feedback: ' . $e->getMessage());
+    
+            Alert::error('Gagal', 'Terjadi kesalahan saat mengirim pesan Anda. Silakan coba lagi.');
+    
+            return redirect()->back()->withInput()->withErrors(['error' => 'Terjadi kesalahan saat mengirim pesan Anda.']);
+        }
     }
-
+    
     public function dashboard()
     {
         $user = auth()->user();
@@ -74,8 +83,6 @@ class HomeController extends Controller
                 ->get();
         } else if ($user->role == 3) {
             $reviewer = $user->reviewer;
-
-            // dd($reviewer->nip_reviewer);
 
             $pengajuan = DB::table('submissions')
                 ->where('status', 'belum_direview')

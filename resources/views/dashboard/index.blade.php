@@ -63,7 +63,7 @@
             <!-- FAQ and Other Submissions -->
             <div class="space-y-10 bg-light-blue-300 my-auto mx-auto p-7 rounded-xl justify-center items-center flex flex-col">
                 @if (auth()->user()->role == 1)
-                <a href="{{ route('home.faq') }}" class="bg-light-blue-500 p-6 w-full rounded-lg text-center">
+                <a href="{{ route('home.help') }}" class="bg-light-blue-500 p-6 w-full rounded-lg text-center">
                     <h3 class="text-white text-7xl">
                         <span class="material-symbols-outlined">
                             help
