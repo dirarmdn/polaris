@@ -26,5 +26,7 @@
         "simple-datatables": "^9.2.1",
         "sweetalert2": "^11.14.5"
     },
-    "engines": { "node": "18.x" }
+    "engines": {
+        "node": "18.x"
+    }
 }
