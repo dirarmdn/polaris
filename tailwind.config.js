@@ -1,4 +1,8 @@
 /** @type {import('tailwindcss').Config} */
+import flowbite from 'flowbite/plugin';
+import tailwindScrollbar from 'tailwind-scrollbar';
+import forms from '@tailwindcss/forms';
+
 export default {
   content: [
     "./resources/**/*.blade.php",
