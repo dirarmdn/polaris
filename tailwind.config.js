@@ -1,9 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-import flowbite from 'flowbite/plugin'
-import tailwindScrollbar from 'tailwind-scrollbar'
-import forms from '@tailwindcss/forms'
-
-export default {
+module.exports = {
   content: [
     "./resources/**/*.blade.php",
     "./resources/**/*.js",
@@ -101,10 +97,10 @@ export default {
     },
   },
   plugins: [
-    flowbite({
+    require('flowbite/plugin')({
       datatables: true,
     }),
-    tailwindScrollbar,
-    forms,
+    require('tailwind-scrollbar'),
+    require('@tailwindcss/forms'),
   ],
 }
