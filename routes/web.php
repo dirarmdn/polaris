@@ -9,8 +9,6 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\OrganizationController;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
-use Illuminate\Http\Request;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\emailNotificationsController;
 
@@ -70,18 +68,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('/user', UserController::class);
     Route::resource('/organization', OrganizationController::class);
     Route::post('/logout', [UserController::class, 'signOut'])->name('logout');
-
-    // // Email Verification Notice route
-    // Route::get('/email/verify', [AuthController::class, 'verifyNotice'])->name
-    // ('verification.notice');
-
-    // // Email Verification Handler route
-    // Route::get('/email/verify/{id}/{hash}', [AuthController::class,
-    // 'verifyEmail'] )->middleware('signed')->name('verification.verify');
-
-    // // Resending the Verification Email
-    // Route::post('/email/verification-notification', [AuthController::class,
-    // 'verifyHandler'])->middleware(['throttle:6,1'])->name('verification.send');
 
     // Email Verification Notice route
     Route::get('/email/verify', [AuthController::class, 'verifyNotice'])
